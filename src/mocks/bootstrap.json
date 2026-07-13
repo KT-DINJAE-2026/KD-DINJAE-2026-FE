@@ -1,0 +1,24 @@
+{
+  "currentStop": {
+    "stopId": "stop-seongbuk-office",
+    "stopName": "성북구청 정류장"
+  },
+  "destinations": [
+    {
+      "destinationId": "bomun",
+      "displayName": "보문역 2번 출구",
+      "stopName": "보문역 2번 출구 정류장",
+      "transportInfo": "지하철 6호선",
+      "nearbyDescription": "보문역 6호선 · 보문숲길도서관 인근",
+      "stopCount": 6
+    },
+    {
+      "destinationId": "cityhall",
+      "displayName": "서울시청",
+      "stopName": "서울시청 정류장",
+      "transportInfo": "시청역 1호선",
+      "nearbyDescription": "서울시청 · 시청역 1호선 인근",
+      "stopCount": 12
+    }
+  ]
+}

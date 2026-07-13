@@ -1,0 +1,23 @@
+{
+  "status": "INSUFFICIENT_DATA",
+  "reasonCode": "NOT_ENOUGH_HISTORICAL_SAMPLES",
+  "generatedAt": "2026-07-13T13:58:00+09:00",
+  "originStopId": "stop-seongbuk-office",
+  "destinationId": "cityhall",
+  "routes": [
+    {
+      "routeId": "101",
+      "routeNumber": "101번",
+      "arrivalMinutes": 4,
+      "travelMinutes": 18,
+      "summaryMessage": "지금 기준 가장 빨리 도착해요"
+    },
+    {
+      "routeId": "102",
+      "routeNumber": "102번",
+      "arrivalMinutes": 7,
+      "travelMinutes": 17,
+      "summaryMessage": "다음으로 빠르게 도착해요"
+    }
+  ]
+}
