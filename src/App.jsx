@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
+  Accessibility,
   AlertTriangle,
   ArrowLeft,
   BusFront,
@@ -7,6 +8,8 @@ import {
   ChevronRight,
   Circle,
   Clock3,
+  Footprints,
+  ImageIcon,
   Info,
   LoaderCircle,
   MapPin,
@@ -44,7 +47,9 @@ function withPrediction(destination, prediction) {
     ...destination,
     hasPrediction: prediction.status === "SUCCESS",
     predictionStatus: prediction.status,
+    reasonCode: prediction.reasonCode,
     generatedAt: prediction.generatedAt,
+    predictionBasis: prediction.predictionBasis,
     routes: prediction.routes.map((route) => {
       const burdenMeta = STANDING_BURDEN_META[route.standingBurdenLevel];
       return {
@@ -62,6 +67,52 @@ function withPrediction(destination, prediction) {
       };
     }),
   };
+}
+
+const getTotalMinutes = (route) => route.arrivalMinutes + route.travelMinutes;
+
+function sortRoutes(routes, mode, predictionAvailable) {
+  const result = [...routes];
+  if (mode === "comfort" && predictionAvailable) {
+    return result.sort(
+      (a, b) => a.standingBurdenMinutes - b.standingBurdenMinutes || getTotalMinutes(a) - getTotalMinutes(b),
+    );
+  }
+  return result.sort(
+    (a, b) => getTotalMinutes(a) - getTotalMinutes(b) || a.arrivalMinutes - b.arrivalMinutes,
+  );
+}
+
+function InfoBand({ tone = "info", icon: Icon = Info, children }) {
+  return (
+    <div className={`info-band info-band--${tone}`}>
+      <Icon className="info-band__icon" aria-hidden="true" />
+      <div>{children}</div>
+    </div>
+  );
+}
+
+function BackHeader({ title, onBack }) {
+  return (
+    <header className="top-bar">
+      <button className="icon-button" type="button" onClick={onBack} aria-label="뒤로 가기" title="뒤로 가기">
+        <ArrowLeft aria-hidden="true" />
+      </button>
+      <span className="top-bar__title">{title}</span>
+    </header>
+  );
+}
+
+function CurrentStopBadge({ currentStop }) {
+  return (
+    <div className="stop-badge" aria-label={`현재 출발지 ${currentStop.stopName}, ${currentStop.directionDescription}`}>
+      <span className="stop-badge__dot" aria-hidden="true" />
+      <span>
+        <strong>{currentStop.stopName}</strong>
+        <small>{currentStop.directionDescription}</small>
+      </span>
+    </div>
+  );
 }
 
 function StatusScreen({ error = false }) {
@@ -83,55 +134,44 @@ function StatusScreen({ error = false }) {
   );
 }
 
-function BackHeader({ title, onBack }) {
-  return (
-    <header className="top-bar">
-      <button className="icon-button" type="button" onClick={onBack} aria-label="뒤로 가기" title="뒤로 가기">
-        <ArrowLeft aria-hidden="true" />
-      </button>
-      <span className="top-bar__title">{title}</span>
-    </header>
-  );
-}
-
-function CurrentStopBadge({ currentStop }) {
-  return (
-    <div className="stop-badge" aria-label={`현재 출발지 ${currentStop.stopName}, QR 확인됨`}>
-      <span className="stop-badge__dot" aria-hidden="true" />
-      <strong>{currentStop.stopName}</strong>
-      <span>QR 확인</span>
-    </div>
-  );
-}
-
-function InfoBand({ tone = "info", icon: Icon = Info, children }) {
-  return (
-    <div className={`info-band info-band--${tone}`}>
-      <Icon className="info-band__icon" aria-hidden="true" />
-      <div>{children}</div>
-    </div>
-  );
-}
-
-function DestinationScreen({ currentStop, destinations, onSelect }) {
+function DestinationScreen({
+  currentStop,
+  destinations,
+  arrivals,
+  preferredTripId,
+  onSelectDestination,
+  onChooseBus,
+  onClearBus,
+}) {
   const [query, setQuery] = useState("");
   const [voiceMessage, setVoiceMessage] = useState("");
   const inputRef = useRef(null);
+  const preferredArrival = arrivals.find((arrival) => arrival.tripId === preferredTripId);
+
+  const availableDestinations = useMemo(() => {
+    if (!preferredArrival) return destinations;
+    return destinations.filter((destination) =>
+      destination.alightingCandidates.some((candidate) => candidate.servedRouteIds.includes(preferredArrival.routeId)),
+    );
+  }, [destinations, preferredArrival]);
 
   const matches = useMemo(() => {
     const keyword = query.trim();
-    if (!keyword) return destinations;
-    return destinations.filter((destination) =>
-      `${destination.stopName} ${destination.nearbyDescription}`.includes(keyword),
+    if (!keyword) return availableDestinations;
+    return availableDestinations.filter((destination) =>
+      [destination.displayName, destination.nearbyDescription, ...destination.searchKeywords]
+        .join(" ")
+        .includes(keyword),
     );
-  }, [destinations, query]);
+  }, [availableDestinations, query]);
 
   const submitSearch = (event) => {
     event.preventDefault();
-    if (matches.length > 0) {
-      onSelect(matches[0]);
+    if (matches.length) {
+      onSelectDestination(matches[0]);
       return;
     }
+    setVoiceMessage("일치하는 장소가 없어요. 다른 이름으로 검색해주세요.");
     inputRef.current?.focus();
   };
 
@@ -151,7 +191,10 @@ function DestinationScreen({ currentStop, destinations, onSelect }) {
       setQuery(event.results[0][0].transcript);
       setVoiceMessage("목적지를 입력했어요.");
     };
-    recognition.onerror = () => setVoiceMessage("잘 듣지 못했어요. 직접 입력해주세요.");
+    recognition.onerror = () => {
+      setVoiceMessage("잘 듣지 못했어요. 직접 입력해주세요.");
+      inputRef.current?.focus();
+    };
     recognition.start();
   };
 
@@ -160,8 +203,16 @@ function DestinationScreen({ currentStop, destinations, onSelect }) {
       <CurrentStopBadge currentStop={currentStop} />
       <section className="screen-heading">
         <h1 id="destination-title">어디까지<br />가세요?</h1>
-        <p>도착할 정류장이나 주변 장소를 입력하세요.</p>
+        <p>장소를 입력하거나 마이크 버튼을 눌러 말씀해주세요.</p>
       </section>
+
+      {preferredArrival && (
+        <div className="preferred-bus-banner">
+          <BusFront aria-hidden="true" />
+          <span><strong>{preferredArrival.routeNumber}</strong>이 가는 목적지만 보여드려요.</span>
+          <button type="button" onClick={onClearBus}>선택 취소</button>
+        </div>
+      )}
 
       <form id="destination-form" className="search-form" onSubmit={submitSearch}>
         <Search aria-hidden="true" />
@@ -180,84 +231,161 @@ function DestinationScreen({ currentStop, destinations, onSelect }) {
       </form>
       <p className="voice-message" aria-live="polite">{voiceMessage}</p>
 
-      <section className="place-section" aria-labelledby="recent-title">
-        <h2 id="recent-title">{query ? "검색 결과" : "최근 목적지"}</h2>
+      <section className="place-section" aria-labelledby="place-title">
+        <h2 id="place-title">{query ? "검색 결과" : preferredArrival ? "갈 수 있는 목적지" : "최근 목적지"}</h2>
         <div className="place-list">
           {matches.map((destination) => (
-            <button className="place-row" type="button" key={destination.destinationId} onClick={() => onSelect(destination)}>
+            <button
+              className="place-row"
+              type="button"
+              key={destination.destinationId}
+              onClick={() => onSelectDestination(destination)}
+            >
               <span className="place-row__icon"><MapPin aria-hidden="true" /></span>
               <span className="place-row__copy">
                 <strong>{destination.displayName}</strong>
-                <small>{destination.transportInfo}</small>
+                <small>{destination.category} · {destination.nearbyDescription}</small>
               </span>
               <ChevronRight aria-hidden="true" />
             </button>
           ))}
-          {matches.length === 0 && (
-            <div className="empty-result">일치하는 목적지가 없어요.</div>
-          )}
+          {!matches.length && <div className="empty-result">일치하는 목적지가 없어요.</div>}
         </div>
       </section>
 
-      <div className="screen-bottom">
-        <InfoBand>목적지를 선택하면 도착 예정 버스의 혼잡한 구간을 비교해드려요.</InfoBand>
-        <button className="primary-button" type="submit" form="destination-form">
-          목적지 찾기
+      <div className="screen-bottom destination-bottom">
+        <button className="primary-button" type="submit" form="destination-form">목적지 찾기</button>
+        <button className="secondary-button secondary-button--full secondary-button--icon" type="button" onClick={onChooseBus}>
+          <BusFront aria-hidden="true" />
+          탈 버스를 이미 알고 있어요
         </button>
-        <p className="fine-print">도착 정보는 실제 운행 상황에 따라 달라질 수 있어요.</p>
       </div>
     </main>
   );
 }
 
-function ConfirmScreen({ currentStop, destination, onBack, onConfirm }) {
+function BusSelectScreen({ currentStop, arrivals, onBack, onSelect }) {
   return (
-    <main className="screen" aria-labelledby="confirm-title">
+    <main className="screen" aria-labelledby="bus-select-title">
       <BackHeader title={currentStop.stopName} onBack={onBack} />
       <section className="screen-heading screen-heading--compact">
-        <h1 id="confirm-title">목적지가<br />여기가 맞나요?</h1>
-        <p>비슷한 정류장이 있어 한 번 확인해주세요.</p>
+        <h1 id="bus-select-title">탈 버스를<br />골라주세요</h1>
+        <p>이 정류장에 곧 도착하는 버스예요.</p>
       </section>
 
-      <div className="map-preview" aria-label={`${destination.stopName} 지도 위치 미리보기`}>
-        <span className="map-road map-road--one" />
-        <span className="map-road map-road--two" />
-        <span className="map-road map-road--three" />
-        <span className="map-pin"><MapPin aria-hidden="true" /></span>
+      <section className="arrival-list" aria-label="도착 예정 버스">
+        {arrivals.map((arrival) => (
+          <button className="arrival-option" type="button" key={arrival.tripId} onClick={() => onSelect(arrival.tripId)}>
+            <span className="arrival-option__route">
+              <strong>{arrival.routeNumber}</strong>
+              <small>{arrival.direction}</small>
+            </span>
+            <span className="arrival-option__time">
+              <strong>{arrival.arrivalMinutes}분 후</strong>
+              <small>{arrival.vehicleType}</small>
+            </span>
+            <ChevronRight aria-hidden="true" />
+          </button>
+        ))}
+      </section>
+
+      <div className="screen-bottom">
+        <InfoBand icon={Accessibility}>저상버스 여부는 실제 배차 상황에 따라 달라질 수 있어요.</InfoBand>
       </div>
+    </main>
+  );
+}
 
-      <section className="destination-summary">
-        <h2>{destination.stopName}</h2>
-        <p>{currentStop.stopName.replace(" 정류장", "")}에서 {destination.stopCount}개 정류장</p>
-        <div>{destination.nearbyDescription}</div>
+function AlightingScreen({
+  currentStop,
+  destination,
+  candidates,
+  selectedCandidate,
+  preferredArrival,
+  onBack,
+  onSelectCandidate,
+  onConfirm,
+}) {
+  const [showCandidates, setShowCandidates] = useState(false);
+
+  return (
+    <main className="screen" aria-labelledby="alighting-title">
+      <BackHeader title={destination.displayName} onBack={onBack} />
+      <section className="screen-heading screen-heading--compact alighting-heading">
+        <h1 id="alighting-title">이 정류장에서<br />내릴까요?</h1>
+        <p>목적지와 가깝고 이동하기 편한 곳을 먼저 찾았어요.</p>
       </section>
+
+      <figure className="street-preview">
+        <img src={selectedCandidate.streetImageUrl} alt={selectedCandidate.streetImageAlt} />
+        <figcaption><ImageIcon aria-hidden="true" /> 거리 사진 예시</figcaption>
+      </figure>
+
+      <section className="stop-confirmation" aria-labelledby="candidate-name">
+        <span className="candidate-label">추천 하차 정류장</span>
+        <h2 id="candidate-name">{selectedCandidate.stopName}</h2>
+        <p>{selectedCandidate.landmark}</p>
+        <div className="walk-metrics">
+          <span><Footprints aria-hidden="true" /><strong>도보 {selectedCandidate.walkMinutes}분</strong></span>
+          <span>{selectedCandidate.walkingDistanceMeters}m</span>
+        </div>
+        {preferredArrival && (
+          <p className="served-route"><BusFront aria-hidden="true" /> {preferredArrival.routeNumber}으로 갈 수 있어요.</p>
+        )}
+      </section>
+
+      {candidates.length > 1 && (
+        <div className="candidate-switcher">
+          <button className="text-button" type="button" onClick={() => setShowCandidates((value) => !value)}>
+            {showCandidates ? "후보 닫기" : "다른 정류장 보기"}
+          </button>
+          {showCandidates && (
+            <div className="candidate-list" aria-label="다른 하차 정류장">
+              {candidates.map((candidate) => (
+                <button
+                  type="button"
+                  key={candidate.candidateId}
+                  className={candidate.candidateId === selectedCandidate.candidateId ? "is-selected" : ""}
+                  onClick={() => {
+                    onSelectCandidate(candidate.candidateId);
+                    setShowCandidates(false);
+                  }}
+                >
+                  <span><strong>{candidate.stopName}</strong><small>{candidate.landmark}</small></span>
+                  <span>도보 {candidate.walkMinutes}분</span>
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
 
       <div className="screen-bottom screen-bottom--actions">
         <div className="button-pair">
           <button className="secondary-button" type="button" onClick={onBack}>다시 찾기</button>
-          <button className="primary-button" type="button" onClick={onConfirm}>여기가 맞아요</button>
+          <button className="primary-button" type="button" onClick={onConfirm}>여기서 내려요</button>
         </div>
-        <p className="fine-print">사용자가 확인한 정류장만 분석에 사용해요.</p>
+        <p className="fine-print">거리 사진은 위치 확인을 돕는 프로토타입용 예시 이미지예요.</p>
       </div>
     </main>
   );
 }
 
-function AnalyzingScreen({ currentStop, destination, onBack }) {
+function AnalyzingScreen({ currentStop, selectedCandidate, onBack }) {
   return (
     <main className="screen screen--centered" aria-labelledby="analyzing-title">
-      <BackHeader title={currentStop.stopName} onBack={onBack} />
+      <BackHeader title={selectedCandidate.stopName} onBack={onBack} />
       <div className="analysis-visual"><LoaderCircle aria-hidden="true" /></div>
       <section className="analysis-heading">
-        <h1 id="analyzing-title">목적지까지 갈 수 있는<br />버스를 비교하고 있어요</h1>
-        <p>{destination.displayName}까지 잠시만 기다려주세요.</p>
+        <h1 id="analyzing-title">목적지까지 갈 버스를<br />비교하고 있어요</h1>
+        <p>{currentStop.stopName.replace(" 정류장", "")}에서 출발해요.</p>
       </section>
       <ol className="progress-list">
         <li className="is-complete"><span><Check aria-hidden="true" /></span>도착 예정 버스 확인</li>
         <li className="is-active"><span><Circle aria-hidden="true" /></span>구간별 탑승 인원 예측</li>
-        <li><span><Circle aria-hidden="true" /></span>이동시간과 혼잡 부담 비교</li>
+        <li><span><Circle aria-hidden="true" /></span>입석 부담과 도착시간 비교</li>
       </ol>
-      <p className="fine-print analysis-footnote">과거 승하차 패턴과 현재 운행 정보를 사용해요.</p>
+      <p className="fine-print analysis-footnote">과거 승하차 패턴과 현재 운행 정보를 함께 사용해요.</p>
     </main>
   );
 }
@@ -286,27 +414,11 @@ function ModeControl({ mode, onChange, predictionAvailable }) {
   );
 }
 
-const getTotalMinutes = (route) => route.arrivalMinutes + route.travelMinutes;
-
-function sortRoutes(routes, mode, predictionAvailable) {
-  const result = [...routes];
-
-  if (mode === "comfort" && predictionAvailable) {
-    return result.sort(
-      (a, b) => a.standingBurdenMinutes - b.standingBurdenMinutes || getTotalMinutes(a) - getTotalMinutes(b),
-    );
-  }
-
-  return result.sort(
-    (a, b) => getTotalMinutes(a) - getTotalMinutes(b) || a.arrivalMinutes - b.arrivalMinutes,
-  );
-}
-
-function BusOption({ route, mode, rank, predictionAvailable, onClick }) {
+function BusOption({ route, mode, rank, predictionAvailable, preferred, onClick }) {
   const isRecommended = rank === 0;
   const total = getTotalMinutes(route);
   const badge = predictionAvailable
-    ? mode === "comfort" ? "덜 붐비는 선택" : "빠른 도착"
+    ? mode === "comfort" ? "입석 부담 적음" : "가장 빠름"
     : "가장 빠름";
 
   return (
@@ -315,44 +427,43 @@ function BusOption({ route, mode, rank, predictionAvailable, onClick }) {
         <strong>{route.routeNumber}</strong>
         {isRecommended && <span className={`status-badge status-badge--${mode === "comfort" ? "comfortable" : "fast"}`}>{badge}</span>}
       </span>
+      <span className="route-meta">{route.direction} · {route.vehicleType}</span>
       <span className="bus-metrics">
-        <span><small>{predictionAvailable ? "대기" : "버스 도착"}</small><strong className="metric-primary">{route.arrivalMinutes}분{predictionAvailable ? "" : " 후"}</strong></span>
-        <span><small>이동</small><strong>{route.travelMinutes}분</strong></span>
+        <span><small>버스 도착</small><strong className="metric-primary">{route.arrivalMinutes}분 후</strong></span>
+        <span><small>목적지까지</small><strong>약 {total}분</strong></span>
         <span>
-          <small>{predictionAvailable ? "보통 이상" : "목적지까지"}</small>
+          <small>{predictionAvailable ? "입석 부담" : "혼잡도"}</small>
           <strong className={predictionAvailable ? route.tone : ""}>
-            {predictionAvailable ? `약 ${route.standingBurdenMinutes}분` : `약 ${total}분`}
+            {predictionAvailable ? `약 ${route.standingBurdenMinutes}분` : "확인 어려움"}
           </strong>
         </span>
       </span>
       <span className="bus-option__footer">
-        <span>{route.summaryMessage}</span>
+        <span>{preferred ? `먼저 고른 버스 · ${route.summaryMessage}` : route.summaryMessage}</span>
         <ChevronRight aria-hidden="true" />
       </span>
     </button>
   );
 }
 
-function CompareScreen({ destination, mode, onModeChange, onBack, onRoute }) {
+function CompareScreen({ destination, selectedCandidate, preferredTripId, mode, onModeChange, onBack, onRoute }) {
   const routes = useMemo(
     () => sortRoutes(destination.routes, mode, destination.hasPrediction),
     [destination, mode],
   );
-
-  const comfortable = destination.hasPrediction
-    ? sortRoutes(destination.routes, "comfort", true)[0]
-    : null;
+  const comfortable = destination.hasPrediction ? sortRoutes(destination.routes, "comfort", true)[0] : null;
   const fastest = sortRoutes(destination.routes, "fast", destination.hasPrediction)[0];
   const comfortDelay = comfortable ? getTotalMinutes(comfortable) - getTotalMinutes(fastest) : 0;
-  const crowdedTimeSaved = comfortable
+  const burdenSaved = comfortable
     ? fastest.standingBurdenMinutes - comfortable.standingBurdenMinutes
     : 0;
 
   return (
     <main className="screen" aria-labelledby="compare-title">
-      <BackHeader title={destination.displayName} onBack={onBack} />
+      <BackHeader title={selectedCandidate.stopName} onBack={onBack} />
       <section className="screen-heading screen-heading--compare">
         <h1 id="compare-title">어떤 버스가<br />더 나을까요?</h1>
+        <p>{destination.displayName}까지 비교했어요.</p>
       </section>
       <ModeControl mode={mode} onChange={onModeChange} predictionAvailable={destination.hasPrediction} />
 
@@ -360,11 +471,11 @@ function CompareScreen({ destination, mode, onModeChange, onBack, onRoute }) {
         mode === "comfort" ? (
           <InfoBand>
             <strong>
-              {comfortable.routeId === fastest.routeId
-                ? `${comfortable.routeNumber}이 빠르고 입석 부담도 가장 낮아요.`
+              {comfortable.tripId === fastest.tripId
+                ? `${comfortable.routeNumber}이 빠르고 입석 부담도 가장 적어요.`
                 : `${comfortable.routeNumber}은 ${comfortDelay}분 늦지만`}
             </strong>
-            {comfortable.routeId !== fastest.routeId && <span>보통 이상 구간이 약 {crowdedTimeSaved}분 짧아요.</span>}
+            {comfortable.tripId !== fastest.tripId && <span>입석 부담 예상 시간이 약 {burdenSaved}분 짧아요.</span>}
           </InfoBand>
         ) : (
           <InfoBand icon={Clock3}>
@@ -383,12 +494,13 @@ function CompareScreen({ destination, mode, onModeChange, onBack, onRoute }) {
       <section className="bus-list" aria-label="버스 비교 결과">
         {routes.map((route, index) => (
           <BusOption
-            key={route.routeId}
+            key={route.tripId}
             route={route}
             mode={mode}
             rank={index}
             predictionAvailable={destination.hasPrediction}
-            onClick={() => onRoute(route.routeId)}
+            preferred={route.tripId === preferredTripId}
+            onClick={() => onRoute(route.tripId)}
           />
         ))}
       </section>
@@ -397,25 +509,26 @@ function CompareScreen({ destination, mode, onModeChange, onBack, onRoute }) {
         {destination.hasPrediction ? <Clock3 aria-hidden="true" /> : <RefreshCw aria-hidden="true" />}
         <span>
           {destination.hasPrediction
-            ? "예측 기준 · 평일 오후 2시 승하차 패턴"
+            ? `예측 기준 · ${destination.predictionBasis.description}`
             : "혼잡도 데이터가 생기면 자동으로 갱신해요."}
         </span>
       </div>
-      <p className="fine-print compare-footnote">도착 정보는 실제 운행 상황에 따라 달라질 수 있어요.</p>
+      <p className="fine-print compare-footnote">예측 결과는 실제 승하차 상황에 따라 달라질 수 있어요.</p>
     </main>
   );
 }
 
-function DetailScreen({ currentStop, destination, route, onBack, onSelect }) {
+function DetailScreen({ currentStop, destination, selectedCandidate, route, onBack, onSelect }) {
   const predictionAvailable = destination.hasPrediction && route.segments;
   const bannerTone = predictionAvailable ? route.tone : "fast";
+  const total = getTotalMinutes(route);
 
   return (
     <main className="screen" aria-labelledby="detail-title">
-      <BackHeader title={destination.displayName} onBack={onBack} />
+      <BackHeader title={selectedCandidate.stopName} onBack={onBack} />
       <section className="route-title">
         <h1 id="detail-title">{route.routeNumber}</h1>
-        <p>{currentStop.stopName.replace(" 정류장", "")} → {destination.displayName}</p>
+        <p>{route.direction} · {route.vehicleType}</p>
       </section>
 
       <section className={`route-summary route-summary--${bannerTone}`}>
@@ -423,6 +536,12 @@ function DetailScreen({ currentStop, destination, route, onBack, onSelect }) {
           {predictionAvailable ? `입석 부담 ${route.burdenLabel}` : "빠른 도착"}
         </span>
         <h2>{predictionAvailable ? route.summaryMessage : `${route.arrivalMinutes}분 후 도착해요.`}</h2>
+      </section>
+
+      <section className="journey-metrics" aria-label="여정 요약">
+        <div><small>버스 도착</small><strong>{route.arrivalMinutes}분 후</strong></div>
+        <div><small>목적지까지</small><strong>약 {total}분</strong></div>
+        <div><small>입석 부담</small><strong>{predictionAvailable ? `약 ${route.standingBurdenMinutes}분` : "확인 어려움"}</strong></div>
       </section>
 
       {predictionAvailable ? (
@@ -442,30 +561,23 @@ function DetailScreen({ currentStop, destination, route, onBack, onSelect }) {
               ))}
             </ol>
           </section>
-          <InfoBand>여유는 좌석 이용 가능성이 상대적으로 높은 혼잡 단계를 의미해요.</InfoBand>
+          <InfoBand>여유는 좌석 이용 가능성이 상대적으로 높은 단계이며 좌석을 보장하지는 않아요.</InfoBand>
         </>
       ) : (
-        <>
-          <section className="arrival-metrics" aria-label="도착 정보">
-            <div><small>버스 도착</small><strong>{route.arrivalMinutes}분 후</strong></div>
-            <div><small>이동시간</small><strong>{route.travelMinutes}분</strong></div>
-            <div><small>목적지까지</small><strong>약 {route.arrivalMinutes + route.travelMinutes}분</strong></div>
-          </section>
-          <InfoBand tone="warning" icon={AlertTriangle}>
-            <strong>아직 데이터가 부족해 혼잡도는 보여드리기 어려워요.</strong>
-          </InfoBand>
-        </>
+        <InfoBand tone="warning" icon={AlertTriangle}>
+          <strong>아직 데이터가 부족해 구간별 입석 부담은 보여드리기 어려워요.</strong>
+        </InfoBand>
       )}
 
       <div className="screen-bottom detail-bottom">
         <button className="primary-button" type="button" onClick={onSelect}>{route.routeNumber} 선택하기</button>
-        <p className="fine-print">최근 정보 갱신 · 오후 1:58</p>
+        <p className="fine-print">하차 정류장 · {selectedCandidate.stopName}</p>
       </div>
     </main>
   );
 }
 
-function SelectedScreen({ currentStop, destination, route, onChange }) {
+function SelectedScreen({ currentStop, destination, selectedCandidate, route, onChangeBus, onNewDestination }) {
   return (
     <main className="screen screen--selected" aria-labelledby="selected-title">
       <div className="selected-icon"><Check aria-hidden="true" /></div>
@@ -475,13 +587,15 @@ function SelectedScreen({ currentStop, destination, route, onChange }) {
       </section>
       <div className="selected-route">
         <BusFront aria-hidden="true" />
-        <div>
-          <strong>{currentStop.stopName}</strong>
-          <span>{destination.stopName}</span>
-        </div>
+        <div><strong>{currentStop.stopName}</strong><span>{selectedCandidate.stopName}에서 하차</span></div>
       </div>
-      <div className="screen-bottom">
-        <button className="secondary-button secondary-button--full" type="button" onClick={onChange}>다른 버스 보기</button>
+      <div className="selected-walk">
+        <Footprints aria-hidden="true" />
+        <span><strong>{destination.displayName}</strong>까지 도보 약 {selectedCandidate.walkMinutes}분</span>
+      </div>
+      <div className="screen-bottom selected-actions">
+        <button className="secondary-button secondary-button--full" type="button" onClick={onChangeBus}>다른 버스 보기</button>
+        <button className="text-button" type="button" onClick={onNewDestination}>새 목적지 찾기</button>
       </div>
     </main>
   );
@@ -493,9 +607,12 @@ export default function App() {
   const analysisRequestRef = useRef(0);
   const [screen, setScreen] = useState("loading");
   const [currentStop, setCurrentStop] = useState(null);
+  const [arrivals, setArrivals] = useState([]);
   const [destinations, setDestinations] = useState([]);
   const [destination, setDestination] = useState(null);
-  const [routeId, setRouteId] = useState(null);
+  const [selectedCandidateId, setSelectedCandidateId] = useState(null);
+  const [preferredTripId, setPreferredTripId] = useState(null);
+  const [selectedTripId, setSelectedTripId] = useState(null);
   const [compareMode, setCompareMode] = useState("comfort");
 
   useEffect(() => {
@@ -509,9 +626,22 @@ export default function App() {
       try {
         const bootstrap = await busApi.getBootstrap(requestedStopId);
         if (!active) return;
-
         setCurrentStop(bootstrap.currentStop);
+        setArrivals(bootstrap.arrivals);
         setDestinations(bootstrap.destinations);
+
+        if (requestedScreen === "bus-select") {
+          setScreen("bus-select");
+          return;
+        }
+
+        if (requestedScreen === "alighting") {
+          const nextDestination = bootstrap.destinations.find((item) => item.destinationId === "bomun");
+          setDestination(nextDestination);
+          setSelectedCandidateId(nextDestination.alightingCandidates.find((item) => item.recommended)?.candidateId);
+          setScreen("alighting");
+          return;
+        }
 
         if (!["compare", "limited", "detail"].includes(requestedScreen)) {
           setScreen("destination");
@@ -520,15 +650,18 @@ export default function App() {
 
         const destinationId = requestedScreen === "limited" ? "cityhall" : "bomun";
         const baseDestination = bootstrap.destinations.find((item) => item.destinationId === destinationId);
+        const candidate = baseDestination.alightingCandidates.find((item) => item.recommended);
         const prediction = await busApi.getJourneyPrediction({
           originStopId: bootstrap.currentStop.stopId,
           destinationId,
+          destinationStopId: candidate.stopId,
+          preferredTripId: null,
         });
         if (!active) return;
-
         const nextDestination = withPrediction(baseDestination, prediction);
         setDestination(nextDestination);
-        setRouteId(nextDestination.routes[0]?.routeId ?? null);
+        setSelectedCandidateId(candidate.candidateId);
+        setSelectedTripId(nextDestination.routes[0]?.tripId ?? null);
         setCompareMode(nextDestination.hasPrediction ? "comfort" : "fast");
         setScreen(requestedScreen === "detail" ? "detail" : "compare");
       } catch {
@@ -542,16 +675,42 @@ export default function App() {
     };
   }, [requestedScreen, requestedStopId]);
 
-  const route = destination?.routes?.find((candidate) => candidate.routeId === routeId) ?? destination?.routes?.[0];
+  const preferredArrival = arrivals.find((arrival) => arrival.tripId === preferredTripId) ?? null;
+  const candidatePool = useMemo(() => {
+    if (!destination) return [];
+    if (!preferredArrival) return destination.alightingCandidates;
+    const served = destination.alightingCandidates.filter((candidate) =>
+      candidate.servedRouteIds.includes(preferredArrival.routeId),
+    );
+    return served.length ? served : destination.alightingCandidates;
+  }, [destination, preferredArrival]);
+  const selectedCandidate = candidatePool.find((candidate) => candidate.candidateId === selectedCandidateId)
+    ?? candidatePool[0]
+    ?? null;
+  const selectedRoute = destination?.routes?.find((route) => route.tripId === selectedTripId)
+    ?? destination?.routes?.[0]
+    ?? null;
 
   const selectDestination = (nextDestination) => {
+    const nextCandidates = preferredArrival
+      ? nextDestination.alightingCandidates.filter((candidate) => candidate.servedRouteIds.includes(preferredArrival.routeId))
+      : nextDestination.alightingCandidates;
+    const candidates = nextCandidates.length ? nextCandidates : nextDestination.alightingCandidates;
+    const candidate = candidates.find((item) => item.recommended) ?? candidates[0];
     setDestination(nextDestination);
-    setRouteId(null);
-    setCompareMode("comfort");
-    setScreen("confirm");
+    setSelectedCandidateId(candidate.candidateId);
+    setSelectedTripId(null);
+    setScreen("alighting");
   };
 
-  const analyzeDestination = async () => {
+  const selectPreferredBus = (tripId) => {
+    setPreferredTripId(tripId);
+    setDestination(null);
+    setSelectedCandidateId(null);
+    setScreen("destination");
+  };
+
+  const analyzeJourney = async () => {
     const requestId = analysisRequestRef.current + 1;
     analysisRequestRef.current = requestId;
     setScreen("analyzing");
@@ -561,14 +720,19 @@ export default function App() {
         busApi.getJourneyPrediction({
           originStopId: currentStop.stopId,
           destinationId: destination.destinationId,
+          destinationStopId: selectedCandidate.stopId,
+          preferredTripId,
         }),
-        new Promise((resolve) => window.setTimeout(resolve, 1000)),
+        new Promise((resolve) => window.setTimeout(resolve, 900)),
       ]);
       if (analysisRequestRef.current !== requestId) return;
-
       const nextDestination = withPrediction(destination, prediction);
       setDestination(nextDestination);
-      setRouteId(nextDestination.routes[0]?.routeId ?? null);
+      setSelectedTripId(
+        nextDestination.routes.find((route) => route.tripId === preferredTripId)?.tripId
+          ?? nextDestination.routes[0]?.tripId
+          ?? null,
+      );
       setCompareMode(nextDestination.hasPrediction ? "comfort" : "fast");
       setScreen("compare");
     } catch {
@@ -578,15 +742,22 @@ export default function App() {
 
   const cancelAnalysis = () => {
     analysisRequestRef.current += 1;
-    setScreen("confirm");
+    setScreen("alighting");
+  };
+
+  const resetJourney = () => {
+    setDestination(null);
+    setSelectedCandidateId(null);
+    setSelectedTripId(null);
+    setPreferredTripId(null);
+    setCompareMode("comfort");
+    setScreen("destination");
   };
 
   if (screen === "loading" || screen === "error") {
     return (
       <div className="app-shell">
-        <div className="phone-frame">
-          <StatusScreen error={screen === "error"} />
-        </div>
+        <div className="phone-frame"><StatusScreen error={screen === "error"} /></div>
       </div>
     );
   }
@@ -595,42 +766,72 @@ export default function App() {
     <div className="app-shell">
       <div className="phone-frame">
         {screen === "destination" && currentStop && (
-          <DestinationScreen currentStop={currentStop} destinations={destinations} onSelect={selectDestination} />
-        )}
-        {screen === "confirm" && currentStop && destination && (
-          <ConfirmScreen
+          <DestinationScreen
             currentStop={currentStop}
-            destination={destination}
-            onBack={() => setScreen("destination")}
-            onConfirm={analyzeDestination}
+            destinations={destinations}
+            arrivals={arrivals}
+            preferredTripId={preferredTripId}
+            onSelectDestination={selectDestination}
+            onChooseBus={() => setScreen("bus-select")}
+            onClearBus={() => setPreferredTripId(null)}
           />
         )}
-        {screen === "analyzing" && currentStop && destination && (
-          <AnalyzingScreen currentStop={currentStop} destination={destination} onBack={cancelAnalysis} />
+        {screen === "bus-select" && currentStop && (
+          <BusSelectScreen
+            currentStop={currentStop}
+            arrivals={arrivals}
+            onBack={() => setScreen("destination")}
+            onSelect={selectPreferredBus}
+          />
         )}
-        {screen === "compare" && destination && (
+        {screen === "alighting" && currentStop && destination && selectedCandidate && (
+          <AlightingScreen
+            currentStop={currentStop}
+            destination={destination}
+            candidates={candidatePool}
+            selectedCandidate={selectedCandidate}
+            preferredArrival={preferredArrival}
+            onBack={() => setScreen("destination")}
+            onSelectCandidate={setSelectedCandidateId}
+            onConfirm={analyzeJourney}
+          />
+        )}
+        {screen === "analyzing" && currentStop && selectedCandidate && (
+          <AnalyzingScreen currentStop={currentStop} selectedCandidate={selectedCandidate} onBack={cancelAnalysis} />
+        )}
+        {screen === "compare" && destination && selectedCandidate && (
           <CompareScreen
             destination={destination}
+            selectedCandidate={selectedCandidate}
+            preferredTripId={preferredTripId}
             mode={compareMode}
             onModeChange={setCompareMode}
-            onBack={() => setScreen("confirm")}
-            onRoute={(nextRouteId) => {
-              setRouteId(nextRouteId);
+            onBack={() => setScreen("alighting")}
+            onRoute={(tripId) => {
+              setSelectedTripId(tripId);
               setScreen("detail");
             }}
           />
         )}
-        {screen === "detail" && currentStop && destination && route && (
+        {screen === "detail" && currentStop && destination && selectedCandidate && selectedRoute && (
           <DetailScreen
             currentStop={currentStop}
             destination={destination}
-            route={route}
+            selectedCandidate={selectedCandidate}
+            route={selectedRoute}
             onBack={() => setScreen("compare")}
             onSelect={() => setScreen("selected")}
           />
         )}
-        {screen === "selected" && currentStop && destination && route && (
-          <SelectedScreen currentStop={currentStop} destination={destination} route={route} onChange={() => setScreen("compare")} />
+        {screen === "selected" && currentStop && destination && selectedCandidate && selectedRoute && (
+          <SelectedScreen
+            currentStop={currentStop}
+            destination={destination}
+            selectedCandidate={selectedCandidate}
+            route={selectedRoute}
+            onChangeBus={() => setScreen("compare")}
+            onNewDestination={resetJourney}
+          />
         )}
       </div>
     </div>

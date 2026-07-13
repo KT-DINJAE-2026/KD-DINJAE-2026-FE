@@ -1,112 +1,113 @@
 # 버스 구간 혼잡도 안내 FE
 
-정류장 QR로 출발지를 확인하고, 목적지까지 갈 수 있는 버스의 입석 부담을 비교하는 React 프로토타입입니다.
+정류장 QR로 출발지를 확인하고, 목적지까지 가는 버스의 입석 부담과 도착시간을 비교하는 React 프로토타입입니다.
 
-현재 도착할 버스가 붐비는지만 보여주는 대신, 사용자가 타는 정류장부터 내리는 정류장까지의 혼잡한 구간을 함께 보여주는 것이 핵심입니다. 혼잡도 예측에 필요한 데이터가 부족할 때는 기능을 막지 않고 목적지에 빨리 도착하는 버스부터 안내합니다.
-
-지금 들어 있는 정류장, 노선, 도착시간, 혼잡도는 화면 개발을 위한 예시 데이터입니다.
+현재 버스 한 대의 혼잡도만 보여주는 방식이 아니라 사용자가 타는 정류장부터 내리는 정류장까지 구간별 탑승 인원을 예측합니다. 과거 데이터가 부족한 구간은 혼잡도를 억지로 표시하지 않고, 확인 가능한 도착 정보로 빠른 버스를 안내합니다.
 
 배포 화면: https://kd-dinjae-2026-fe.vercel.app
 
-## 주요 흐름
+## 이용 흐름
 
-1. 정류장 QR에 포함된 `stopId`로 출발지를 확인합니다.
-2. 사용자가 목적지 또는 주변 장소를 검색합니다.
-3. 목적지를 확인하면 이용 가능한 버스를 분석합니다.
-4. `덜 붐비는 버스`와 `빠른 도착` 기준을 바꿔 비교합니다.
-5. 버스를 누르면 구간별 입석 부담을 확인한 뒤 선택할 수 있습니다.
+1. 정류장 QR의 `stopId`로 출발 정류장과 운행 방향을 확인합니다.
+2. 목적지나 주변 장소를 글자 또는 음성으로 입력합니다.
+3. 목적지 주변에서 이동하기 편한 하차 정류장을 거리 사진과 도보 거리로 확인합니다.
+4. 현재 도착 예정 버스별 이동시간과 구간별 입석 부담을 비교합니다.
+5. 버스 상세에서 `여유·보통·혼잡` 구간을 확인한 뒤 한 대를 선택합니다.
 
-`빠른 도착`은 버스 대기시간과 목적지까지의 이동시간을 더한 값으로 비교합니다. `덜 붐비는 버스`는 이동 중 입석 부담이 예상되는 시간이 짧은 순서로 보여줍니다.
+탈 버스를 이미 알고 있다면 목적지 입력 전에 버스를 먼저 고를 수 있습니다. 이 선택은 가능한 목적지를 거르는 데만 사용하며 기본 흐름을 막지는 않습니다.
 
 ## 실행 방법
-
-Node.js가 설치된 환경에서 아래 명령을 실행합니다.
 
 ```bash
 npm install
 npm run dev
 ```
 
-개발 서버가 실행되면 `http://localhost:5173`에서 확인할 수 있습니다.
-
-배포용 파일은 다음 명령으로 만듭니다.
+개발 서버는 기본적으로 `http://localhost:5173`에서 열립니다. 배포용 빌드는 아래 명령으로 확인합니다.
 
 ```bash
 npm run build
 ```
 
-## 확인 가능한 화면
+## 확인할 수 있는 경우
 
-기본 화면에서 아래 목적지를 선택하면 두 가지 응답을 확인할 수 있습니다.
-
-- `보문역 2번 출구`: 혼잡도 예측 결과가 있는 경우
+- `보문역 2번 출구`: 혼잡도 예측 결과와 하차 정류장 후보가 있는 경우
 - `서울시청`: 과거 데이터가 부족해 빠른 도착만 제공하는 경우
+- `탈 버스를 이미 알고 있어요`: 도착 예정 버스를 먼저 고르는 선택 흐름
 
-개발 중에는 쿼리로 특정 화면을 바로 열 수 있습니다.
+개발 중 특정 화면을 바로 열 수 있습니다.
 
 ```text
-http://localhost:5173/?stopId=stop-seongbuk-office
-http://localhost:5173/?screen=compare
-http://localhost:5173/?screen=limited
-http://localhost:5173/?screen=detail
+/?stopId=stop-seongbuk-office
+/?screen=bus-select
+/?screen=alighting
+/?screen=compare
+/?screen=limited
+/?screen=detail
 ```
 
 ## 폴더 구성
 
 ```text
+public/images/                    하차 정류장 거리 사진 예시
 src/
-├── api/
-│   └── busApi.js                 Mock과 Spring API 전환
+├── api/busApi.js                 Mock과 Spring API 요청을 한곳에서 전환
 ├── mocks/
-│   ├── bootstrap.json            출발 정류장과 목적지 후보
+│   ├── bootstrap.json            출발 정류장, 도착 버스, 목적지·하차 후보
 │   └── predictions/
-│       ├── bomun.json             혼잡도 예측 성공
-│       └── cityhall.json          혼잡도 데이터 부족
+│       ├── bomun.json             혼잡도 예측 성공 응답
+│       └── cityhall.json          혼잡도 데이터 부족 응답
 ├── App.jsx                        화면과 사용자 흐름
-├── main.jsx
-└── styles.css
+└── styles.css                     주황색 테마와 반응형 스타일
+design/figma-import/               Figma용 흐름도와 화면 SVG
+docs/API_CONTRACT_DRAFT.md         백엔드 협의용 요청·응답 초안
 ```
 
-Figma 화면은 [`../design/figma-import`](../design/figma-import)에서 확인할 수 있습니다.
+Figma 화면은 [`design/figma-import`](design/figma-import)에서 확인할 수 있습니다. 한눈에 볼 때는 [`contact-sheet.png`](design/figma-import/contact-sheet.png)가 가장 편합니다.
 
-## Mock 데이터 사용 방식
+## Mock JSON 구조
 
-화면 컴포넌트에서 JSON을 직접 불러오지 않고 `src/api/busApi.js`를 통해 요청합니다. 현재는 `mock` 모드라 로컬 JSON을 반환하고, 백엔드가 준비되면 같은 함수가 Spring API를 호출합니다.
+화면 컴포넌트는 JSON 파일을 직접 읽지 않고 `src/api/busApi.js`만 호출합니다.
 
 ```text
 React 화면 → busApi → Mock JSON
                     → Spring API
 ```
 
-이 구조를 유지하면 실제 API를 연결할 때 화면 코드를 다시 고칠 필요가 없습니다. 대신 Mock JSON의 필드명과 응답 구조는 최종 Swagger 응답과 같아야 합니다.
+현재 `VITE_API_MODE`의 기본값은 `mock`입니다. Swagger가 정해지면 Mock JSON과 서버 응답의 필드명을 먼저 맞추고 `server` 모드로 바꿉니다.
 
-### 파일별 역할
+### `bootstrap.json`
 
-| 파일 | 사용 시점 | 내용 |
-| --- | --- | --- |
-| `bootstrap.json` | QR로 처음 들어왔을 때 | 현재 정류장과 목적지 후보 |
-| `bomun.json` | 보문역 분석 요청 | 도착시간, 이동시간, 구간별 혼잡도 |
-| `cityhall.json` | 서울시청 분석 요청 | 혼잡도 없이 도착시간과 이동시간만 제공 |
+QR로 처음 들어왔을 때 필요한 데이터를 한 번에 담습니다.
 
-### 주요 필드
+- `currentStop`: 현재 정류장 ID, 이름, 운행 방향
+- `arrivals`: 이 정류장에 실제로 도착할 버스 목록
+- `destinations`: 검색용 목적지와 목적지 주변 하차 정류장 후보
+- `alightingCandidates`: 정류장 이름, 랜드마크, 도보 시간, 사진, 운행 노선
+
+### `predictions/*.json`
+
+사용자가 하차 정류장을 정한 뒤 조회하는 여정 분석 결과입니다.
+
+- `status`: `SUCCESS` 또는 `INSUFFICIENT_DATA`
+- `routes`: 비교할 도착 예정 버스
+- `standingBurdenMinutes`: 입석 부담이 예상되는 시간
+- `segments`: 출발지부터 하차 지점까지의 구간별 혼잡 단계
+- `predictionBasis`: 예측에 사용한 시간대와 기준 설명
+
+### 자주 쓰는 ID
 
 | 필드 | 의미 | 예시 |
 | --- | --- | --- |
-| `stopId` | 출발 정류장을 구분하는 ID | `stop-seongbuk-office` |
-| `destinationId` | 목적지 후보를 구분하는 ID | `bomun` |
-| `routeId` | 버스 노선 ID | `1112` |
-| `routeNumber` | 화면에 표시할 노선 번호 | `1112번` |
-| `arrivalMinutes` | 버스가 출발 정류장에 올 때까지 남은 시간 | `5` |
-| `travelMinutes` | 승차 후 목적지까지 예상 이동시간 | `15` |
-| `standingBurdenMinutes` | `보통` 이상 구간의 예상 시간을 모두 더한 값 | `3` |
-| `standingBurdenLevel` | 노선 전체의 입석 부담 단계 | `LOW` |
-| `congestionLevel` | 한 구간의 예상 혼잡 단계 | `NORMAL` |
-| `durationMinutes` | 해당 구간을 지나는 데 걸리는 시간 | `3` |
-| `generatedAt` | 예측 결과를 만든 시각 | ISO 8601 문자열 |
+| `stopId` | 정류장 고유 ID | `stop-seongbuk-office` |
+| `destinationId` | 장소 검색 결과 ID | `bomun` |
+| `candidateId` | 목적지 주변 하차 후보 ID | `bomun-exit2` |
+| `routeId` | 노선 자체의 ID | `1112` |
+| `tripId` | 지금 도착할 특정 운행 버스 ID | `trip-1112-1358` |
 
-`standingBurdenMinutes`는 각 구간 중 `NORMAL` 이상인 구간의 `durationMinutes`를 더한 값입니다. 예를 들어 보통 3분, 여유 12분인 노선이라면 입석 부담 예상 시간은 3분입니다.
+같은 노선 번호라도 도착 시각과 차량 종류가 다른 운행이 올 수 있으므로 화면에서 버스를 고를 때는 `routeId`가 아니라 `tripId`를 사용합니다.
 
-혼잡 단계는 코드로 전달하고, 화면에 표시할 한글과 색상은 프론트에서 정합니다.
+### 혼잡도 값
 
 | API 값 | 화면 표시 |
 | --- | --- |
@@ -115,11 +116,13 @@ React 화면 → busApi → Mock JSON
 | `CROWDED` | 혼잡 |
 | `VERY_CROWDED` | 매우 혼잡 |
 
-노선 전체의 입석 부담은 `LOW`, `MEDIUM`, `HIGH`를 사용합니다. 서버 응답에는 CSS 색상 이름이나 `tone` 같은 화면 전용 값을 넣지 않습니다.
+`standingBurdenMinutes`는 `NORMAL` 이상으로 예상된 구간의 시간을 합친 값입니다. `여유`는 앉을 가능성이 상대적으로 높은 단계이며 좌석을 보장한다는 뜻은 아닙니다.
 
-### 데이터가 부족한 경우
+서버는 혼잡도 코드와 수치만 전달하고 한글 문구와 색상은 프론트에서 정합니다. CSS 색상이나 `tone` 같은 화면용 값은 API에 넣지 않습니다.
 
-혼잡도 데이터 부족은 요청 실패와 구분합니다. 서버는 `200 OK`와 함께 `status`를 `INSUFFICIENT_DATA`로 내려주고, 사용할 수 있는 도착시간과 이동시간은 그대로 제공합니다.
+## 데이터가 부족할 때
+
+예측 데이터 부족과 서버 오류는 다르게 처리합니다. 도착시간과 이동시간을 쓸 수 있다면 서버는 `200 OK`와 `INSUFFICIENT_DATA`를 반환합니다.
 
 ```json
 {
@@ -127,6 +130,7 @@ React 화면 → busApi → Mock JSON
   "reasonCode": "NOT_ENOUGH_HISTORICAL_SAMPLES",
   "routes": [
     {
+      "tripId": "trip-101-1402",
       "routeId": "101",
       "routeNumber": "101번",
       "arrivalMinutes": 4,
@@ -136,22 +140,20 @@ React 화면 → busApi → Mock JSON
 }
 ```
 
-이 응답을 받으면 `덜 붐비는 버스` 선택을 비활성화하고 빠른 도착순으로만 보여줍니다.
+이 경우 `덜 붐비는 버스`는 비활성화하고 `arrivalMinutes + travelMinutes`가 짧은 순서로 보여줍니다.
 
 ## Spring API 연결
 
-백엔드가 준비되면 `.env`를 만들고 모드를 변경합니다.
+`.env`에 아래 값을 넣으면 `busApi`가 Spring 서버를 호출합니다.
 
 ```bash
 VITE_API_MODE=server
 VITE_API_BASE_URL=http://localhost:8080
 ```
 
-현재 프론트에서 사용하는 함수는 다음 두 개입니다.
+현재 화면에서 사용하는 함수는 다음과 같습니다.
 
 - `getBootstrap(stopId)`
-- `getJourneyPrediction({ originStopId, destinationId })`
+- `getJourneyPrediction({ originStopId, destinationId, destinationStopId, preferredTripId })`
 
-목적지 검색은 아직 `bootstrap.json`의 후보를 브라우저에서 필터링합니다. 검색 API가 확정되면 `busApi.searchDestinations`를 추가할 예정입니다.
-
-요청 시점과 응답 예시는 [`docs/API_CONTRACT_DRAFT.md`](docs/API_CONTRACT_DRAFT.md)에 따로 정리했습니다. Swagger가 확정되면 이 문서와 `src/mocks`를 먼저 맞춘 뒤 서버 모드로 전환하면 됩니다.
+목적지 검색은 현재 Mock 후보를 브라우저에서 필터링합니다. 검색 API가 확정되면 `busApi.searchDestinations`를 추가할 예정입니다. 요청 시점과 전체 응답 예시는 [`docs/API_CONTRACT_DRAFT.md`](docs/API_CONTRACT_DRAFT.md)에 정리했습니다.
