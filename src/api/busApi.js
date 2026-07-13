@@ -46,7 +46,7 @@ async function getBootstrap(stopId) {
   return request(`/api/v1/stops/${encodeURIComponent(stopId)}/context`);
 }
 
-async function getJourneyPrediction({ originStopId, destinationId, destinationStopId, preferredTripId }) {
+async function getJourneyPrediction({ originStopId, destinationId, destinationStopId }) {
   if (API_MODE === "mock") {
     await wait(MOCK_DELAY_MS);
     const response = predictionMocks[destinationId];
@@ -56,7 +56,7 @@ async function getJourneyPrediction({ originStopId, destinationId, destinationSt
 
   return request("/api/v1/journeys/predictions", {
     method: "POST",
-    body: JSON.stringify({ originStopId, destinationId, destinationStopId, preferredTripId }),
+    body: JSON.stringify({ originStopId, destinationId, destinationStopId }),
   });
 }
 

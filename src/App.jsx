@@ -1,6 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
-  Accessibility,
   AlertTriangle,
   ArrowLeft,
   BusFront,
@@ -137,38 +136,36 @@ function StatusScreen({ error = false }) {
 function DestinationScreen({
   currentStop,
   destinations,
-  arrivals,
-  preferredTripId,
   onSelectDestination,
-  onChooseBus,
-  onClearBus,
 }) {
   const [query, setQuery] = useState("");
   const [voiceMessage, setVoiceMessage] = useState("");
   const inputRef = useRef(null);
-  const preferredArrival = arrivals.find((arrival) => arrival.tripId === preferredTripId);
-
-  const availableDestinations = useMemo(() => {
-    if (!preferredArrival) return destinations;
-    return destinations.filter((destination) =>
-      destination.alightingCandidates.some((candidate) => candidate.servedRouteIds.includes(preferredArrival.routeId)),
-    );
-  }, [destinations, preferredArrival]);
 
   const matches = useMemo(() => {
-    const keyword = query.trim();
-    if (!keyword) return availableDestinations;
-    return availableDestinations.filter((destination) =>
+    const keyword = query.trim().toLocaleLowerCase("ko-KR");
+    if (!keyword) return destinations;
+    return destinations.filter((destination) =>
       [destination.displayName, destination.nearbyDescription, ...destination.searchKeywords]
         .join(" ")
+        .toLocaleLowerCase("ko-KR")
         .includes(keyword),
     );
-  }, [availableDestinations, query]);
+  }, [destinations, query]);
 
   const submitSearch = (event) => {
     event.preventDefault();
-    if (matches.length) {
+    if (!query.trim()) {
+      setVoiceMessage("목적지를 먼저 입력해주세요.");
+      inputRef.current?.focus();
+      return;
+    }
+    if (matches.length === 1) {
       onSelectDestination(matches[0]);
+      return;
+    }
+    if (matches.length > 1) {
+      setVoiceMessage("검색 결과에서 목적지를 선택해주세요.");
       return;
     }
     setVoiceMessage("일치하는 장소가 없어요. 다른 이름으로 검색해주세요.");
@@ -206,14 +203,6 @@ function DestinationScreen({
         <p>장소를 입력하거나 마이크 버튼을 눌러 말씀해주세요.</p>
       </section>
 
-      {preferredArrival && (
-        <div className="preferred-bus-banner">
-          <BusFront aria-hidden="true" />
-          <span><strong>{preferredArrival.routeNumber}</strong>이 가는 목적지만 보여드려요.</span>
-          <button type="button" onClick={onClearBus}>선택 취소</button>
-        </div>
-      )}
-
       <form id="destination-form" className="search-form" onSubmit={submitSearch}>
         <Search aria-hidden="true" />
         <label className="sr-only" htmlFor="destination-search">목적지 검색</label>
@@ -221,7 +210,10 @@ function DestinationScreen({
           id="destination-search"
           ref={inputRef}
           value={query}
-          onChange={(event) => setQuery(event.target.value)}
+          onChange={(event) => {
+            setQuery(event.target.value);
+            setVoiceMessage("");
+          }}
           placeholder="예: 보문역 2번 출구"
           autoComplete="off"
         />
@@ -232,7 +224,7 @@ function DestinationScreen({
       <p className="voice-message" aria-live="polite">{voiceMessage}</p>
 
       <section className="place-section" aria-labelledby="place-title">
-        <h2 id="place-title">{query ? "검색 결과" : preferredArrival ? "갈 수 있는 목적지" : "최근 목적지"}</h2>
+        <h2 id="place-title">{query ? "검색 결과" : "최근 목적지"}</h2>
         <div className="place-list">
           {matches.map((destination) => (
             <button
@@ -255,53 +247,15 @@ function DestinationScreen({
 
       <div className="screen-bottom destination-bottom">
         <button className="primary-button" type="submit" form="destination-form">목적지 찾기</button>
-        <button className="secondary-button secondary-button--full secondary-button--icon" type="button" onClick={onChooseBus}>
-          <BusFront aria-hidden="true" />
-          탈 버스를 이미 알고 있어요
-        </button>
-      </div>
-    </main>
-  );
-}
-
-function BusSelectScreen({ currentStop, arrivals, onBack, onSelect }) {
-  return (
-    <main className="screen" aria-labelledby="bus-select-title">
-      <BackHeader title={currentStop.stopName} onBack={onBack} />
-      <section className="screen-heading screen-heading--compact">
-        <h1 id="bus-select-title">탈 버스를<br />골라주세요</h1>
-        <p>이 정류장에 곧 도착하는 버스예요.</p>
-      </section>
-
-      <section className="arrival-list" aria-label="도착 예정 버스">
-        {arrivals.map((arrival) => (
-          <button className="arrival-option" type="button" key={arrival.tripId} onClick={() => onSelect(arrival.tripId)}>
-            <span className="arrival-option__route">
-              <strong>{arrival.routeNumber}</strong>
-              <small>{arrival.direction}</small>
-            </span>
-            <span className="arrival-option__time">
-              <strong>{arrival.arrivalMinutes}분 후</strong>
-              <small>{arrival.vehicleType}</small>
-            </span>
-            <ChevronRight aria-hidden="true" />
-          </button>
-        ))}
-      </section>
-
-      <div className="screen-bottom">
-        <InfoBand icon={Accessibility}>저상버스 여부는 실제 배차 상황에 따라 달라질 수 있어요.</InfoBand>
       </div>
     </main>
   );
 }
 
 function AlightingScreen({
-  currentStop,
   destination,
   candidates,
   selectedCandidate,
-  preferredArrival,
   onBack,
   onSelectCandidate,
   onConfirm,
@@ -329,9 +283,6 @@ function AlightingScreen({
           <span><Footprints aria-hidden="true" /><strong>도보 {selectedCandidate.walkMinutes}분</strong></span>
           <span>{selectedCandidate.walkingDistanceMeters}m</span>
         </div>
-        {preferredArrival && (
-          <p className="served-route"><BusFront aria-hidden="true" /> {preferredArrival.routeNumber}으로 갈 수 있어요.</p>
-        )}
       </section>
 
       {candidates.length > 1 && (
@@ -414,7 +365,7 @@ function ModeControl({ mode, onChange, predictionAvailable }) {
   );
 }
 
-function BusOption({ route, mode, rank, predictionAvailable, preferred, onClick }) {
+function BusOption({ route, mode, rank, predictionAvailable, onClick }) {
   const isRecommended = rank === 0;
   const total = getTotalMinutes(route);
   const badge = predictionAvailable
@@ -439,14 +390,14 @@ function BusOption({ route, mode, rank, predictionAvailable, preferred, onClick 
         </span>
       </span>
       <span className="bus-option__footer">
-        <span>{preferred ? `먼저 고른 버스 · ${route.summaryMessage}` : route.summaryMessage}</span>
+        <span>{route.summaryMessage}</span>
         <ChevronRight aria-hidden="true" />
       </span>
     </button>
   );
 }
 
-function CompareScreen({ destination, selectedCandidate, preferredTripId, mode, onModeChange, onBack, onRoute }) {
+function CompareScreen({ destination, selectedCandidate, mode, onModeChange, onBack, onRoute }) {
   const routes = useMemo(
     () => sortRoutes(destination.routes, mode, destination.hasPrediction),
     [destination, mode],
@@ -499,7 +450,6 @@ function CompareScreen({ destination, selectedCandidate, preferredTripId, mode, 
             mode={mode}
             rank={index}
             predictionAvailable={destination.hasPrediction}
-            preferred={route.tripId === preferredTripId}
             onClick={() => onRoute(route.tripId)}
           />
         ))}
@@ -607,11 +557,9 @@ export default function App() {
   const analysisRequestRef = useRef(0);
   const [screen, setScreen] = useState("loading");
   const [currentStop, setCurrentStop] = useState(null);
-  const [arrivals, setArrivals] = useState([]);
   const [destinations, setDestinations] = useState([]);
   const [destination, setDestination] = useState(null);
   const [selectedCandidateId, setSelectedCandidateId] = useState(null);
-  const [preferredTripId, setPreferredTripId] = useState(null);
   const [selectedTripId, setSelectedTripId] = useState(null);
   const [compareMode, setCompareMode] = useState("comfort");
 
@@ -627,13 +575,7 @@ export default function App() {
         const bootstrap = await busApi.getBootstrap(requestedStopId);
         if (!active) return;
         setCurrentStop(bootstrap.currentStop);
-        setArrivals(bootstrap.arrivals);
         setDestinations(bootstrap.destinations);
-
-        if (requestedScreen === "bus-select") {
-          setScreen("bus-select");
-          return;
-        }
 
         if (requestedScreen === "alighting") {
           const nextDestination = bootstrap.destinations.find((item) => item.destinationId === "bomun");
@@ -655,7 +597,6 @@ export default function App() {
           originStopId: bootstrap.currentStop.stopId,
           destinationId,
           destinationStopId: candidate.stopId,
-          preferredTripId: null,
         });
         if (!active) return;
         const nextDestination = withPrediction(baseDestination, prediction);
@@ -675,15 +616,7 @@ export default function App() {
     };
   }, [requestedScreen, requestedStopId]);
 
-  const preferredArrival = arrivals.find((arrival) => arrival.tripId === preferredTripId) ?? null;
-  const candidatePool = useMemo(() => {
-    if (!destination) return [];
-    if (!preferredArrival) return destination.alightingCandidates;
-    const served = destination.alightingCandidates.filter((candidate) =>
-      candidate.servedRouteIds.includes(preferredArrival.routeId),
-    );
-    return served.length ? served : destination.alightingCandidates;
-  }, [destination, preferredArrival]);
+  const candidatePool = destination?.alightingCandidates ?? [];
   const selectedCandidate = candidatePool.find((candidate) => candidate.candidateId === selectedCandidateId)
     ?? candidatePool[0]
     ?? null;
@@ -692,22 +625,12 @@ export default function App() {
     ?? null;
 
   const selectDestination = (nextDestination) => {
-    const nextCandidates = preferredArrival
-      ? nextDestination.alightingCandidates.filter((candidate) => candidate.servedRouteIds.includes(preferredArrival.routeId))
-      : nextDestination.alightingCandidates;
-    const candidates = nextCandidates.length ? nextCandidates : nextDestination.alightingCandidates;
+    const candidates = nextDestination.alightingCandidates;
     const candidate = candidates.find((item) => item.recommended) ?? candidates[0];
     setDestination(nextDestination);
     setSelectedCandidateId(candidate.candidateId);
     setSelectedTripId(null);
     setScreen("alighting");
-  };
-
-  const selectPreferredBus = (tripId) => {
-    setPreferredTripId(tripId);
-    setDestination(null);
-    setSelectedCandidateId(null);
-    setScreen("destination");
   };
 
   const analyzeJourney = async () => {
@@ -721,18 +644,13 @@ export default function App() {
           originStopId: currentStop.stopId,
           destinationId: destination.destinationId,
           destinationStopId: selectedCandidate.stopId,
-          preferredTripId,
         }),
         new Promise((resolve) => window.setTimeout(resolve, 900)),
       ]);
       if (analysisRequestRef.current !== requestId) return;
       const nextDestination = withPrediction(destination, prediction);
       setDestination(nextDestination);
-      setSelectedTripId(
-        nextDestination.routes.find((route) => route.tripId === preferredTripId)?.tripId
-          ?? nextDestination.routes[0]?.tripId
-          ?? null,
-      );
+      setSelectedTripId(nextDestination.routes[0]?.tripId ?? null);
       setCompareMode(nextDestination.hasPrediction ? "comfort" : "fast");
       setScreen("compare");
     } catch {
@@ -749,7 +667,6 @@ export default function App() {
     setDestination(null);
     setSelectedCandidateId(null);
     setSelectedTripId(null);
-    setPreferredTripId(null);
     setCompareMode("comfort");
     setScreen("destination");
   };
@@ -769,28 +686,14 @@ export default function App() {
           <DestinationScreen
             currentStop={currentStop}
             destinations={destinations}
-            arrivals={arrivals}
-            preferredTripId={preferredTripId}
             onSelectDestination={selectDestination}
-            onChooseBus={() => setScreen("bus-select")}
-            onClearBus={() => setPreferredTripId(null)}
-          />
-        )}
-        {screen === "bus-select" && currentStop && (
-          <BusSelectScreen
-            currentStop={currentStop}
-            arrivals={arrivals}
-            onBack={() => setScreen("destination")}
-            onSelect={selectPreferredBus}
           />
         )}
         {screen === "alighting" && currentStop && destination && selectedCandidate && (
           <AlightingScreen
-            currentStop={currentStop}
             destination={destination}
             candidates={candidatePool}
             selectedCandidate={selectedCandidate}
-            preferredArrival={preferredArrival}
             onBack={() => setScreen("destination")}
             onSelectCandidate={setSelectedCandidateId}
             onConfirm={analyzeJourney}
@@ -803,7 +706,6 @@ export default function App() {
           <CompareScreen
             destination={destination}
             selectedCandidate={selectedCandidate}
-            preferredTripId={preferredTripId}
             mode={compareMode}
             onModeChange={setCompareMode}
             onBack={() => setScreen("alighting")}

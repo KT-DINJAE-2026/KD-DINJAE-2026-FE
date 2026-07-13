@@ -42,16 +42,8 @@
 <text x="1136" y="338" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="13" font-weight="500" fill="#555555" text-anchor="start" dominant-baseline="middle" letter-spacing="0">입석 부담과 도착시간 확인</text>
   <line x1="1222" y1="370" x2="1222" y2="474" stroke="#888888" stroke-width="2" stroke-linecap="round"/>
   <path d="M1216 466L1222 474L1228 466" fill="none" stroke="#888888" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-  <line x1="174" y1="370" x2="174" y2="474" stroke="#888888" stroke-width="2" stroke-linecap="round" stroke-dasharray="6 6"/>
-  <path d="M168 466L174 474L180 466" fill="none" stroke="#888888" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
   <line x1="698" y1="370" x2="698" y2="474" stroke="#888888" stroke-width="2" stroke-linecap="round" stroke-dasharray="6 6"/>
   <path d="M692 466L698 474L704 466" fill="none" stroke="#888888" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-  <rect x="64" y="474" width="220" height="134" rx="8" fill="#FFFFFF" stroke="#E5E5E5" stroke-width="1"/>
-<circle cx="92" cy="502" r="16" fill="#B8560A" stroke="none" stroke-width="1"/>
-<text x="92" y="502" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="13" font-weight="800" fill="#FFFFFF" text-anchor="middle" dominant-baseline="middle" letter-spacing="0">1-A</text>
-<text x="88" y="544" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="19" font-weight="800" fill="#191919" text-anchor="start" dominant-baseline="middle" letter-spacing="0">탑승 버스 선택</text>
-<text x="88" y="576" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="13" font-weight="500" fill="#555555" text-anchor="start" dominant-baseline="middle" letter-spacing="0">목적지 화면에 선택 반영</text>
-  <text x="64" y="632" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="13" font-weight="600" fill="#555555" text-anchor="start" dominant-baseline="middle" letter-spacing="0">선택 분기 · 탈 버스를 이미 아는 경우에만 사용</text>
   <rect x="588" y="474" width="220" height="134" rx="8" fill="#FFFFFF" stroke="#E5E5E5" stroke-width="1"/>
 <circle cx="616" cy="502" r="16" fill="#888888" stroke="none" stroke-width="1"/>
 <text x="616" y="502" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="13" font-weight="800" fill="#FFFFFF" text-anchor="middle" dominant-baseline="middle" letter-spacing="0">4-B</text>

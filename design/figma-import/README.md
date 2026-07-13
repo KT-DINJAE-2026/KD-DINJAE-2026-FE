@@ -1,17 +1,13 @@
 # Figma 화면 자료
 
-정류장 QR로 출발지를 확인한 뒤 목적지, 하차 정류장, 탑승할 버스를 차례로 정하는 흐름입니다. React 프로토타입과 같은 내용으로 맞춰 두었으며 각 SVG는 Figma에 바로 가져올 수 있습니다.
-
-버스 선택은 필수 단계가 아닙니다. 기본 흐름은 목적지를 먼저 찾고, 이미 탈 버스를 알고 있는 사용자만 보조 화면에서 버스를 먼저 고릅니다.
+정류장 QR로 출발지를 확인한 뒤 목적지와 하차 정류장을 정하고, 실제 도착 예정 버스를 비교하는 흐름입니다. React 프로토타입과 같은 내용으로 맞춰 두었으며 각 SVG는 Figma에 바로 가져올 수 있습니다.
 
 ## 파일 구성
 
 | 파일 | 화면 |
 | --- | --- |
-| `00-user-flow.svg` | 기본 흐름, 버스 우선 선택, 데이터 부족 분기 |
+| `00-user-flow.svg` | 기본 흐름과 데이터 부족 분기 |
 | `01-destination.svg` | QR 출발지와 목적지 입력 |
-| `01-bus-select.svg` | 곧 도착할 버스 중 하나를 먼저 선택 |
-| `01-destination-preferred.svg` | 먼저 고른 버스가 반영된 목적지 입력 |
 | `02-alighting.svg` | 거리 사진과 도보 거리로 하차 정류장 확인 |
 | `03-analyzing.svg` | 도착 버스와 구간별 탑승 인원 분석 |
 | `04-compare.svg` | 입석 부담이 적은 순서로 비교 |
@@ -47,16 +43,6 @@
   1112번 → 05-detail
 05-detail
   1112번 선택하기 → 06-selected-comfort
-
-버스를 먼저 고르는 흐름
-01-destination
-  탈 버스를 이미 알고 있어요 → 01-bus-select
-01-bus-select
-  1112번 → 01-destination-preferred
-01-destination-preferred
-  목적지 선택/찾기 → 02-alighting
-  해제 → 01-destination
-  다른 버스 고르기 → 01-bus-select
 
 비교와 예외
 04-compare-fast

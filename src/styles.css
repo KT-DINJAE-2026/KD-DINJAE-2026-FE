@@ -200,41 +200,6 @@ input:focus-visible {
   line-height: 1.55;
 }
 
-.preferred-bus-banner {
-  min-height: 58px;
-  margin-top: 22px;
-  padding: 10px 12px;
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  color: #555555;
-  background: #fff0e6;
-  font-size: 13px;
-}
-
-.preferred-bus-banner > svg {
-  width: 22px;
-  flex: 0 0 22px;
-  color: #b8560a;
-}
-
-.preferred-bus-banner > span {
-  min-width: 0;
-  flex: 1;
-}
-
-.preferred-bus-banner button {
-  min-height: 44px;
-  padding: 0 8px;
-  border: 0;
-  color: #8f4107;
-  background: transparent;
-  font-size: 12px;
-  font-weight: 800;
-  cursor: pointer;
-}
-
 .search-form {
   min-height: 64px;
   margin-top: 28px;
@@ -245,10 +210,6 @@ input:focus-visible {
   align-items: center;
   gap: 12px;
   background: #f2f3f3;
-}
-
-.preferred-bus-banner + .search-form {
-  margin-top: 14px;
 }
 
 .search-form:focus-within {
@@ -305,7 +266,6 @@ input:focus-visible {
 }
 
 .place-list,
-.arrival-list,
 .bus-list,
 .candidate-list {
   display: grid;
@@ -410,18 +370,6 @@ input:focus-visible {
   background: #f2f3f3;
 }
 
-.secondary-button--icon {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-}
-
-.secondary-button--icon svg {
-  width: 22px;
-  color: #b8560a;
-}
-
 .text-button {
   min-height: 44px;
   padding: 0 8px;
@@ -481,60 +429,6 @@ input:focus-visible {
   font-size: 12px;
   line-height: 1.45;
   text-align: center;
-}
-
-.arrival-list {
-  margin-top: 30px;
-}
-
-.arrival-option {
-  width: 100%;
-  min-height: 88px;
-  padding: 14px 14px 14px 16px;
-  border: 1px solid #e3e4e4;
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  text-align: left;
-  background: #ffffff;
-  cursor: pointer;
-}
-
-.arrival-option__route {
-  min-width: 0;
-  flex: 1;
-  display: grid;
-  gap: 6px;
-}
-
-.arrival-option__route strong {
-  font-size: 22px;
-}
-
-.arrival-option__route small,
-.arrival-option__time small {
-  color: #777777;
-  font-size: 12px;
-  font-weight: 600;
-}
-
-.arrival-option__time {
-  flex: 0 0 auto;
-  display: grid;
-  gap: 6px;
-  text-align: right;
-}
-
-.arrival-option__time strong {
-  color: #b8560a;
-  font-size: 15px;
-}
-
-.arrival-option > svg {
-  width: 20px;
-  flex: 0 0 20px;
-  color: #888888;
 }
 
 .alighting-heading {
@@ -614,22 +508,15 @@ input:focus-visible {
   font-size: 14px;
 }
 
-.walk-metrics > span:first-child,
-.served-route {
+.walk-metrics > span:first-child {
   display: inline-flex;
   align-items: center;
   gap: 8px;
 }
 
-.walk-metrics svg,
-.served-route svg {
+.walk-metrics svg {
   width: 20px;
   color: #b8560a;
-}
-
-.served-route {
-  color: #2f7248 !important;
-  font-weight: 700;
 }
 
 .candidate-switcher {

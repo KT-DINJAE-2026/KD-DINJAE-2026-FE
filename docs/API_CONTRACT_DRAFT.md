@@ -6,13 +6,13 @@
 
 | 사용자 동작 | 요청 | 화면에서 쓰는 값 |
 | --- | --- | --- |
-| 정류장 QR 진입 | `GET /api/v1/stops/{stopId}/context` | 현재 정류장, 도착 예정 버스, 초기 목적지 후보 |
+| 정류장 QR 진입 | `GET /api/v1/stops/{stopId}/context` | 현재 정류장과 초기 목적지 후보 |
 | 목적지 검색 | `GET /api/v1/destinations?originStopId={id}&query={text}` | 장소와 주변 하차 정류장 후보, 추가 예정 |
 | 하차 정류장 확정 | `POST /api/v1/journeys/predictions` | 도착 버스별 이동시간과 구간별 입석 부담 |
 | 다시 분석 | 위 예측 API 재호출 | 최신 `generatedAt` 결과 |
 | 버스 최종 선택 | 요청 없음 | 예약이나 알림 기능이 생길 때 별도 논의 |
 
-현재 프론트는 `context` 응답에서 정류장 정보, 도착 버스, 초기 목적지 후보를 함께 받습니다. 첫 연동 때는 이 구조를 그대로 제공해야 합니다. 목적지 검색 API가 추가되면 입력 검색 결과만 별도 요청으로 바꾸고, 목적지 객체와 하차 후보의 구조는 그대로 유지합니다.
+현재 프론트는 `context` 응답에서 정류장 정보와 초기 목적지 후보를 함께 받습니다. 첫 연동 때는 이 구조를 그대로 제공해야 합니다. 목적지 검색 API가 추가되면 입력 검색 결과만 별도 요청으로 바꾸고, 목적지 객체와 하차 후보의 구조는 그대로 유지합니다.
 
 ## ID 기준
 
@@ -38,17 +38,6 @@ GET /api/v1/stops/stop-seongbuk-office/context
     "stopName": "성북구청 정류장",
     "directionDescription": "보문역·종로 방면"
   },
-  "arrivals": [
-    {
-      "tripId": "trip-1112-1403",
-      "routeId": "1112",
-      "routeNumber": "1112번",
-      "direction": "보문역·신설동 방면",
-      "arrivalMinutes": 5,
-      "vehicleType": "저상버스",
-      "isLowFloor": true
-    }
-  ],
   "destinations": [
     {
       "destinationId": "bomun",
@@ -75,7 +64,7 @@ GET /api/v1/stops/stop-seongbuk-office/context
 }
 ```
 
-`arrivalMinutes`는 최상단 `generatedAt` 시각을 기준으로 계산합니다.
+`generatedAt`은 초기 목적지 후보를 만든 시각입니다. 버스 도착시간의 기준 시각은 여정 분석 응답에서 다시 제공합니다.
 
 ## 2. 목적지 검색과 하차 후보
 
@@ -125,12 +114,9 @@ Content-Type: application/json
 {
   "originStopId": "stop-seongbuk-office",
   "destinationId": "bomun",
-  "destinationStopId": "stop-bomun-exit2",
-  "preferredTripId": "trip-1112-1403"
+  "destinationStopId": "stop-bomun-exit2"
 }
 ```
-
-`preferredTripId`는 버스를 먼저 고른 경우에만 전달하며 그 외에는 `null`입니다. 먼저 고른 버스가 운행 종료나 도착 완료로 더 이상 유효하지 않다면 서버는 다른 버스 결과를 정상 반환하고, 필요하면 별도 `reasonCode`를 추가합니다.
 
 ## 예측 성공 응답
 

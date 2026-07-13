@@ -14,8 +14,6 @@
 4. 현재 도착 예정 버스별 이동시간과 구간별 입석 부담을 비교합니다.
 5. 버스 상세에서 `여유·보통·혼잡` 구간을 확인한 뒤 한 대를 선택합니다.
 
-탈 버스를 이미 알고 있다면 목적지 입력 전에 버스를 먼저 고를 수 있습니다. 이 선택은 가능한 목적지를 거르는 데만 사용하며 기본 흐름을 막지는 않습니다.
-
 ## 실행 방법
 
 ```bash
@@ -33,13 +31,11 @@ npm run build
 
 - `보문역 2번 출구`: 혼잡도 예측 결과와 하차 정류장 후보가 있는 경우
 - `서울시청`: 과거 데이터가 부족해 빠른 도착만 제공하는 경우
-- `탈 버스를 이미 알고 있어요`: 도착 예정 버스를 먼저 고르는 선택 흐름
 
 개발 중 특정 화면을 바로 열 수 있습니다.
 
 ```text
 /?stopId=stop-seongbuk-office
-/?screen=bus-select
 /?screen=alighting
 /?screen=compare
 /?screen=limited
@@ -53,7 +49,7 @@ public/images/                    하차 정류장 거리 사진 예시
 src/
 ├── api/busApi.js                 Mock과 Spring API 요청을 한곳에서 전환
 ├── mocks/
-│   ├── bootstrap.json            출발 정류장, 도착 버스, 목적지·하차 후보
+│   ├── bootstrap.json            출발 정류장과 목적지·하차 후보
 │   └── predictions/
 │       ├── bomun.json             혼잡도 예측 성공 응답
 │       └── cityhall.json          혼잡도 데이터 부족 응답
@@ -81,7 +77,6 @@ React 화면 → busApi → Mock JSON
 QR로 처음 들어왔을 때 필요한 데이터를 한 번에 담습니다.
 
 - `currentStop`: 현재 정류장 ID, 이름, 운행 방향
-- `arrivals`: 이 정류장에 실제로 도착할 버스 목록
 - `destinations`: 검색용 목적지와 목적지 주변 하차 정류장 후보
 - `alightingCandidates`: 정류장 이름, 랜드마크, 도보 시간, 사진, 운행 노선
 
@@ -154,6 +149,6 @@ VITE_API_BASE_URL=http://localhost:8080
 현재 화면에서 사용하는 함수는 다음과 같습니다.
 
 - `getBootstrap(stopId)`
-- `getJourneyPrediction({ originStopId, destinationId, destinationStopId, preferredTripId })`
+- `getJourneyPrediction({ originStopId, destinationId, destinationStopId })`
 
 목적지 검색은 현재 Mock 후보를 브라우저에서 필터링합니다. 검색 API가 확정되면 `busApi.searchDestinations`를 추가할 예정입니다. 요청 시점과 전체 응답 예시는 [`docs/API_CONTRACT_DRAFT.md`](docs/API_CONTRACT_DRAFT.md)에 정리했습니다.

@@ -215,59 +215,7 @@ const screens = [
       text(24, 414, "최근 목적지", 14, 700, C.subtext),
       placeRow(440, "보문역 2번 출구", "지하철역 · 보문숲길도서관 인근"),
       placeRow(520, "서울시청", "공공기관 · 시청역 인근"),
-      primaryButton(710, "목적지 찾기"),
-      rect(24, 778, 342, 50, C.page, 8),
-      icon("bus", 44, 791, 22, C.blue),
-      text(205, 803, "탈 버스를 이미 알고 있어요", 15, 700, C.text, { anchor: "middle" }),
-    ].join("\n")),
-  },
-  {
-    file: "01-bus-select.svg",
-    title: "01-A 탑승 버스 선택",
-    svg: screen("탑승할 버스를 이미 아는 경우의 선택 화면", [
-      header(),
-      multiline(24, 120, ["탈 버스를", "골라주세요"], 32, 800, C.text, 1.18),
-      text(24, 218, "이 정류장에 곧 도착하는 버스예요.", 15, 500, C.subtext),
-      ...[
-        [266, "95번", "보문역·동대문 방면", "3분 후", "일반버스"],
-        [360, "101번", "종로·시청 방면", "4분 후", "저상버스"],
-        [454, "1112번", "보문역·신설동 방면", "5분 후", "저상버스"],
-        [548, "102번", "종로·시청 방면", "7분 후", "저상버스"],
-      ].flatMap(([y, route, direction, eta, type]) => [
-        rect(24, y, 342, 82, C.surface, 8, C.border),
-        text(42, y + 28, route, 20, 800),
-        text(42, y + 56, direction, 12, 500, C.muted),
-        text(326, y + 28, eta, 14, 800, C.blue, { anchor: "end" }),
-        text(326, y + 55, type, 12, 500, C.muted, { anchor: "end" }),
-        icon("chevronRight", 334, y + 29, 18, C.muted),
-      ]),
-      rect(24, 740, 342, 68, C.blueSoft, 8),
-      icon("info", 42, 762, 20, C.blue),
-      multiline(74, 758, ["저상버스 여부는 실제 배차 상황에 따라", "달라질 수 있어요."], 13, 600, C.subtext, 1.45),
-    ].join("\n")),
-  },
-  {
-    file: "01-destination-preferred.svg",
-    title: "01-B 선택 버스가 반영된 목적지 입력",
-    svg: screen("선택한 버스가 반영된 목적지 입력 화면", [
-      currentStop(),
-      rect(24, 102, 342, 58, C.blueSoft, 8),
-      icon("bus", 42, 119, 22, C.blue),
-      text(78, 131, "1112번을 먼저 골랐어요", 14, 700, C.subtext),
-      text(346, 131, "해제", 12, 800, C.blue, { anchor: "end" }),
-      multiline(24, 210, ["어디까지", "가세요?"], 34, 800, C.text, 1.22),
-      text(24, 302, "1112번으로 갈 수 있는 목적지를 보여드려요.", 14, 500, C.subtext),
-      rect(24, 340, 342, 64, C.page, 8),
-      icon("search", 44, 361, 22, C.subtext),
-      text(78, 372, "예: 보문역 2번 출구", 15, 500, C.muted),
-      rect(314, 348, 44, 48, C.blueSoft, 8),
-      icon("mic", 326, 360, 20, C.blue),
-      text(24, 464, "갈 수 있는 목적지", 14, 700, C.subtext),
-      placeRow(490, "보문역 2번 출구", "1112번 운행 경로 · 도보 2분"),
-      primaryButton(710, "목적지 찾기"),
-      rect(24, 778, 342, 50, C.page, 8),
-      icon("bus", 44, 791, 22, C.blue),
-      text(205, 803, "다른 버스 고르기", 15, 700, C.text, { anchor: "middle" }),
+      primaryButton(760, "목적지 찾기"),
     ].join("\n")),
   },
   {
@@ -565,12 +513,8 @@ const flowSvg = `<?xml version="1.0" encoding="UTF-8"?>
   ${flowCard(1112, 236, "5", "구간별 상세", "입석 부담과 도착시간 확인", C.green)}
   ${line(1222, 370, 1222, 474, C.muted, 2)}
   <path d="M1216 466L1222 474L1228 466" fill="none" stroke="${C.muted}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-  ${line(174, 370, 174, 474, C.muted, 2, "6 6")}
-  <path d="M168 466L174 474L180 466" fill="none" stroke="${C.muted}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
   ${line(698, 370, 698, 474, C.muted, 2, "6 6")}
   <path d="M692 466L698 474L704 466" fill="none" stroke="${C.muted}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-  ${flowCard(64, 474, "1-A", "탑승 버스 선택", "목적지 화면에 선택 반영", C.blue)}
-  ${text(64, 632, "선택 분기 · 탈 버스를 이미 아는 경우에만 사용", 13, 600, C.subtext)}
   ${flowCard(588, 474, "4-B", "데이터 부족", "빠른 도착만 제공", C.muted)}
   ${rect(850, 474, 220, 134, C.blueSoft, 8)}
   ${text(878, 510, "표현 원칙", 15, 800, C.blue)}
@@ -584,7 +528,7 @@ await fs.mkdir(OUT_DIR, { recursive: true });
 const legacyFiles = [
   "01-arrivals", "02-destination", "03-confirm", "04-analyzing", "05-result",
   "01-arrivals.svg", "02-destination.svg", "03-confirm.svg", "04-analyzing.svg", "05-result.svg",
-  "00-user-flow", "01-destination", "01-bus-select", "01-destination-preferred", "02-confirm", "02-alighting", "03-analyzing",
+  "00-user-flow", "01-destination", "01-bus-select", "01-bus-select.svg", "01-destination-preferred", "01-destination-preferred.svg", "02-confirm", "02-alighting", "03-analyzing",
   "04-compare", "04-compare-fast", "04-compare-unavailable", "05-detail", "05-detail-fast",
   "06-selected-comfort", "06-selected-fast", "06-unavailable", "02-confirm.svg", "06-unavailable.svg",
 ];
@@ -597,8 +541,6 @@ for (const item of screens) {
 
 const previewOrder = [
   "01-destination.svg",
-  "01-bus-select.svg",
-  "01-destination-preferred.svg",
   "02-alighting.svg",
   "03-analyzing.svg",
   "04-compare.svg",
