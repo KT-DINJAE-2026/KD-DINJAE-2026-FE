@@ -2,7 +2,6 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import {
   AlertTriangle,
   ArrowLeft,
-  BusFront,
   Check,
   ChevronRight,
   Circle,
@@ -468,7 +467,7 @@ function CompareScreen({ destination, selectedCandidate, mode, onModeChange, onB
   );
 }
 
-function DetailScreen({ currentStop, destination, selectedCandidate, route, onBack, onSelect }) {
+function DetailScreen({ destination, selectedCandidate, route, onBack }) {
   const predictionAvailable = destination.hasPrediction && route.segments;
   const bannerTone = predictionAvailable ? route.tone : "fast";
   const total = getTotalMinutes(route);
@@ -519,34 +518,6 @@ function DetailScreen({ currentStop, destination, selectedCandidate, route, onBa
         </InfoBand>
       )}
 
-      <div className="screen-bottom detail-bottom">
-        <button className="primary-button" type="button" onClick={onSelect}>{route.routeNumber} 선택하기</button>
-        <p className="fine-print">하차 정류장 · {selectedCandidate.stopName}</p>
-      </div>
-    </main>
-  );
-}
-
-function SelectedScreen({ currentStop, destination, selectedCandidate, route, onChangeBus, onNewDestination }) {
-  return (
-    <main className="screen screen--selected" aria-labelledby="selected-title">
-      <div className="selected-icon"><Check aria-hidden="true" /></div>
-      <section>
-        <h1 id="selected-title">{route.routeNumber}을 선택했어요</h1>
-        <p>{route.arrivalMinutes}분 후 {currentStop.stopName} 도착 예정이에요.</p>
-      </section>
-      <div className="selected-route">
-        <BusFront aria-hidden="true" />
-        <div><strong>{currentStop.stopName}</strong><span>{selectedCandidate.stopName}에서 하차</span></div>
-      </div>
-      <div className="selected-walk">
-        <Footprints aria-hidden="true" />
-        <span><strong>{destination.displayName}</strong>까지 도보 약 {selectedCandidate.walkMinutes}분</span>
-      </div>
-      <div className="screen-bottom selected-actions">
-        <button className="secondary-button secondary-button--full" type="button" onClick={onChangeBus}>다른 버스 보기</button>
-        <button className="text-button" type="button" onClick={onNewDestination}>새 목적지 찾기</button>
-      </div>
     </main>
   );
 }
@@ -663,14 +634,6 @@ export default function App() {
     setScreen("alighting");
   };
 
-  const resetJourney = () => {
-    setDestination(null);
-    setSelectedCandidateId(null);
-    setSelectedTripId(null);
-    setCompareMode("comfort");
-    setScreen("destination");
-  };
-
   if (screen === "loading" || screen === "error") {
     return (
       <div className="app-shell">
@@ -717,22 +680,10 @@ export default function App() {
         )}
         {screen === "detail" && currentStop && destination && selectedCandidate && selectedRoute && (
           <DetailScreen
-            currentStop={currentStop}
             destination={destination}
             selectedCandidate={selectedCandidate}
             route={selectedRoute}
             onBack={() => setScreen("compare")}
-            onSelect={() => setScreen("selected")}
-          />
-        )}
-        {screen === "selected" && currentStop && destination && selectedCandidate && selectedRoute && (
-          <SelectedScreen
-            currentStop={currentStop}
-            destination={destination}
-            selectedCandidate={selectedCandidate}
-            route={selectedRoute}
-            onChangeBus={() => setScreen("compare")}
-            onNewDestination={resetJourney}
           />
         )}
       </div>

@@ -180,25 +180,6 @@ function fastRouteCard(y, options) {
   ].join("\n");
 }
 
-function selectedScreen(route, arrivalMinutes) {
-  return screen(`${route} 선택 완료 화면`, [
-    circle(195, 88, 44, C.blue),
-    icon("check", 171, 64, 48, C.surface, 2.5),
-    text(195, 174, `${route}을 선택했어요`, 28, 800, C.text, { anchor: "middle" }),
-    text(195, 222, `${arrivalMinutes}분 후 성북구청 정류장 도착 예정이에요.`, 15, 500, C.subtext, { anchor: "middle" }),
-    rect(24, 286, 342, 104, C.page, 8),
-    icon("bus", 46, 320, 28, C.blue),
-    text(92, 318, "성북구청 정류장", 17, 800),
-    text(92, 348, "보문역 2번 출구 정류장에서 하차", 14, 500, C.subtext),
-    rect(24, 404, 342, 58, C.blueSoft, 8),
-    icon("walk", 44, 421, 22, C.blue),
-    text(82, 433, "보문역 2번 출구까지 도보 약 2분", 14, 700, C.subtext),
-    rect(24, 714, 342, 56, C.page, 8),
-    text(195, 742, "다른 버스 보기", 17, 700, C.text, { anchor: "middle" }),
-    text(195, 804, "새 목적지 찾기", 15, 700, C.blue, { anchor: "middle" }),
-  ].join("\n"));
-}
-
 const screens = [
   {
     file: "01-destination.svg",
@@ -355,7 +336,7 @@ const screens = [
   {
     file: "05-detail.svg",
     title: "05 구간별 상세",
-    svg: screen("선택한 버스 구간별 혼잡도 화면", [
+    svg: screen("버스 구간별 혼잡도 상세 화면", [
       header("보문역 2번 출구"),
       text(24, 104, "1112번", 29, 800),
       text(24, 140, "보문역·신설동 방면 · 저상버스", 14, 500, C.subtext),
@@ -387,13 +368,12 @@ const screens = [
       rect(24, 662, 342, 58, C.blueSoft, 8),
       icon("info", 42, 681, 20, C.blue),
       multiline(74, 680, ["여유는 좌석 이용 가능성이 상대적으로 높은", "단계이며 좌석을 보장하지는 않아요."], 12, 600, C.subtext, 1.45),
-      primaryButton(760, "1112번 선택하기"),
     ].join("\n")),
   },
   {
     file: "05-detail-fast.svg",
     title: "05-A 빠른 버스 상세",
-    svg: screen("빠른 도착으로 선택한 버스의 구간별 혼잡도 화면", [
+    svg: screen("빠른 도착 순서에서 확인한 버스의 구간별 혼잡도 화면", [
       header("보문역 2번 출구"),
       text(24, 104, "95번", 29, 800),
       text(24, 140, "보문역·동대문 방면 · 일반버스", 14, 500, C.subtext),
@@ -424,19 +404,8 @@ const screens = [
       text(333, 608, "여유", 12, 800, C.green, { anchor: "middle" }),
       rect(24, 662, 342, 58, C.blueSoft, 8),
       icon("info", 42, 681, 20, C.blue),
-      multiline(74, 680, ["빠른 도착을 선택해도 구간별 입석 부담을", "함께 확인할 수 있어요."], 12, 600, C.subtext, 1.45),
-      primaryButton(760, "95번 선택하기"),
+      multiline(74, 680, ["빠른 도착순으로 보더라도 구간별 입석 부담을", "함께 확인할 수 있어요."], 12, 600, C.subtext, 1.45),
     ].join("\n")),
-  },
-  {
-    file: "06-selected-comfort.svg",
-    title: "06 덜 붐비는 버스 선택 완료",
-    svg: selectedScreen("1112번", 5),
-  },
-  {
-    file: "06-selected-fast.svg",
-    title: "06-A 빠른 버스 선택 완료",
-    svg: selectedScreen("95번", 3),
   },
   {
     file: "04-compare-unavailable.svg",
@@ -511,15 +480,12 @@ const flowSvg = `<?xml version="1.0" encoding="UTF-8"?>
   ${flowCard(850, 236, "4", "버스 비교", "덜 붐빔·빠른 도착 비교")}
   ${flowArrow(1070, 303, 1112)}
   ${flowCard(1112, 236, "5", "구간별 상세", "입석 부담과 도착시간 확인", C.green)}
-  ${line(1222, 370, 1222, 474, C.muted, 2)}
-  <path d="M1216 466L1222 474L1228 466" fill="none" stroke="${C.muted}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
   ${line(698, 370, 698, 474, C.muted, 2, "6 6")}
   <path d="M692 466L698 474L704 466" fill="none" stroke="${C.muted}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
   ${flowCard(588, 474, "4-B", "데이터 부족", "빠른 도착만 제공", C.muted)}
   ${rect(850, 474, 220, 134, C.blueSoft, 8)}
   ${text(878, 510, "표현 원칙", 15, 800, C.blue)}
   ${multiline(878, 548, ["입석 부담 예상 시간과", "여유·보통·혼잡을 함께 표시"], 14, 600, C.subtext, 1.55)}
-  ${flowCard(1112, 474, "6", "선택 완료", "도착·하차 위치 확인")}
   ${text(64, 696, "Prototype · 화면 전환은 즉시 연결  |  분석 화면만 약 800ms 뒤 결과 표시", 13, 600, C.muted)}
 </svg>\n`;
 
@@ -530,7 +496,7 @@ const legacyFiles = [
   "01-arrivals.svg", "02-destination.svg", "03-confirm.svg", "04-analyzing.svg", "05-result.svg",
   "00-user-flow", "01-destination", "01-bus-select", "01-bus-select.svg", "01-destination-preferred", "01-destination-preferred.svg", "02-confirm", "02-alighting", "03-analyzing",
   "04-compare", "04-compare-fast", "04-compare-unavailable", "05-detail", "05-detail-fast",
-  "06-selected-comfort", "06-selected-fast", "06-unavailable", "02-confirm.svg", "06-unavailable.svg",
+  "06-unavailable", "02-confirm.svg", "06-unavailable.svg",
 ];
 await Promise.all(legacyFiles.map((file) => fs.rm(path.join(OUT_DIR, file), { force: true })));
 
@@ -548,8 +514,6 @@ const previewOrder = [
   "04-compare-unavailable.svg",
   "05-detail.svg",
   "05-detail-fast.svg",
-  "06-selected-comfort.svg",
-  "06-selected-fast.svg",
 ];
 
 const previewCards = [...screens].sort(

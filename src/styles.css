@@ -178,8 +178,7 @@ input:focus-visible {
 }
 
 .screen-heading h1,
-.analysis-heading h1,
-.screen--selected h1 {
+.analysis-heading h1 {
   margin: 0;
   font-size: 34px;
   line-height: 1.2;
@@ -192,8 +191,7 @@ input:focus-visible {
 }
 
 .screen-heading p,
-.analysis-heading p,
-.screen--selected section > p {
+.analysis-heading p {
   margin: 18px 0 0;
   color: #555555;
   font-size: 16px;
@@ -343,8 +341,7 @@ input:focus-visible {
   padding-top: 28px;
 }
 
-.destination-bottom,
-.selected-actions {
+.destination-bottom {
   display: grid;
   gap: 10px;
 }
@@ -1050,82 +1047,6 @@ input:focus-visible {
   margin-top: 18px;
 }
 
-.detail-bottom {
-  padding-top: 22px;
-}
-
-.screen--selected {
-  align-items: center;
-  padding-top: max(58px, env(safe-area-inset-top, 0px));
-  text-align: center;
-}
-
-.selected-icon {
-  width: 88px;
-  height: 88px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #ffffff;
-  background: #b8560a;
-}
-
-.selected-icon svg {
-  width: 46px;
-  height: 46px;
-}
-
-.screen--selected section {
-  margin-top: 30px;
-}
-
-.screen--selected h1 {
-  font-size: 28px;
-}
-
-.selected-route,
-.selected-walk {
-  width: 100%;
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  text-align: left;
-}
-
-.selected-route {
-  margin-top: 36px;
-  padding: 18px;
-  background: #f2f3f3;
-}
-
-.selected-walk {
-  margin-top: 10px;
-  padding: 14px 18px;
-  color: #555555;
-  background: #fff0e6;
-  font-size: 14px;
-}
-
-.selected-route > svg,
-.selected-walk > svg {
-  width: 28px;
-  flex: 0 0 28px;
-  color: #b8560a;
-}
-
-.selected-route div {
-  min-width: 0;
-  display: grid;
-  gap: 5px;
-}
-
-.selected-route span {
-  color: #666666;
-  font-size: 13px;
-}
-
 @media (max-width: 460px) {
   .phone-frame {
     max-width: none;
@@ -1141,10 +1062,6 @@ input:focus-visible {
   .screen-heading h1,
   .analysis-heading h1 {
     font-size: 30px;
-  }
-
-  .screen--selected {
-    padding-top: max(46px, env(safe-area-inset-top, 0px));
   }
 
   .bus-option {
@@ -1173,8 +1090,7 @@ input:focus-visible {
   }
 
   .screen-heading h1,
-  .analysis-heading h1,
-  .screen--selected h1 {
+  .analysis-heading h1 {
     font-size: 27px;
   }
 

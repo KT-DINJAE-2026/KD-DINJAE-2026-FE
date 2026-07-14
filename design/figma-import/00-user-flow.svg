@@ -40,8 +40,6 @@
 <text x="1140" y="264" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="13" font-weight="800" fill="#FFFFFF" text-anchor="middle" dominant-baseline="middle" letter-spacing="0">5</text>
 <text x="1136" y="306" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="19" font-weight="800" fill="#191919" text-anchor="start" dominant-baseline="middle" letter-spacing="0">구간별 상세</text>
 <text x="1136" y="338" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="13" font-weight="500" fill="#555555" text-anchor="start" dominant-baseline="middle" letter-spacing="0">입석 부담과 도착시간 확인</text>
-  <line x1="1222" y1="370" x2="1222" y2="474" stroke="#888888" stroke-width="2" stroke-linecap="round"/>
-  <path d="M1216 466L1222 474L1228 466" fill="none" stroke="#888888" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
   <line x1="698" y1="370" x2="698" y2="474" stroke="#888888" stroke-width="2" stroke-linecap="round" stroke-dasharray="6 6"/>
   <path d="M692 466L698 474L704 466" fill="none" stroke="#888888" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
   <rect x="588" y="474" width="220" height="134" rx="8" fill="#FFFFFF" stroke="#E5E5E5" stroke-width="1"/>
@@ -52,10 +50,5 @@
   <rect x="850" y="474" width="220" height="134" rx="8" fill="#FFF0E6" stroke="none" stroke-width="1"/>
   <text x="878" y="510" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="15" font-weight="800" fill="#B8560A" text-anchor="start" dominant-baseline="middle" letter-spacing="0">표현 원칙</text>
   <text x="878" y="548" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="14" font-weight="600" fill="#555555" text-anchor="start" letter-spacing="0"><tspan x="878" dy="0">입석 부담 예상 시간과</tspan><tspan x="878" dy="22">여유·보통·혼잡을 함께 표시</tspan></text>
-  <rect x="1112" y="474" width="220" height="134" rx="8" fill="#FFFFFF" stroke="#E5E5E5" stroke-width="1"/>
-<circle cx="1140" cy="502" r="16" fill="#B8560A" stroke="none" stroke-width="1"/>
-<text x="1140" y="502" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="13" font-weight="800" fill="#FFFFFF" text-anchor="middle" dominant-baseline="middle" letter-spacing="0">6</text>
-<text x="1136" y="544" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="19" font-weight="800" fill="#191919" text-anchor="start" dominant-baseline="middle" letter-spacing="0">선택 완료</text>
-<text x="1136" y="576" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="13" font-weight="500" fill="#555555" text-anchor="start" dominant-baseline="middle" letter-spacing="0">도착·하차 위치 확인</text>
   <text x="64" y="696" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="13" font-weight="600" fill="#888888" text-anchor="start" dominant-baseline="middle" letter-spacing="0">Prototype · 화면 전환은 즉시 연결  |  분석 화면만 약 800ms 뒤 결과 표시</text>
 </svg>

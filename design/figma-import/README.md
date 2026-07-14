@@ -15,8 +15,6 @@
 | `04-compare-unavailable.svg` | 혼잡도 데이터가 부족한 경우 |
 | `05-detail.svg` | 1112번의 구간별 예상 |
 | `05-detail-fast.svg` | 95번의 구간별 예상 |
-| `06-selected-comfort.svg` | 1112번 선택 완료 |
-| `06-selected-fast.svg` | 95번 선택 완료 |
 
 `index.html`은 모든 화면을 한 페이지에서 확인하는 용도입니다. `contact-sheet.png`는 회의 자료나 Discord 공유에 쓰기 편하도록 한 장으로 정리한 이미지입니다.
 
@@ -41,21 +39,16 @@
 04-compare
   빠른 도착 → 04-compare-fast
   1112번 → 05-detail
-05-detail
-  1112번 선택하기 → 06-selected-comfort
+05-detail → 상세 확인 후 흐름 종료
 
 비교와 예외
 04-compare-fast
   덜 붐비는 버스 → 04-compare
   95번 → 05-detail-fast
-05-detail-fast
-  95번 선택하기 → 06-selected-fast
+05-detail-fast → 상세 확인 후 흐름 종료
 04-compare-unavailable
   혼잡도 비교는 비활성화
-  101번 → 빠른 도착 상세 또는 선택 완료
-06-selected-*
-  다른 버스 보기 → 직전 비교 화면
-  새 목적지 찾기 → 01-destination
+  101번 → 빠른 도착 상세
 ```
 
 화면 전환은 `Instant`로 두고 분석 화면만 약 800ms 뒤 비교 화면으로 넘어가게 설정합니다. 고령 사용자가 내용을 읽는 중 화면이 흐려지지 않도록 불투명도 애니메이션은 사용하지 않습니다.
