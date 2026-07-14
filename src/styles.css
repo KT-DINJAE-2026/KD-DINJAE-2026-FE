@@ -107,22 +107,18 @@ input:focus-visible {
   white-space: nowrap;
 }
 
-.icon-button,
-.voice-button {
+.icon-button {
   width: 48px;
   height: 48px;
+  flex: 0 0 48px;
   padding: 0;
   border: 0;
   border-radius: 8px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  cursor: pointer;
-}
-
-.icon-button {
-  flex: 0 0 48px;
   background: #f2f3f3;
+  cursor: pointer;
 }
 
 .icon-button svg {
@@ -201,7 +197,7 @@ input:focus-visible {
 .search-form {
   min-height: 64px;
   margin-top: 28px;
-  padding-left: 18px;
+  padding: 0 18px;
   border: 1px solid transparent;
   border-radius: 8px;
   display: flex;
@@ -235,17 +231,7 @@ input:focus-visible {
   color: #888888;
 }
 
-.voice-button {
-  margin-right: 8px;
-  color: #b8560a;
-  background: #fff0e6;
-}
-
-.voice-button svg {
-  width: 21px;
-}
-
-.voice-message {
+.search-message {
   min-height: 20px;
   margin: 6px 0 0;
   color: #666666;

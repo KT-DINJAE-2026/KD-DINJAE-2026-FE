@@ -12,7 +12,6 @@ import {
   Info,
   LoaderCircle,
   MapPin,
-  Mic,
   RefreshCw,
   Search,
 } from "lucide-react";
@@ -173,7 +172,7 @@ function DestinationScreen({
   onSelectDestination,
 }) {
   const [query, setQuery] = useState("");
-  const [voiceMessage, setVoiceMessage] = useState("");
+  const [searchMessage, setSearchMessage] = useState("");
   const inputRef = useRef(null);
 
   const matches = useMemo(() => {
@@ -190,7 +189,7 @@ function DestinationScreen({
   const submitSearch = (event) => {
     event.preventDefault();
     if (!query.trim()) {
-      setVoiceMessage("목적지를 먼저 입력해주세요.");
+      setSearchMessage("목적지를 먼저 입력해주세요.");
       inputRef.current?.focus();
       return;
     }
@@ -199,34 +198,11 @@ function DestinationScreen({
       return;
     }
     if (matches.length > 1) {
-      setVoiceMessage("검색 결과에서 목적지를 선택해주세요.");
+      setSearchMessage("검색 결과에서 목적지를 선택해주세요.");
       return;
     }
-    setVoiceMessage("일치하는 장소가 없어요. 다른 이름으로 검색해주세요.");
+    setSearchMessage("일치하는 장소가 없어요. 다른 이름으로 검색해주세요.");
     inputRef.current?.focus();
-  };
-
-  const startVoiceInput = () => {
-    const Recognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-    if (!Recognition) {
-      setVoiceMessage("이 브라우저에서는 음성 입력을 지원하지 않아요.");
-      inputRef.current?.focus();
-      return;
-    }
-
-    const recognition = new Recognition();
-    recognition.lang = "ko-KR";
-    recognition.interimResults = false;
-    setVoiceMessage("목적지를 듣고 있어요.");
-    recognition.onresult = (event) => {
-      setQuery(event.results[0][0].transcript);
-      setVoiceMessage("목적지를 입력했어요.");
-    };
-    recognition.onerror = () => {
-      setVoiceMessage("잘 듣지 못했어요. 직접 입력해주세요.");
-      inputRef.current?.focus();
-    };
-    recognition.start();
   };
 
   return (
@@ -234,7 +210,7 @@ function DestinationScreen({
       <CurrentStopBadge currentStop={currentStop} />
       <section className="screen-heading">
         <h1 id="destination-title">어디까지<br />가세요?</h1>
-        <p>장소를 입력하거나 마이크 버튼을 눌러 말씀해주세요.</p>
+        <p>목적지나 주변 장소를 입력해주세요.</p>
       </section>
 
       <form id="destination-form" className="search-form" onSubmit={submitSearch}>
@@ -246,16 +222,13 @@ function DestinationScreen({
           value={query}
           onChange={(event) => {
             setQuery(event.target.value);
-            setVoiceMessage("");
+            setSearchMessage("");
           }}
           placeholder="예: 보문역 2번 출구"
           autoComplete="off"
         />
-        <button type="button" className="voice-button" onClick={startVoiceInput} aria-label="음성으로 목적지 입력" title="음성으로 입력">
-          <Mic aria-hidden="true" />
-        </button>
       </form>
-      <p className="voice-message" aria-live="polite">{voiceMessage}</p>
+      <p className="search-message" aria-live="polite">{searchMessage}</p>
 
       <section className="place-section" aria-labelledby="place-title">
         <h2 id="place-title">{query ? "검색 결과" : "최근 목적지"}</h2>

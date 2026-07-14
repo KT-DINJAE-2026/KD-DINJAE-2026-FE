@@ -69,7 +69,6 @@ function icon(name, x, y, size = 24, color = C.text, strokeWidth = 2) {
     arrowRight: `<path d="M5 12h14M12 5l7 7-7 7" ${common}/>` ,
     chevronRight: `<path d="m9 18 6-6-6-6" ${common}/>` ,
     search: `<circle cx="11" cy="11" r="8" ${common}/><path d="m21 21-4.35-4.35" ${common}/>` ,
-    mic: `<path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z" ${common}/><path d="M19 10v2a7 7 0 0 1-14 0v-2M12 19v3" ${common}/>` ,
     check: `<path d="m5 12 4 4L19 6" ${common}/>` ,
     refresh: `<path d="M20 11a8.1 8.1 0 1 0 2.2 5.5M20 4v7h-7" ${common}/>` ,
     pin: `<path d="M20 10c0 5-8 12-8 12S4 15 4 10a8 8 0 1 1 16 0Z" ${common}/><circle cx="12" cy="10" r="2.5" ${common}/>` ,
@@ -187,12 +186,10 @@ const screens = [
     svg: screen("목적지 입력 화면", [
       currentStop(),
       multiline(24, 136, ["어디까지", "가세요?"], 34, 800, C.text, 1.22),
-      multiline(24, 230, ["장소를 입력하거나 마이크 버튼을 눌러", "말씀해주세요."], 15, 500, C.subtext, 1.5),
+      text(24, 242, "목적지나 주변 장소를 입력해주세요.", 15, 500, C.subtext),
       rect(24, 292, 342, 64, C.page, 8),
       icon("search", 44, 313, 22, C.subtext),
       text(78, 324, "예: 보문역 2번 출구", 15, 500, C.muted),
-      rect(314, 300, 44, 48, C.blueSoft, 8),
-      icon("mic", 326, 312, 20, C.blue),
       text(24, 414, "최근 목적지", 14, 700, C.subtext),
       placeRow(440, "보문역 2번 출구", "지하철역 · 보문숲길도서관 인근"),
       placeRow(520, "서울시청", "공공기관 · 시청역 인근"),
@@ -500,7 +497,7 @@ const flowSvg = `<?xml version="1.0" encoding="UTF-8"?>
   ${rect(64, 148, 232, 38, C.blueSoft, 8)}
   ${icon("pin", 80, 157, 20, C.blue)}
   ${text(110, 167, "QR 확인 · 성북구청 정류장", 14, 700, C.blue)}
-  ${flowCard(64, 236, "1", "목적지 입력", "장소 검색·음성 입력")}
+  ${flowCard(64, 236, "1", "목적지 입력", "장소 이름 검색")}
   ${flowArrow(284, 303, 326)}
   ${flowCard(326, 236, "2", "하차 정류장 확인", "거리 사진·도보 거리 확인")}
   ${flowArrow(546, 303, 588)}
@@ -526,7 +523,7 @@ const legacyFiles = [
   "01-arrivals", "02-destination", "03-confirm", "04-analyzing", "05-result",
   "01-arrivals.svg", "02-destination.svg", "03-confirm.svg", "04-analyzing.svg", "05-result.svg",
   "00-user-flow", "01-destination", "01-bus-select", "01-bus-select.svg", "01-destination-preferred", "01-destination-preferred.svg", "02-confirm", "02-alighting", "03-analyzing",
-  "04-compare", "04-compare-fast", "04-compare-unavailable", "05-detail", "05-detail-fast",
+  "04-compare", "04-compare-fast", "04-compare-unavailable", "05-detail", "05-detail-fast", "05-detail-unavailable",
   "06-unavailable", "02-confirm.svg", "06-unavailable.svg",
 ];
 await Promise.all(legacyFiles.map((file) => fs.rm(path.join(OUT_DIR, file), { force: true })));

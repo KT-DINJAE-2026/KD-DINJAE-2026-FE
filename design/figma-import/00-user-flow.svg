@@ -11,7 +11,7 @@
 <circle cx="92" cy="264" r="16" fill="#B8560A" stroke="none" stroke-width="1"/>
 <text x="92" y="264" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="13" font-weight="800" fill="#FFFFFF" text-anchor="middle" dominant-baseline="middle" letter-spacing="0">1</text>
 <text x="88" y="306" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="19" font-weight="800" fill="#191919" text-anchor="start" dominant-baseline="middle" letter-spacing="0">목적지 입력</text>
-<text x="88" y="338" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="13" font-weight="500" fill="#555555" text-anchor="start" dominant-baseline="middle" letter-spacing="0">장소 검색·음성 입력</text>
+<text x="88" y="338" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="13" font-weight="500" fill="#555555" text-anchor="start" dominant-baseline="middle" letter-spacing="0">장소 이름 검색</text>
   <line x1="284" y1="303" x2="326" y2="303" stroke="#888888" stroke-width="2" stroke-linecap="round"/>
 <path d="M318 297L326 303L318 309" fill="none" stroke="#888888" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
   <rect x="326" y="236" width="220" height="134" rx="8" fill="#FFFFFF" stroke="#E5E5E5" stroke-width="1"/>
