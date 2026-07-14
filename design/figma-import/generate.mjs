@@ -368,6 +368,7 @@ const screens = [
       rect(24, 662, 342, 58, C.blueSoft, 8),
       icon("info", 42, 681, 20, C.blue),
       multiline(74, 680, ["여유는 좌석 이용 가능성이 상대적으로 높은", "단계이며 좌석을 보장하지는 않아요."], 12, 600, C.subtext, 1.45),
+      text(195, 782, "버스 비교로 돌아가기", 15, 800, C.blue, { anchor: "middle" }),
     ].join("\n")),
   },
   {
@@ -402,9 +403,15 @@ const screens = [
       text(64, 626, "2분 · 좌석 이용 여건 개선 예상", 12, 600, C.green),
       rect(300, 594, 66, 28, C.greenSoft, 6),
       text(333, 608, "여유", 12, 800, C.green, { anchor: "middle" }),
-      rect(24, 662, 342, 58, C.blueSoft, 8),
-      icon("info", 42, 681, 20, C.blue),
-      multiline(74, 680, ["빠른 도착순으로 보더라도 구간별 입석 부담을", "함께 확인할 수 있어요."], 12, 600, C.subtext, 1.45),
+      rect(24, 642, 342, 190, "#FFF8F3", 8, "#EFC6AA"),
+      rect(42, 658, 40, 40, C.blueSoft, 8),
+      icon("bus", 51, 667, 22, C.blue),
+      text(96, 666, "다른 선택지도 있어요", 12, 800, C.blue),
+      text(96, 690, "1112번은 5분 더 걸리지만", 16, 800),
+      text(42, 724, "입석 부담 예상 시간이 약 7분 짧아요.", 14, 700, C.subtext),
+      text(42, 750, "5분 후 도착 · 저상버스", 12, 600, C.muted),
+      rect(42, 770, 306, 48, C.surface, 8, C.blue),
+      text(195, 794, "1112번과 비교하기", 15, 800, C.blue, { anchor: "middle" }),
     ].join("\n")),
   },
   {
@@ -440,6 +447,28 @@ const screens = [
       rect(24, 680, 342, 56, C.page, 8),
       icon("refresh", 42, 698, 20, C.subtext),
       text(74, 708, "혼잡도 데이터가 생기면 자동으로 갱신해요.", 13, 600, C.subtext),
+      text(195, 790, "도착 정보는 실제 운행 상황에 따라 달라질 수 있어요.", 11, 500, C.muted, { anchor: "middle" }),
+    ].join("\n")),
+  },
+  {
+    file: "05-detail-unavailable.svg",
+    title: "05-B 데이터 부족 상세",
+    svg: screen("혼잡도 데이터가 부족한 버스 상세 화면", [
+      header("서울시청 앞 정류장"),
+      text(24, 104, "101번", 29, 800),
+      text(24, 140, "종로·시청 방면 · 저상버스", 14, 500, C.subtext),
+      rect(24, 174, 342, 112, C.blueSoft, 8),
+      rect(40, 190, 82, 28, C.blue, 6),
+      text(81, 204, "빠른 도착", 12, 800, C.surface, { anchor: "middle" }),
+      text(40, 246, "4분 후 도착해요.", 18, 800),
+      rect(24, 302, 342, 76, C.page, 8),
+      metric(40, 322, "버스 도착", "4분 후", C.blue),
+      metric(148, 322, "목적지까지", "약 22분"),
+      metric(268, 322, "입석 부담", "확인 어려움", C.muted),
+      rect(24, 408, 342, 92, C.amberSoft, 8),
+      icon("alert", 42, 432, 20, C.amber, 2),
+      multiline(74, 426, ["아직 데이터가 부족해 구간별 입석 부담은", "보여드리기 어려워요."], 14, 700, C.subtext, 1.55),
+      text(195, 554, "다른 도착 버스 보기", 15, 800, C.blue, { anchor: "middle" }),
       text(195, 790, "도착 정보는 실제 운행 상황에 따라 달라질 수 있어요.", 11, 500, C.muted, { anchor: "middle" }),
     ].join("\n")),
   },
@@ -479,13 +508,15 @@ const flowSvg = `<?xml version="1.0" encoding="UTF-8"?>
   ${flowArrow(808, 303, 850)}
   ${flowCard(850, 236, "4", "버스 비교", "덜 붐빔·빠른 도착 비교")}
   ${flowArrow(1070, 303, 1112)}
-  ${flowCard(1112, 236, "5", "구간별 상세", "입석 부담과 도착시간 확인", C.green)}
+  ${flowCard(1112, 236, "5", "구간별 상세", "근거 확인·필요 시 재비교", C.green)}
   ${line(698, 370, 698, 474, C.muted, 2, "6 6")}
   <path d="M692 466L698 474L704 466" fill="none" stroke="${C.muted}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
   ${flowCard(588, 474, "4-B", "데이터 부족", "빠른 도착만 제공", C.muted)}
-  ${rect(850, 474, 220, 134, C.blueSoft, 8)}
-  ${text(878, 510, "표현 원칙", 15, 800, C.blue)}
-  ${multiline(878, 548, ["입석 부담 예상 시간과", "여유·보통·혼잡을 함께 표시"], 14, 600, C.subtext, 1.55)}
+  ${flowArrow(808, 541, 850)}
+  ${flowCard(850, 474, "5-B", "도착 정보 상세", "혼잡도 없이 확인", C.muted)}
+  ${rect(1112, 474, 220, 134, C.blueSoft, 8)}
+  ${text(1140, 510, "대안 안내 원칙", 15, 800, C.blue)}
+  ${multiline(1140, 548, ["부담 감소와 추가 시간을", "함께 보여준 뒤 재비교"], 14, 600, C.subtext, 1.55)}
   ${text(64, 696, "Prototype · 화면 전환은 즉시 연결  |  분석 화면만 약 800ms 뒤 결과 표시", 13, 600, C.muted)}
 </svg>\n`;
 
@@ -514,6 +545,7 @@ const previewOrder = [
   "04-compare-unavailable.svg",
   "05-detail.svg",
   "05-detail-fast.svg",
+  "05-detail-unavailable.svg",
 ];
 
 const previewCards = [...screens].sort(

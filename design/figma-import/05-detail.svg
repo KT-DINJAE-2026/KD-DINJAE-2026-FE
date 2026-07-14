@@ -38,4 +38,5 @@
 <rect x="24" y="662" width="342" height="58" rx="8" fill="#FFF0E6" stroke="none" stroke-width="1"/>
 <g transform="translate(42 681) scale(0.8333333333333334)"><circle cx="12" cy="12" r="9" fill="none" stroke="#B8560A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 11v5M12 8h.01" fill="none" stroke="#B8560A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></g>
 <text x="74" y="680" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="12" font-weight="600" fill="#555555" text-anchor="start" letter-spacing="0"><tspan x="74" dy="0">여유는 좌석 이용 가능성이 상대적으로 높은</tspan><tspan x="74" dy="17">단계이며 좌석을 보장하지는 않아요.</tspan></text>
+<text x="195" y="782" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="15" font-weight="800" fill="#B8560A" text-anchor="middle" dominant-baseline="middle" letter-spacing="0">버스 비교로 돌아가기</text>
 </svg>

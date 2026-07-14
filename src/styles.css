@@ -1047,6 +1047,85 @@ input:focus-visible {
   margin-top: 18px;
 }
 
+.alternative-recommendation {
+  margin-top: 20px;
+  padding: 18px;
+  border: 1px solid #efc6aa;
+  border-radius: 8px;
+  background: #fff8f3;
+}
+
+.alternative-recommendation__heading {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.alternative-recommendation__icon {
+  width: 40px;
+  height: 40px;
+  flex: 0 0 40px;
+  border-radius: 8px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #b8560a;
+  background: #fff0e6;
+}
+
+.alternative-recommendation__icon svg {
+  width: 22px;
+  height: 22px;
+}
+
+.alternative-recommendation__heading > div {
+  min-width: 0;
+}
+
+.alternative-recommendation__heading span {
+  color: #8f4107;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.alternative-recommendation h2 {
+  margin: 5px 0 0;
+  font-size: 17px;
+  line-height: 1.45;
+}
+
+.alternative-recommendation p {
+  margin: 14px 0 0;
+  color: #333333;
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.5;
+}
+
+.alternative-recommendation__meta {
+  display: block;
+  margin-top: 6px;
+  color: #666666;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.recommendation-button {
+  margin-top: 16px;
+  border: 1px solid #b8560a;
+  color: #8f4107;
+  background: #ffffff;
+}
+
+.detail-return {
+  margin-top: 18px;
+  text-align: center;
+}
+
+.detail-return .text-button {
+  width: 100%;
+}
+
 @media (max-width: 460px) {
   .phone-frame {
     max-width: none;
