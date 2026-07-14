@@ -3,7 +3,6 @@
   "reasonCode": "NOT_ENOUGH_HISTORICAL_SAMPLES",
   "generatedAt": "2026-07-13T13:58:00+09:00",
   "originStopId": "stop-seongbuk-office",
-  "destinationId": "cityhall",
   "destinationStopId": "stop-cityhall-front",
   "predictionBasis": {
     "description": "과거 승하차 표본 부족",

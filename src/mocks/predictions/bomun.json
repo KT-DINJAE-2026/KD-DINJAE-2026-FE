@@ -2,7 +2,6 @@
   "status": "SUCCESS",
   "generatedAt": "2026-07-13T13:58:00+09:00",
   "originStopId": "stop-seongbuk-office",
-  "destinationId": "bomun",
   "destinationStopId": "stop-bomun-exit2",
   "predictionBasis": {
     "description": "평일 오후 2시 승하차 패턴",

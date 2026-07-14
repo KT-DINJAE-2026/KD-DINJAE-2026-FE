@@ -7,8 +7,8 @@ const API_BASE_URL = (import.meta.env.VITE_API_BASE_URL ?? "http://localhost:808
 const MOCK_DELAY_MS = 350;
 
 const predictionMocks = {
-  bomun: bomunPredictionMock,
-  cityhall: cityhallPredictionMock,
+  "stop-bomun-exit2": bomunPredictionMock,
+  "stop-cityhall-front": cityhallPredictionMock,
 };
 
 const wait = (milliseconds) => new Promise((resolve) => window.setTimeout(resolve, milliseconds));
@@ -46,17 +46,17 @@ async function getBootstrap(stopId) {
   return request(`/api/v1/stops/${encodeURIComponent(stopId)}/context`);
 }
 
-async function getJourneyPrediction({ originStopId, destinationId, destinationStopId }) {
+async function getJourneyPrediction({ originStopId, destinationStopId }) {
   if (API_MODE === "mock") {
     await wait(MOCK_DELAY_MS);
-    const response = predictionMocks[destinationId];
-    if (!response) throw new Error(`등록되지 않은 Mock 목적지: ${destinationId}`);
+    const response = predictionMocks[destinationStopId];
+    if (!response) throw new Error(`등록되지 않은 Mock 도착 정류장: ${destinationStopId}`);
     return clone(response);
   }
 
   return request("/api/v1/journeys/predictions", {
     method: "POST",
-    body: JSON.stringify({ originStopId, destinationId, destinationStopId }),
+    body: JSON.stringify({ originStopId, destinationStopId }),
   });
 }
 

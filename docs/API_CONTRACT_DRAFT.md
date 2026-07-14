@@ -1,29 +1,27 @@
 # FE-백엔드 API 계약 초안
 
-프론트 Mock JSON과 Spring Swagger의 구조를 맞추기 위한 회의용 문서입니다. URL과 필드명은 확정 전이지만, 화면에 필요한 요청 시점과 데이터 범위는 이 기준으로 맞추면 됩니다.
+프론트 Mock JSON과 Spring Swagger를 맞추기 위한 회의용 초안입니다. URL과 필드명은 확정 전이지만 화면에 필요한 요청 시점과 데이터 범위는 아래와 같습니다.
 
 ## 요청 시점
 
 | 사용자 동작 | 요청 | 화면에서 쓰는 값 |
 | --- | --- | --- |
-| 정류장 QR 진입 | `GET /api/v1/stops/{stopId}/context` | 현재 정류장과 초기 목적지 후보 |
-| 목적지 검색 | `GET /api/v1/destinations?originStopId={id}&query={text}` | 장소와 주변 하차 정류장 후보, 추가 예정 |
-| 하차 정류장 확정 | `POST /api/v1/journeys/predictions` | 도착 버스별 이동시간과 구간별 입석 부담 |
+| 정류장 QR 진입 | `GET /api/v1/stops/{stopId}/context` | 현재 정류장과 최근 도착 정류장 |
+| 도착 정류장 검색 | `GET /api/v1/stops/search?originStopId={id}&query={text}` | 현재 정류장에서 갈 수 있는 정류장 |
+| 도착 정류장 선택 | `POST /api/v1/journeys/predictions` | 운행 가능한 버스와 구간별 입석 부담 |
 | 다시 분석 | 위 예측 API 재호출 | 최신 `generatedAt` 결과 |
 
-현재 프론트는 `context` 응답에서 정류장 정보와 초기 목적지 후보를 함께 받습니다. 첫 연동 때는 이 구조를 그대로 제공해야 합니다. 목적지 검색 API가 추가되면 입력 검색 결과만 별도 요청으로 바꾸고, 목적지 객체와 하차 후보의 구조는 그대로 유지합니다.
+프로토타입은 `context` 응답의 `destinationStops`를 브라우저에서 검색합니다. 실제 연동에서는 검색어가 바뀔 때 정류장 검색 API를 호출하는 방식으로 바꿀 예정입니다.
 
 ## ID 기준
 
-- `stopId`: 정류장을 식별합니다.
-- `destinationId`: 사용자가 검색한 장소를 식별합니다.
-- `candidateId`: 한 장소 주변의 하차 후보를 식별합니다.
-- `routeId`: 1112번과 같은 노선 자체를 식별합니다.
+- `stopId`: 출발 정류장과 도착 정류장을 식별합니다.
+- `routeId`: 1112번처럼 노선 자체를 식별합니다.
 - `tripId`: 현재 도착 예정인 특정 운행 버스를 식별합니다.
 
-같은 노선의 버스가 연달아 올 수 있으므로 비교 결과와 상세 화면을 연결하려면 `tripId`가 필요합니다. 모델이 예측할 구간은 `originStopId`부터 `destinationStopId`까지입니다.
+같은 노선의 차량이 연달아 올 수 있으므로 비교 결과와 상세 화면 연결에는 `tripId`가 필요합니다. 모델이 예측할 범위는 `originStopId`부터 `destinationStopId`까지입니다.
 
-## 1. 정류장 진입
+## 1. QR 진입
 
 ```http
 GET /api/v1/stops/stop-seongbuk-office/context
@@ -37,72 +35,44 @@ GET /api/v1/stops/stop-seongbuk-office/context
     "stopName": "성북구청 정류장",
     "directionDescription": "보문역·종로 방면"
   },
-  "destinations": [
+  "destinationStops": [
     {
-      "destinationId": "bomun",
-      "displayName": "보문역 2번 출구",
-      "category": "지하철역",
-      "nearbyDescription": "보문역 6호선 · 보문숲길도서관 인근",
-      "searchKeywords": ["보문역", "보문", "6호선"],
-      "alightingCandidates": [
-        {
-          "candidateId": "bomun-exit2",
-          "stopId": "stop-bomun-exit2",
-          "stopName": "보문역 2번 출구 정류장",
-          "landmark": "보문역 2번 출구와 엘리베이터 앞",
-          "walkMinutes": 2,
-          "walkingDistanceMeters": 140,
-          "streetImageUrl": "https://example.com/stops/bomun-exit2.jpg",
-          "streetImageAlt": "지하철 출입구와 버스 정류장이 함께 보이는 거리 사진",
-          "servedRouteIds": ["1112", "95"],
-          "recommended": true
-        }
-      ]
+      "stopId": "stop-bomun-exit2",
+      "stopName": "보문역 2번 출구 정류장",
+      "directionDescription": "신설동·동대문 방면",
+      "landmark": "보문역 2번 출구 앞",
+      "searchKeywords": ["보문역", "보문", "2번 출구"],
+      "servedRouteIds": ["1112", "95"]
     }
   ]
 }
 ```
 
-`generatedAt`은 초기 목적지 후보를 만든 시각입니다. 버스 도착시간의 기준 시각은 여정 분석 응답에서 다시 제공합니다.
+`destinationStops`는 최근 검색이나 데모용 초기 목록입니다. 버스 도착시간의 기준 시각은 여정 분석 응답에서 따로 제공합니다.
 
-## 2. 목적지 검색과 하차 후보
+## 2. 도착 정류장 검색
 
 ```http
-GET /api/v1/destinations?originStopId=stop-seongbuk-office&query=보문역
+GET /api/v1/stops/search?originStopId=stop-seongbuk-office&query=보문역
 ```
 
 ```json
 {
-  "destinations": [
+  "destinationStops": [
     {
-      "destinationId": "bomun",
-      "displayName": "보문역 2번 출구",
-      "category": "지하철역",
-      "nearbyDescription": "보문역 6호선 · 보문숲길도서관 인근",
-      "alightingCandidates": [
-        {
-          "candidateId": "bomun-exit2",
-          "stopId": "stop-bomun-exit2",
-          "stopName": "보문역 2번 출구 정류장",
-          "landmark": "보문역 2번 출구와 엘리베이터 앞",
-          "walkMinutes": 2,
-          "walkingDistanceMeters": 140,
-          "streetImageUrl": "https://example.com/stops/bomun-exit2.jpg",
-          "streetImageAlt": "지하철 출입구와 버스 정류장이 함께 보이는 거리 사진",
-          "servedRouteIds": ["1112", "95"],
-          "recommended": true
-        }
-      ]
+      "stopId": "stop-bomun-exit2",
+      "stopName": "보문역 2번 출구 정류장",
+      "directionDescription": "신설동·동대문 방면",
+      "landmark": "보문역 2번 출구 앞",
+      "servedRouteIds": ["1112", "95"]
     }
   ]
 }
 ```
 
-하차 후보는 목적지에서 가까운 순서만으로 정하지 않습니다. 도보 거리, 엘리베이터나 횡단보도 같은 이동 정보, 출발 정류장에서 해당 정류장까지 운행하는 노선을 함께 고려해야 합니다.
+검색 결과에는 현재 정류장에서 한 번에 갈 수 있는 도착 정류장만 포함합니다. 같은 이름의 정류장을 구분할 수 있도록 `directionDescription`과 `landmark`가 필요합니다. `servedRouteIds`에는 출발 정류장과 도착 정류장을 모두 지나는 노선만 넣습니다.
 
-`streetImageUrl`은 현재 프로토타입 사진용 필드입니다. 실제 로드뷰 SDK를 프론트에서 직접 쓰기로 하면 이 필드 대신 좌표와 로드뷰 식별자를 합의하면 됩니다.
-
-## 3. 여정 분석 요청
+## 3. 여정 분석
 
 ```http
 POST /api/v1/journeys/predictions
@@ -112,19 +82,17 @@ Content-Type: application/json
 ```json
 {
   "originStopId": "stop-seongbuk-office",
-  "destinationId": "bomun",
   "destinationStopId": "stop-bomun-exit2"
 }
 ```
 
-## 예측 성공 응답
+### 예측 성공 응답
 
 ```json
 {
   "status": "SUCCESS",
   "generatedAt": "2026-07-13T13:58:00+09:00",
   "originStopId": "stop-seongbuk-office",
-  "destinationId": "bomun",
   "destinationStopId": "stop-bomun-exit2",
   "predictionBasis": {
     "description": "평일 오후 2시 승하차 패턴",
@@ -156,9 +124,9 @@ Content-Type: application/json
         {
           "fromStopId": "stop-seongbuk-fire-station",
           "fromStopName": "성북소방서",
-          "toStopId": "stop-seongbuk-police-station",
-          "toStopName": "성북경찰서",
-          "durationMinutes": 4,
+          "toStopId": "stop-bomun-exit2",
+          "toStopName": "보문역 2번 출구",
+          "durationMinutes": 12,
           "congestionLevel": "RELAXED",
           "description": "좌석 이용 여건 개선 예상"
         }
@@ -168,26 +136,22 @@ Content-Type: application/json
 }
 ```
 
-대안 버스는 별도 API로 나누지 않고 같은 `routes` 배열에 담습니다. 같은 시각의 데이터로 비교해야 하기 때문입니다. 프론트는 다음 기준으로 정렬합니다.
+대안 버스는 같은 시각의 결과를 비교할 수 있도록 별도 API가 아닌 `routes` 배열에 함께 담습니다. 프론트 정렬 기준은 다음과 같습니다.
 
 - 덜 붐비는 버스: `standingBurdenMinutes`가 짧은 순서
 - 빠른 도착: `arrivalMinutes + travelMinutes`가 짧은 순서
 
-### 상세 화면의 대안 안내 기준
-
-현재 프로토타입은 사용자가 확인한 버스의 `standingBurdenLevel`이 `HIGH`일 때만 같은 `routes` 배열에서 대안을 찾습니다. 다음 조건을 모두 만족하는 버스가 있을 때 추가 소요시간과 입석 부담 감소량을 함께 안내합니다.
+현재 프로토타입은 사용자가 확인한 버스의 `standingBurdenLevel`이 `HIGH`이고 아래 조건을 모두 만족하는 노선이 있을 때 대안을 안내합니다.
 
 - 입석 부담 예상 시간이 3분 이상 줄어듭니다.
 - 총 소요시간이 현재 버스의 1.5배를 넘지 않습니다.
 - 추가 소요시간이 15분을 넘지 않습니다.
 
-대안은 자동으로 선택하지 않고 `덜 붐비는 버스` 비교 화면으로 다시 연결합니다. 이 수치는 화면 동작을 검증하기 위한 임시 기준이므로 기획·백엔드와 함께 확정해야 합니다.
-
-현재 `routes`는 같은 출발 정류장과 하차 정류장을 잇는 도착 예정 버스만 다룹니다. 다른 정류장까지 걷거나 환승하는 우회 경로를 추천하려면 별도의 여정 후보 구조와 도보 거리, 환승 횟수, 저상버스 여부, 엘리베이터·횡단보도 같은 접근성 정보가 필요합니다. 해당 정보가 준비되기 전에는 우회 경로를 안전한 대안처럼 표시하지 않습니다.
+이 수치는 화면 동작 확인용 임시 기준입니다. 환승이나 다른 정류장까지 걷는 우회 경로는 현재 범위에 포함하지 않습니다.
 
 ## 데이터 부족 응답
 
-혼잡도 데이터 부족은 서버 오류가 아닙니다. 도착시간과 이동시간을 쓸 수 있다면 `200 OK`와 `INSUFFICIENT_DATA`를 반환합니다.
+혼잡도 데이터 부족은 서버 오류가 아닙니다. 도착시간과 이동시간을 제공할 수 있다면 `200 OK`와 `INSUFFICIENT_DATA`를 반환합니다.
 
 ```json
 {
@@ -195,7 +159,6 @@ Content-Type: application/json
   "reasonCode": "NOT_ENOUGH_HISTORICAL_SAMPLES",
   "generatedAt": "2026-07-13T13:58:00+09:00",
   "originStopId": "stop-seongbuk-office",
-  "destinationId": "cityhall",
   "destinationStopId": "stop-cityhall-front",
   "predictionBasis": {
     "description": "과거 승하차 표본 부족",
@@ -228,11 +191,11 @@ Content-Type: application/json
 | `standingBurdenLevel` | `LOW`, `MEDIUM`, `HIGH` |
 | `congestionLevel` | `RELAXED`, `NORMAL`, `CROWDED`, `VERY_CROWDED` |
 
-시간 숫자는 모두 분 단위이며 필드명에 `Minutes`를 붙입니다. 거리 숫자는 미터 단위이며 `Meters`를 붙입니다. `generatedAt`은 시간대가 포함된 ISO 8601 문자열을 사용합니다.
+시간은 분 단위이며 필드명에 `Minutes`를 붙입니다. `generatedAt`은 시간대가 포함된 ISO 8601 문자열을 사용합니다.
 
 ## 오류 응답
 
-HTTP 오류는 데이터 부족 응답과 다른 형식을 사용합니다.
+HTTP 오류는 데이터 부족 응답과 구분합니다.
 
 ```json
 {
@@ -242,16 +205,16 @@ HTTP 오류는 데이터 부족 응답과 다른 형식을 사용합니다.
 }
 ```
 
-최소한 `400`, `404`, `409`, `500`의 `code`와 처리 방식을 Swagger에서 합의해야 합니다.
+최소한 `400`, `404`, `409`, `500`의 오류 코드와 프론트 처리 방식을 Swagger에서 합의해야 합니다.
 
 ## 회의에서 확정할 항목
 
-- 목적지 검색 API가 하차 후보까지 한 번에 반환하는지 여부
-- 실제 도착 버스를 구분할 수 있는 `tripId` 제공 여부
+- 검색 결과를 현재 정류장에서 갈 수 있는 정류장으로 제한할 수 있는지
+- 동명 정류장 구분용 방향·랜드마크 데이터 제공 여부
+- 실제 도착 차량을 구분할 수 있는 `tripId` 제공 여부
 - 각 필드의 필수·선택 여부와 `null` 허용 여부
 - enum 값과 데이터 부족 `reasonCode`
-- 거리 사진 URL을 줄지, 좌표와 로드뷰 식별자를 줄지
-- 도착시간의 갱신 주기와 캐시 기준
+- 도착시간 갱신 주기와 캐시 기준
 - 로컬 개발 주소와 Vercel 주소에 대한 Spring CORS 설정
 - 공통 오류 형식과 Swagger 예시 응답
 

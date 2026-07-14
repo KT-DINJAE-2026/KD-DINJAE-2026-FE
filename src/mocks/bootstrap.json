@@ -5,72 +5,22 @@
     "stopName": "성북구청 정류장",
     "directionDescription": "보문역·종로 방면"
   },
-  "destinations": [
+  "destinationStops": [
     {
-      "destinationId": "bomun",
-      "displayName": "보문역 2번 출구",
-      "category": "지하철역",
-      "nearbyDescription": "보문역 6호선 · 보문숲길도서관 인근",
-      "searchKeywords": ["보문역", "보문", "6호선"],
-      "alightingCandidates": [
-        {
-          "candidateId": "bomun-exit2",
-          "stopId": "stop-bomun-exit2",
-          "stopName": "보문역 2번 출구 정류장",
-          "landmark": "보문역 2번 출구와 엘리베이터 앞",
-          "walkMinutes": 2,
-          "walkingDistanceMeters": 140,
-          "streetImageUrl": "/images/street-bomun.webp",
-          "streetImageAlt": "지하철 출입구와 버스 정류장이 함께 보이는 거리 사진 예시",
-          "servedRouteIds": ["1112", "95"],
-          "recommended": true
-        },
-        {
-          "candidateId": "bomun-crossroad",
-          "stopId": "stop-bomun-crossroad",
-          "stopName": "보문역 사거리 정류장",
-          "landmark": "보문역 사거리 횡단보도 건너편",
-          "walkMinutes": 5,
-          "walkingDistanceMeters": 360,
-          "streetImageUrl": "/images/street-bomun.webp",
-          "streetImageAlt": "넓은 보도와 횡단보도가 보이는 거리 사진 예시",
-          "servedRouteIds": ["95"],
-          "recommended": false
-        }
-      ]
+      "stopId": "stop-bomun-exit2",
+      "stopName": "보문역 2번 출구 정류장",
+      "directionDescription": "신설동·동대문 방면",
+      "landmark": "보문역 2번 출구 앞",
+      "searchKeywords": ["보문역", "보문", "2번 출구"],
+      "servedRouteIds": ["1112", "95"]
     },
     {
-      "destinationId": "cityhall",
-      "displayName": "서울시청",
-      "category": "공공기관",
-      "nearbyDescription": "서울시청 · 서울광장 · 시청역 인근",
+      "stopId": "stop-cityhall-front",
+      "stopName": "서울시청 앞 정류장",
+      "directionDescription": "시청·서소문 방면",
+      "landmark": "서울광장 맞은편",
       "searchKeywords": ["시청", "서울시청", "서울광장"],
-      "alightingCandidates": [
-        {
-          "candidateId": "cityhall-front",
-          "stopId": "stop-cityhall-front",
-          "stopName": "서울시청 앞 정류장",
-          "landmark": "서울광장 맞은편 버스 정류장",
-          "walkMinutes": 3,
-          "walkingDistanceMeters": 210,
-          "streetImageUrl": "/images/street-cityhall.webp",
-          "streetImageAlt": "서울 도심의 공공건물과 버스 쉼터가 함께 보이는 거리 사진 예시",
-          "servedRouteIds": ["101", "102"],
-          "recommended": true
-        },
-        {
-          "candidateId": "cityhall-west",
-          "stopId": "stop-cityhall-west",
-          "stopName": "시청 서소문청사 정류장",
-          "landmark": "서소문청사 입구에서 큰길 방향",
-          "walkMinutes": 6,
-          "walkingDistanceMeters": 430,
-          "streetImageUrl": "/images/street-cityhall.webp",
-          "streetImageAlt": "가로수와 버스 쉼터가 있는 도심 거리 사진 예시",
-          "servedRouteIds": ["101"],
-          "recommended": false
-        }
-      ]
+      "servedRouteIds": ["101", "102"]
     }
   ]
 }

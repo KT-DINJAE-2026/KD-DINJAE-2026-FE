@@ -5,8 +5,6 @@ import { fileURLToPath } from "node:url";
 const OUT_DIR = path.dirname(fileURLToPath(import.meta.url));
 const W = 390;
 const H = 844;
-const STREET_IMAGE_PATH = path.resolve(OUT_DIR, "assets/street-bomun.jpg");
-const STREET_IMAGE_DATA = `data:image/jpeg;base64,${(await fs.readFile(STREET_IMAGE_PATH)).toString("base64")}`;
 
 const C = {
   page: "#F4F5F5",
@@ -44,11 +42,6 @@ function circle(cx, cy, r, fill, stroke = "none", strokeWidth = 1) {
   return `<circle cx="${cx}" cy="${cy}" r="${r}" fill="${fill}" stroke="${stroke}" stroke-width="${strokeWidth}"/>`;
 }
 
-function image(x, y, width, height, href, radius = 8) {
-  const clipId = `clip-${x}-${y}-${width}-${height}`;
-  return `<defs><clipPath id="${clipId}"><rect x="${x}" y="${y}" width="${width}" height="${height}" rx="${radius}"/></clipPath></defs><image x="${x}" y="${y}" width="${width}" height="${height}" href="${href}" preserveAspectRatio="xMidYMid slice" clip-path="url(#${clipId})"/>`;
-}
-
 function text(x, y, value, size = 16, weight = 500, color = C.text, options = {}) {
   const anchor = options.anchor || "start";
   const baseline = options.baseline || "middle";
@@ -76,8 +69,6 @@ function icon(name, x, y, size = 24, color = C.text, strokeWidth = 2) {
     bus: `<rect x="4" y="3" width="16" height="16" rx="3" ${common}/><path d="M4 11h16M8 19v2M16 19v2M8 7h.01M16 7h.01" ${common}/>` ,
     info: `<circle cx="12" cy="12" r="9" ${common}/><path d="M12 11v5M12 8h.01" ${common}/>` ,
     alert: `<path d="M10.3 3.8 2.2 18a2 2 0 0 0 1.7 3h16.2a2 2 0 0 0 1.7-3L13.7 3.8a2 2 0 0 0-3.4 0Z" ${common}/><path d="M12 9v4M12 17h.01" ${common}/>` ,
-    image: `<rect x="3" y="5" width="18" height="14" rx="2" ${common}/><circle cx="8.5" cy="10" r="1.5" ${common}/><path d="m21 15-5-5L5 19" ${common}/>` ,
-    walk: `<circle cx="12" cy="4" r="2" ${common}/><path d="m10 22 1-7-2-2-1 4M14 22l-1-6 3-3 2 4M8 12l3-4 4 3 3 1" ${common}/>` ,
   };
   return `<g transform="translate(${x} ${y}) scale(${scale})">${paths[name]}</g>`;
 }
@@ -181,61 +172,35 @@ function fastRouteCard(y, options) {
 
 const screens = [
   {
-    file: "01-destination.svg",
-    title: "01 목적지 입력",
-    svg: screen("목적지 입력 화면", [
+    file: "01-destination-stop.svg",
+    title: "01 도착 정류장 검색",
+    svg: screen("도착 정류장 검색 화면", [
       currentStop(),
-      multiline(24, 136, ["어디까지", "가세요?"], 34, 800, C.text, 1.22),
-      text(24, 242, "목적지나 주변 장소를 입력해주세요.", 15, 500, C.subtext),
+      multiline(24, 136, ["어느 정류장까지", "가세요?"], 34, 800, C.text, 1.22),
+      text(24, 242, "도착할 정류장 이름을 입력해주세요.", 15, 500, C.subtext),
       rect(24, 292, 342, 64, C.page, 8),
       icon("search", 44, 313, 22, C.subtext),
-      text(78, 324, "예: 보문역 2번 출구", 15, 500, C.muted),
-      text(24, 414, "최근 목적지", 14, 700, C.subtext),
-      placeRow(440, "보문역 2번 출구", "지하철역 · 보문숲길도서관 인근"),
-      placeRow(520, "서울시청", "공공기관 · 시청역 인근"),
-      primaryButton(760, "목적지 찾기"),
+      text(78, 324, "예: 보문역 2번 출구 정류장", 14, 500, C.muted),
+      text(24, 414, "최근 도착 정류장", 14, 700, C.subtext),
+      placeRow(440, "보문역 2번 출구 정류장", "신설동 방면 · 2번 출구 앞"),
+      placeRow(520, "서울시청 앞 정류장", "서소문 방면 · 서울광장 맞은편"),
+      primaryButton(760, "도착 정류장 찾기"),
     ].join("\n")),
   },
   {
-    file: "02-alighting.svg",
-    title: "02 하차 정류장 확인",
-    svg: screen("목적지 주변 하차 정류장 확인 화면", [
-      header("보문역 2번 출구"),
-      multiline(24, 116, ["이 정류장에서", "내릴까요?"], 30, 800, C.text, 1.2),
-      multiline(24, 204, ["목적지와 가깝고 이동하기 편한 곳을", "먼저 찾았어요."], 15, 500, C.subtext, 1.45),
-      image(24, 258, 342, 228, STREET_IMAGE_DATA, 8),
-      rect(36, 270, 116, 34, C.surface, 6),
-      icon("image", 46, 278, 18, C.subtext),
-      text(76, 287, "거리 사진 예시", 12, 700, C.subtext),
-      text(24, 518, "추천 하차 정류장", 12, 800, C.blue),
-      text(24, 548, "보문역 2번 출구 정류장", 22, 800),
-      text(24, 578, "보문역 2번 출구와 엘리베이터 앞", 13, 500, C.subtext),
-      rect(24, 610, 342, 52, C.page, 8),
-      icon("walk", 42, 625, 20, C.blue),
-      text(78, 636, "도보 2분", 14, 700),
-      text(346, 636, "140m", 13, 700, C.subtext, { anchor: "end" }),
-      text(195, 696, "다른 정류장 보기", 14, 700, C.blue, { anchor: "middle" }),
-      rect(24, 730, 158, 56, C.page, 8),
-      text(103, 758, "다시 찾기", 16, 700, C.text, { anchor: "middle" }),
-      rect(194, 730, 172, 56, C.blue, 8),
-      text(280, 758, "여기서 내려요", 16, 700, C.surface, { anchor: "middle" }),
-      text(195, 814, "사진은 위치 확인을 돕는 프로토타입용 예시예요.", 10, 500, C.muted, { anchor: "middle" }),
-    ].join("\n")),
-  },
-  {
-    file: "03-analyzing.svg",
-    title: "03 버스 분석 중",
+    file: "02-analyzing.svg",
+    title: "02 버스 분석 중",
     svg: screen("버스 혼잡도 분석 중 화면", [
       header("보문역 2번 출구 정류장"),
       circle(195, 184, 54, C.blueSoft),
       circle(195, 184, 33, "none", C.blue, 6),
       line(195, 151, 195, 164, C.surface, 6),
-      multiline(195, 282, ["목적지까지 갈 버스를", "비교하고 있어요"], 27, 800, C.text, 1.35, { anchor: "middle" }),
+      multiline(195, 282, ["두 정류장을 잇는 버스를", "비교하고 있어요"], 27, 800, C.text, 1.35, { anchor: "middle" }),
       text(195, 364, "성북구청에서 출발해요.", 16, 500, C.subtext, { anchor: "middle" }),
       rect(44, 420, 302, 204, C.page, 8),
       circle(72, 462, 14, C.green),
       icon("check", 64, 454, 16, C.surface, 2.5),
-      text(102, 462, "도착 예정 버스 확인", 16, 700),
+      text(102, 462, "두 정류장 운행 버스 확인", 16, 700),
       line(72, 480, 72, 516, C.border, 2),
       circle(72, 534, 14, C.blueSoft, C.blue, 2),
       circle(72, 534, 5, C.blue),
@@ -247,8 +212,8 @@ const screens = [
     ].join("\n")),
   },
   {
-    file: "04-compare.svg",
-    title: "04 덜 붐비는 버스 비교",
+    file: "03-compare.svg",
+    title: "03 덜 붐비는 버스 비교",
     svg: screen("덜 붐비는 버스 비교 화면", [
       header("보문역 2번 출구 정류장"),
       text(24, 108, "어떤 버스가", 29, 800),
@@ -289,8 +254,8 @@ const screens = [
     ].join("\n")),
   },
   {
-    file: "04-compare-fast.svg",
-    title: "04-A 빠른 도착 비교",
+    file: "03-compare-fast.svg",
+    title: "03-A 빠른 도착 비교",
     svg: screen("빠른 도착 기준 버스 비교 화면", [
       header("보문역 2번 출구 정류장"),
       text(24, 108, "어떤 버스가", 29, 800),
@@ -331,8 +296,8 @@ const screens = [
     ].join("\n")),
   },
   {
-    file: "05-detail.svg",
-    title: "05 구간별 상세",
+    file: "04-detail.svg",
+    title: "04 구간별 상세",
     svg: screen("버스 구간별 혼잡도 상세 화면", [
       header("보문역 2번 출구"),
       text(24, 104, "1112번", 29, 800),
@@ -369,8 +334,8 @@ const screens = [
     ].join("\n")),
   },
   {
-    file: "05-detail-fast.svg",
-    title: "05-A 빠른 버스 상세",
+    file: "04-detail-fast.svg",
+    title: "04-A 빠른 버스 상세",
     svg: screen("빠른 도착 순서에서 확인한 버스의 구간별 혼잡도 화면", [
       header("보문역 2번 출구"),
       text(24, 104, "95번", 29, 800),
@@ -412,10 +377,10 @@ const screens = [
     ].join("\n")),
   },
   {
-    file: "04-compare-unavailable.svg",
-    title: "04-B 혼잡도 데이터 부족",
+    file: "03-compare-unavailable.svg",
+    title: "03-B 혼잡도 데이터 부족",
     svg: screen("혼잡도 데이터가 부족한 버스 비교 화면", [
-      header("서울시청 인근 정류장"),
+      header("서울시청 앞 정류장"),
       text(24, 108, "어떤 버스가", 29, 800),
       text(24, 146, "더 나을까요?", 29, 800),
       rect(24, 184, 342, 44, C.page, 8),
@@ -448,8 +413,8 @@ const screens = [
     ].join("\n")),
   },
   {
-    file: "05-detail-unavailable.svg",
-    title: "05-B 데이터 부족 상세",
+    file: "04-detail-unavailable.svg",
+    title: "04-B 데이터 부족 상세",
     svg: screen("혼잡도 데이터가 부족한 버스 상세 화면", [
       header("서울시청 앞 정류장"),
       text(24, 104, "101번", 29, 800),
@@ -493,28 +458,26 @@ const flowSvg = `<?xml version="1.0" encoding="UTF-8"?>
   <title>교통약자 버스 서비스 사용자 흐름</title>
   ${rect(0, 0, 1440, 760, C.page, 0)}
   ${text(64, 70, "교통약자 버스 서비스 · 사용자 흐름", 32, 800)}
-  ${text(64, 110, "QR로 출발지를 확정한 뒤, 목적지 주변의 하차 정류장과 실제 도착 버스를 비교합니다.", 16, 500, C.subtext)}
+  ${text(64, 110, "QR로 출발 정류장을 확인하고, 입력한 도착 정류장까지 운행하는 버스를 비교합니다.", 16, 500, C.subtext)}
   ${rect(64, 148, 232, 38, C.blueSoft, 8)}
   ${icon("pin", 80, 157, 20, C.blue)}
   ${text(110, 167, "QR 확인 · 성북구청 정류장", 14, 700, C.blue)}
-  ${flowCard(64, 236, "1", "목적지 입력", "장소 이름 검색")}
+  ${flowCard(64, 236, "1", "도착 정류장 검색", "이름·방향으로 구분")}
   ${flowArrow(284, 303, 326)}
-  ${flowCard(326, 236, "2", "하차 정류장 확인", "거리 사진·도보 거리 확인")}
+  ${flowCard(326, 236, "2", "여정 분석", "운행 버스·탑승 인원 예측")}
   ${flowArrow(546, 303, 588)}
-  ${flowCard(588, 236, "3", "여정 분석", "탑승 인원·운행 정보 예측")}
+  ${flowCard(588, 236, "3", "버스 비교", "덜 붐빔·빠른 도착 비교")}
   ${flowArrow(808, 303, 850)}
-  ${flowCard(850, 236, "4", "버스 비교", "덜 붐빔·빠른 도착 비교")}
-  ${flowArrow(1070, 303, 1112)}
-  ${flowCard(1112, 236, "5", "구간별 상세", "근거 확인·필요 시 재비교", C.green)}
-  ${line(698, 370, 698, 474, C.muted, 2, "6 6")}
-  <path d="M692 466L698 474L704 466" fill="none" stroke="${C.muted}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-  ${flowCard(588, 474, "4-B", "데이터 부족", "빠른 도착만 제공", C.muted)}
-  ${flowArrow(808, 541, 850)}
-  ${flowCard(850, 474, "5-B", "도착 정보 상세", "혼잡도 없이 확인", C.muted)}
-  ${rect(1112, 474, 220, 134, C.blueSoft, 8)}
-  ${text(1140, 510, "대안 안내 원칙", 15, 800, C.blue)}
-  ${multiline(1140, 548, ["부담 감소와 추가 시간을", "함께 보여준 뒤 재비교"], 14, 600, C.subtext, 1.55)}
-  ${text(64, 696, "Prototype · 화면 전환은 즉시 연결  |  분석 화면만 약 800ms 뒤 결과 표시", 13, 600, C.muted)}
+  ${flowCard(850, 236, "4", "구간별 상세", "예측 근거·대안 확인", C.green)}
+  ${line(436, 370, 436, 474, C.muted, 2, "6 6")}
+  <path d="M430 466L436 474L442 466" fill="none" stroke="${C.muted}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  ${flowCard(326, 474, "3-B", "데이터 부족", "빠른 도착만 제공", C.muted)}
+  ${flowArrow(546, 541, 588)}
+  ${flowCard(588, 474, "4-B", "도착 정보 상세", "혼잡도 없이 확인", C.muted)}
+  ${rect(850, 474, 220, 134, C.blueSoft, 8)}
+  ${text(878, 510, "대안 안내 원칙", 15, 800, C.blue)}
+  ${multiline(878, 548, ["부담 감소와 추가 시간을", "함께 보여준 뒤 재비교"], 14, 600, C.subtext, 1.55)}
+  ${text(64, 696, "Prototype · 도착 정류장 선택 후 분석 화면을 거쳐 버스 비교로 이동", 13, 600, C.muted)}
 </svg>\n`;
 
 await fs.mkdir(OUT_DIR, { recursive: true });
@@ -525,6 +488,9 @@ const legacyFiles = [
   "00-user-flow", "01-destination", "01-bus-select", "01-bus-select.svg", "01-destination-preferred", "01-destination-preferred.svg", "02-confirm", "02-alighting", "03-analyzing",
   "04-compare", "04-compare-fast", "04-compare-unavailable", "05-detail", "05-detail-fast", "05-detail-unavailable",
   "06-unavailable", "02-confirm.svg", "06-unavailable.svg",
+  "01-destination.svg", "02-alighting.svg", "03-analyzing.svg",
+  "04-compare.svg", "04-compare-fast.svg", "04-compare-unavailable.svg",
+  "05-detail.svg", "05-detail-fast.svg", "05-detail-unavailable.svg",
 ];
 await Promise.all(legacyFiles.map((file) => fs.rm(path.join(OUT_DIR, file), { force: true })));
 
@@ -534,15 +500,14 @@ for (const item of screens) {
 }
 
 const previewOrder = [
-  "01-destination.svg",
-  "02-alighting.svg",
-  "03-analyzing.svg",
-  "04-compare.svg",
-  "04-compare-fast.svg",
-  "04-compare-unavailable.svg",
-  "05-detail.svg",
-  "05-detail-fast.svg",
-  "05-detail-unavailable.svg",
+  "01-destination-stop.svg",
+  "02-analyzing.svg",
+  "03-compare.svg",
+  "03-compare-fast.svg",
+  "03-compare-unavailable.svg",
+  "04-detail.svg",
+  "04-detail-fast.svg",
+  "04-detail-unavailable.svg",
 ];
 
 const previewCards = [...screens].sort(
@@ -573,7 +538,7 @@ const preview = `<!doctype html>
 </head>
 <body>
   <h1>교통약자 버스 서비스 · Figma 시안</h1>
-  <p>목적지까지 빠른 버스와 덜 붐비는 버스를 함께 비교하는 모바일 프로토타입입니다.</p>
+  <p>출발 정류장에서 입력한 도착 정류장까지 운행하는 버스를 비교하는 모바일 프로토타입입니다.</p>
   <img class="flow" src="./00-user-flow.svg" alt="사용자 흐름도">
   <main>${previewCards}</main>
 </body>
