@@ -136,10 +136,7 @@ Content-Type: application/json
 }
 ```
 
-대안 버스는 같은 시각의 결과를 비교할 수 있도록 별도 API가 아닌 `routes` 배열에 함께 담습니다. 프론트 정렬 기준은 다음과 같습니다.
-
-- 덜 붐비는 버스: `standingBurdenMinutes`가 짧은 순서
-- 빠른 도착: `arrivalMinutes + travelMinutes`가 짧은 순서
+대안 버스는 같은 시각의 결과를 비교할 수 있도록 별도 API가 아닌 `routes` 배열에 함께 담습니다. 혼잡도 예측이 있으면 `standingBurdenMinutes`가 짧은 순서로 배치하고, `arrivalMinutes + travelMinutes`가 가장 짧은 버스에는 별도로 `빠른 도착` 표시를 붙입니다. 데이터가 부족하면 빠른 도착순으로 배치합니다.
 
 현재 프로토타입은 사용자가 확인한 버스의 `standingBurdenLevel`이 `HIGH`이고 아래 조건을 모두 만족하는 노선이 있을 때 대안을 안내합니다.
 
@@ -180,7 +177,7 @@ Content-Type: application/json
 }
 ```
 
-이 응답에는 `standingBurdenMinutes`, `standingBurdenLevel`, `segments`를 넣지 않습니다. 프론트는 혼잡도 탭을 비활성화하고 빠른 도착순으로만 보여줍니다.
+이 응답에는 `standingBurdenMinutes`, `standingBurdenLevel`, `segments`를 넣지 않습니다. 프론트는 입석 부담 표시 없이 빠른 도착순으로만 보여줍니다.
 
 ## enum과 단위
 

@@ -9,8 +9,7 @@
 | `00-user-flow.svg` | 기본 흐름과 데이터 부족 분기 |
 | `01-destination-stop.svg` | QR 출발지와 도착 정류장 검색 |
 | `02-analyzing.svg` | 운행 버스와 구간별 탑승 인원 분석 |
-| `03-compare.svg` | 입석 부담이 적은 순서로 비교 |
-| `03-compare-fast.svg` | 빠른 도착 순서로 비교 |
+| `03-compare.svg` | 입석 부담과 빠른 도착을 한 화면에서 비교 |
 | `03-compare-unavailable.svg` | 혼잡도 데이터가 부족한 경우 |
 | `04-detail.svg` | 1112번의 구간별 예상 |
 | `04-detail-fast.svg` | 95번의 구간별 예상과 1112번 대안 안내 |
@@ -35,19 +34,15 @@
 02-analyzing
   분석 완료 → 03-compare
 03-compare
-  빠른 도착 → 03-compare-fast
   1112번 → 04-detail
+  95번 → 04-detail-fast
 04-detail
   버스 비교로 돌아가기 → 03-compare
 
 비교와 예외
-03-compare-fast
-  덜 붐비는 버스 → 03-compare
-  95번 → 04-detail-fast
 04-detail-fast
   1112번과 비교하기 → 03-compare
 03-compare-unavailable
-  혼잡도 비교는 비활성화
   101번 → 04-detail-unavailable
 04-detail-unavailable
   다른 도착 버스 보기 → 03-compare-unavailable
@@ -58,6 +53,7 @@
 ## 표현 기준
 
 - 검색 결과는 정류장 이름과 함께 운행 방향, 가까운 랜드마크를 표시해 동명 정류장을 구분합니다.
+- 비교 기준을 고르는 토글 없이 각 카드에 `입석 부담 적음` 또는 `빠른 도착` 표시를 직접 붙입니다.
 - `빠른 도착`은 버스가 올 때까지의 시간과 승차 후 이동시간을 합쳐 비교합니다.
 - `덜 붐비는 버스`는 이동 중 입석 부담이 예상되는 시간이 짧은 순서입니다.
 - 분석 과정에는 `재차인원` 대신 `탑승 인원`을 사용합니다.

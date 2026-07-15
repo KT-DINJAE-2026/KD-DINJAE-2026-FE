@@ -515,42 +515,6 @@ input:focus-visible {
   margin-top: auto;
 }
 
-.mode-control {
-  min-height: 52px;
-  padding: 4px;
-  border-radius: 8px;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  background: #f2f3f3;
-}
-
-.mode-control button {
-  min-width: 0;
-  min-height: 44px;
-  border: 0;
-  border-radius: 6px;
-  color: #888888;
-  background: transparent;
-  font-size: 14px;
-  font-weight: 800;
-  cursor: pointer;
-}
-
-.mode-control button.is-active {
-  color: #b8560a;
-  background: #ffffff;
-  box-shadow: 0 1px 4px rgba(25, 25, 25, 0.08);
-}
-
-.mode-control button:disabled {
-  cursor: not-allowed;
-  opacity: 0.62;
-}
-
-.screen-heading--compare + .mode-control + .info-band {
-  margin-top: 18px;
-}
-
 .bus-list {
   margin-top: 16px;
 }
@@ -578,11 +542,19 @@ input:focus-visible {
   min-height: 32px;
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
   gap: 10px;
 }
 
 .bus-option__header > strong {
   font-size: 23px;
+}
+
+.bus-option__badges {
+  min-width: 0;
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 6px;
 }
 
 .status-badge {
@@ -1011,10 +983,6 @@ input:focus-visible {
   .screen-heading h1,
   .analysis-heading h1 {
     font-size: 27px;
-  }
-
-  .mode-control button {
-    font-size: 13px;
   }
 
   .status-badge {

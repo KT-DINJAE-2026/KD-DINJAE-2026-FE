@@ -136,7 +136,7 @@ QR로 처음 들어왔을 때 필요한 값입니다.
 }
 ```
 
-이 경우 `덜 붐비는 버스`는 비활성화하고 `arrivalMinutes + travelMinutes`가 짧은 순서로 보여줍니다.
+이 경우 입석 부담 표시는 생략하고 `arrivalMinutes + travelMinutes`가 짧은 순서로 보여줍니다.
 
 ## Spring API 연결
 

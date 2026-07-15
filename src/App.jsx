@@ -101,9 +101,9 @@ function findComfortAlternative(currentRoute, routes) {
     ))[0] ?? null;
 }
 
-function sortRoutes(routes, mode, predictionAvailable) {
+function sortRoutes(routes, predictionAvailable) {
   const result = [...routes];
-  if (mode === "comfort" && predictionAvailable) {
+  if (predictionAvailable) {
     return result.sort(
       (a, b) => a.standingBurdenMinutes - b.standingBurdenMinutes || getTotalMinutes(a) - getTotalMinutes(b),
     );
@@ -282,42 +282,18 @@ function AnalyzingScreen({ currentStop, destinationStop, onBack }) {
   );
 }
 
-function ModeControl({ mode, onChange, predictionAvailable }) {
-  return (
-    <div className="mode-control" role="group" aria-label="버스 정렬 기준">
-      <button
-        type="button"
-        aria-pressed={mode === "comfort"}
-        disabled={!predictionAvailable}
-        className={mode === "comfort" ? "is-active" : ""}
-        onClick={() => onChange("comfort")}
-      >
-        덜 붐비는 버스
-      </button>
-      <button
-        type="button"
-        aria-pressed={mode === "fast"}
-        className={mode === "fast" ? "is-active" : ""}
-        onClick={() => onChange("fast")}
-      >
-        빠른 도착
-      </button>
-    </div>
-  );
-}
-
-function BusOption({ route, mode, rank, predictionAvailable, onClick }) {
-  const isRecommended = rank === 0;
+function BusOption({ route, isComfortBest, isFastest, predictionAvailable, onClick }) {
+  const isRecommended = isComfortBest || (!predictionAvailable && isFastest);
   const total = getTotalMinutes(route);
-  const badge = predictionAvailable
-    ? mode === "comfort" ? "입석 부담 적음" : "가장 빠름"
-    : "가장 빠름";
 
   return (
     <button className={`bus-option ${isRecommended ? "is-recommended" : ""}`} type="button" onClick={onClick}>
       <span className="bus-option__header">
         <strong>{route.routeNumber}</strong>
-        {isRecommended && <span className={`status-badge status-badge--${mode === "comfort" ? "comfortable" : "fast"}`}>{badge}</span>}
+        <span className="bus-option__badges">
+          {isComfortBest && <span className="status-badge status-badge--comfortable">입석 부담 적음</span>}
+          {isFastest && <span className="status-badge status-badge--fast">빠른 도착</span>}
+        </span>
       </span>
       <span className="route-meta">{route.direction} · {route.vehicleType}</span>
       <span className="bus-metrics">
@@ -338,13 +314,15 @@ function BusOption({ route, mode, rank, predictionAvailable, onClick }) {
   );
 }
 
-function CompareScreen({ destinationStop, mode, onModeChange, onBack, onRoute }) {
+function CompareScreen({ destinationStop, onBack, onRoute }) {
   const routes = useMemo(
-    () => sortRoutes(destinationStop.routes, mode, destinationStop.hasPrediction),
-    [destinationStop, mode],
+    () => sortRoutes(destinationStop.routes, destinationStop.hasPrediction),
+    [destinationStop],
   );
-  const comfortable = destinationStop.hasPrediction ? sortRoutes(destinationStop.routes, "comfort", true)[0] : null;
-  const fastest = sortRoutes(destinationStop.routes, "fast", destinationStop.hasPrediction)[0];
+  const comfortable = destinationStop.hasPrediction ? routes[0] : null;
+  const fastest = [...destinationStop.routes].sort(
+    (a, b) => getTotalMinutes(a) - getTotalMinutes(b) || a.arrivalMinutes - b.arrivalMinutes,
+  )[0];
   const comfortDelay = comfortable ? getTotalMinutes(comfortable) - getTotalMinutes(fastest) : 0;
   const burdenSaved = comfortable
     ? fastest.standingBurdenMinutes - comfortable.standingBurdenMinutes
@@ -357,24 +335,16 @@ function CompareScreen({ destinationStop, mode, onModeChange, onBack, onRoute })
         <h1 id="compare-title">어떤 버스가<br />더 나을까요?</h1>
         <p>이 정류장까지 운행하는 버스를 비교했어요.</p>
       </section>
-      <ModeControl mode={mode} onChange={onModeChange} predictionAvailable={destinationStop.hasPrediction} />
 
       {destinationStop.hasPrediction ? (
-        mode === "comfort" ? (
-          <InfoBand>
-            <strong>
-              {comfortable.tripId === fastest.tripId
-                ? `${comfortable.routeNumber}이 빠르고 입석 부담도 가장 적어요.`
-                : `${comfortable.routeNumber}은 ${comfortDelay}분 늦지만`}
-            </strong>
-            {comfortable.tripId !== fastest.tripId && <span>입석 부담 예상 시간이 약 {burdenSaved}분 짧아요.</span>}
-          </InfoBand>
-        ) : (
-          <InfoBand icon={Clock3}>
-            <strong>{fastest.routeNumber}은 목적지까지 약 {getTotalMinutes(fastest)}분</strong>
-            <span>지금 비교한 버스 중 가장 빨리 도착해요.</span>
-          </InfoBand>
-        )
+        <InfoBand>
+          <strong>
+            {comfortable.tripId === fastest.tripId
+              ? `${comfortable.routeNumber}이 빠르고 입석 부담도 가장 적어요.`
+              : `${comfortable.routeNumber}은 ${comfortDelay}분 늦지만`}
+          </strong>
+          {comfortable.tripId !== fastest.tripId && <span>입석 부담 예상 시간이 약 {burdenSaved}분 짧아요.</span>}
+        </InfoBand>
       ) : (
         <InfoBand tone="warning" icon={AlertTriangle}>
           <strong>아직 데이터가 부족해</strong>
@@ -384,12 +354,12 @@ function CompareScreen({ destinationStop, mode, onModeChange, onBack, onRoute })
       )}
 
       <section className="bus-list" aria-label="버스 비교 결과">
-        {routes.map((route, index) => (
+        {routes.map((route) => (
           <BusOption
             key={route.tripId}
             route={route}
-            mode={mode}
-            rank={index}
+            isComfortBest={comfortable?.tripId === route.tripId}
+            isFastest={fastest.tripId === route.tripId}
             predictionAvailable={destinationStop.hasPrediction}
             onClick={() => onRoute(route.tripId)}
           />
@@ -409,7 +379,7 @@ function CompareScreen({ destinationStop, mode, onModeChange, onBack, onRoute })
   );
 }
 
-function DetailScreen({ destinationStop, route, onBack, onCompareComfort }) {
+function DetailScreen({ destinationStop, route, onBack, onCompareRoutes }) {
   const predictionAvailable = Boolean(destinationStop.hasPrediction && route.segments?.length);
   const bannerTone = predictionAvailable ? route.tone : "fast";
   const total = getTotalMinutes(route);
@@ -484,7 +454,7 @@ function DetailScreen({ destinationStop, route, onBack, onCompareComfort }) {
           <span className="alternative-recommendation__meta">
             {alternative.route.arrivalMinutes}분 후 도착 · {alternative.route.vehicleType}
           </span>
-          <button className="secondary-button recommendation-button" type="button" onClick={onCompareComfort}>
+          <button className="secondary-button recommendation-button" type="button" onClick={onCompareRoutes}>
             {alternative.route.routeNumber}과 비교하기
           </button>
         </section>
@@ -509,7 +479,6 @@ export default function App() {
   const [destinationStops, setDestinationStops] = useState([]);
   const [destinationStop, setDestinationStop] = useState(null);
   const [selectedTripId, setSelectedTripId] = useState(null);
-  const [compareMode, setCompareMode] = useState("comfort");
 
   useEffect(() => {
     window.scrollTo({ top: 0, left: 0, behavior: "auto" });
@@ -544,7 +513,6 @@ export default function App() {
         const nextDestinationStop = withPrediction(baseDestinationStop, prediction);
         setDestinationStop(nextDestinationStop);
         setSelectedTripId(nextDestinationStop.routes[0]?.tripId ?? null);
-        setCompareMode(nextDestinationStop.hasPrediction ? "comfort" : "fast");
         setScreen(requestedScreen === "detail" ? "detail" : "compare");
       } catch {
         if (active) setScreen("error");
@@ -580,7 +548,6 @@ export default function App() {
       const destinationWithPrediction = withPrediction(nextDestinationStop, prediction);
       setDestinationStop(destinationWithPrediction);
       setSelectedTripId(destinationWithPrediction.routes[0]?.tripId ?? null);
-      setCompareMode(destinationWithPrediction.hasPrediction ? "comfort" : "fast");
       setScreen("compare");
     } catch {
       if (analysisRequestRef.current === requestId) setScreen("error");
@@ -620,8 +587,6 @@ export default function App() {
         {screen === "compare" && destinationStop && (
           <CompareScreen
             destinationStop={destinationStop}
-            mode={compareMode}
-            onModeChange={setCompareMode}
             onBack={() => setScreen("destination")}
             onRoute={(tripId) => {
               setSelectedTripId(tripId);
@@ -634,10 +599,7 @@ export default function App() {
             destinationStop={destinationStop}
             route={selectedRoute}
             onBack={() => setScreen("compare")}
-            onCompareComfort={() => {
-              setCompareMode("comfort");
-              setScreen("compare");
-            }}
+            onCompareRoutes={() => setScreen("compare")}
           />
         )}
       </div>
