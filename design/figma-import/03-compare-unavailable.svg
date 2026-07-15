@@ -7,39 +7,40 @@
 <text x="366" y="48" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="14" font-weight="700" fill="#555555" text-anchor="end" dominant-baseline="middle" letter-spacing="0">서울시청 앞 정류장</text>
 <text x="24" y="108" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="29" font-weight="800" fill="#191919" text-anchor="start" dominant-baseline="middle" letter-spacing="0">어떤 버스가</text>
 <text x="24" y="146" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="29" font-weight="800" fill="#191919" text-anchor="start" dominant-baseline="middle" letter-spacing="0">더 나을까요?</text>
-<rect x="24" y="184" width="342" height="84" rx="8" fill="#FFF4D6" stroke="none" stroke-width="1"/>
-<g transform="translate(42 214) scale(0.8333333333333334)"><path d="M10.3 3.8 2.2 18a2 2 0 0 0 1.7 3h16.2a2 2 0 0 0 1.7-3L13.7 3.8a2 2 0 0 0-3.4 0Z" fill="none" stroke="#B86E00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 9v4M12 17h.01" fill="none" stroke="#B86E00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></g>
-<text x="74" y="202" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="14" font-weight="700" fill="#555555" text-anchor="start" letter-spacing="0"><tspan x="74" dy="0">아직 데이터가 부족해</tspan><tspan x="74" dy="20">혼잡도는 예측하기 어려워요.</tspan><tspan x="74" dy="20">빠른 도착순으로 보여드릴게요.</tspan></text>
-<rect x="24" y="284" width="342" height="146" rx="8" fill="#FFFFFF" stroke="#B8560A" stroke-width="2"/>
-<text x="42" y="311" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="23" font-weight="800" fill="#191919" text-anchor="start" dominant-baseline="middle" letter-spacing="0">101번</text>
-<rect x="112" y="300" width="78" height="28" rx="6" fill="#FFF0E6" stroke="none" stroke-width="1"/>
-<text x="151" y="314" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="12" font-weight="800" fill="#B8560A" text-anchor="middle" dominant-baseline="middle" letter-spacing="0">빠른 도착</text>
-<text x="42" y="338" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="12" font-weight="500" fill="#888888" text-anchor="start" dominant-baseline="middle" letter-spacing="0">종로·시청 방면 · 저상버스</text>
-<text x="42" y="362" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="12" font-weight="600" fill="#888888" text-anchor="start" dominant-baseline="middle" letter-spacing="0">버스 도착</text>
-<text x="42" y="387" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="16" font-weight="800" fill="#B8560A" text-anchor="start" dominant-baseline="middle" letter-spacing="0">4분 후</text>
-<text x="155" y="362" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="12" font-weight="600" fill="#888888" text-anchor="start" dominant-baseline="middle" letter-spacing="0">목적지까지</text>
-<text x="155" y="387" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="16" font-weight="800" fill="#191919" text-anchor="start" dominant-baseline="middle" letter-spacing="0">약 22분</text>
-<text x="274" y="362" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="12" font-weight="600" fill="#888888" text-anchor="start" dominant-baseline="middle" letter-spacing="0">혼잡도</text>
-<text x="274" y="387" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="16" font-weight="800" fill="#888888" text-anchor="start" dominant-baseline="middle" letter-spacing="0">확인 어려움</text>
-<line x1="42" y1="400" x2="348" y2="400" stroke="#E5E5E5" stroke-width="1" stroke-linecap="round"/>
-<text x="42" y="418" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="12" font-weight="600" fill="#555555" text-anchor="start" dominant-baseline="middle" letter-spacing="0">지금 기준 가장 빨리 도착해요</text>
-<g transform="translate(326 401) scale(0.9166666666666666)"><path d="m9 18 6-6-6-6" fill="none" stroke="#B8560A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></g>
-<rect x="24" y="446" width="342" height="146" rx="8" fill="#FFFFFF" stroke="#E5E5E5" stroke-width="1"/>
-<text x="42" y="473" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="23" font-weight="800" fill="#191919" text-anchor="start" dominant-baseline="middle" letter-spacing="0">102번</text>
+<text x="24" y="178" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="14" font-weight="500" fill="#555555" text-anchor="start" dominant-baseline="middle" letter-spacing="0">도착 예정 버스 4대를 비교했어요.</text>
+<rect x="24" y="204" width="342" height="84" rx="8" fill="#FFF4D6" stroke="none" stroke-width="1"/>
+<g transform="translate(42 234) scale(0.8333333333333334)"><path d="M10.3 3.8 2.2 18a2 2 0 0 0 1.7 3h16.2a2 2 0 0 0 1.7-3L13.7 3.8a2 2 0 0 0-3.4 0Z" fill="none" stroke="#B86E00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 9v4M12 17h.01" fill="none" stroke="#B86E00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></g>
+<text x="74" y="222" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="14" font-weight="700" fill="#555555" text-anchor="start" letter-spacing="0"><tspan x="74" dy="0">아직 데이터가 부족해</tspan><tspan x="74" dy="20">혼잡도는 예측하기 어려워요.</tspan><tspan x="74" dy="20">빠른 도착순으로 보여드릴게요.</tspan></text>
+<rect x="24" y="304" width="342" height="146" rx="8" fill="#FFFFFF" stroke="#B8560A" stroke-width="2"/>
+<text x="42" y="331" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="23" font-weight="800" fill="#191919" text-anchor="start" dominant-baseline="middle" letter-spacing="0">101번</text>
+<rect x="112" y="320" width="78" height="28" rx="6" fill="#FFF0E6" stroke="none" stroke-width="1"/>
+<text x="151" y="334" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="12" font-weight="800" fill="#B8560A" text-anchor="middle" dominant-baseline="middle" letter-spacing="0">빠른 도착</text>
+<text x="42" y="358" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="12" font-weight="500" fill="#888888" text-anchor="start" dominant-baseline="middle" letter-spacing="0">종로·시청 방면 · 저상버스</text>
+<text x="42" y="382" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="12" font-weight="600" fill="#888888" text-anchor="start" dominant-baseline="middle" letter-spacing="0">버스 도착</text>
+<text x="42" y="407" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="16" font-weight="800" fill="#B8560A" text-anchor="start" dominant-baseline="middle" letter-spacing="0">4분 후</text>
+<text x="155" y="382" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="12" font-weight="600" fill="#888888" text-anchor="start" dominant-baseline="middle" letter-spacing="0">목적지까지</text>
+<text x="155" y="407" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="16" font-weight="800" fill="#191919" text-anchor="start" dominant-baseline="middle" letter-spacing="0">약 22분</text>
+<text x="274" y="382" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="12" font-weight="600" fill="#888888" text-anchor="start" dominant-baseline="middle" letter-spacing="0">혼잡도</text>
+<text x="274" y="407" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="16" font-weight="800" fill="#888888" text-anchor="start" dominant-baseline="middle" letter-spacing="0">확인 어려움</text>
+<line x1="42" y1="420" x2="348" y2="420" stroke="#E5E5E5" stroke-width="1" stroke-linecap="round"/>
+<text x="42" y="438" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="12" font-weight="600" fill="#555555" text-anchor="start" dominant-baseline="middle" letter-spacing="0">지금 기준 가장 빨리 도착해요</text>
+<g transform="translate(326 421) scale(0.9166666666666666)"><path d="m9 18 6-6-6-6" fill="none" stroke="#B8560A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></g>
+<rect x="24" y="466" width="342" height="146" rx="8" fill="#FFFFFF" stroke="#E5E5E5" stroke-width="1"/>
+<text x="42" y="493" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="23" font-weight="800" fill="#191919" text-anchor="start" dominant-baseline="middle" letter-spacing="0">102번</text>
 
 
-<text x="42" y="500" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="12" font-weight="500" fill="#888888" text-anchor="start" dominant-baseline="middle" letter-spacing="0">종로·시청 방면 · 저상버스</text>
-<text x="42" y="524" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="12" font-weight="600" fill="#888888" text-anchor="start" dominant-baseline="middle" letter-spacing="0">버스 도착</text>
-<text x="42" y="549" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="16" font-weight="800" fill="#B8560A" text-anchor="start" dominant-baseline="middle" letter-spacing="0">7분 후</text>
-<text x="155" y="524" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="12" font-weight="600" fill="#888888" text-anchor="start" dominant-baseline="middle" letter-spacing="0">목적지까지</text>
-<text x="155" y="549" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="16" font-weight="800" fill="#191919" text-anchor="start" dominant-baseline="middle" letter-spacing="0">약 24분</text>
-<text x="274" y="524" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="12" font-weight="600" fill="#888888" text-anchor="start" dominant-baseline="middle" letter-spacing="0">혼잡도</text>
-<text x="274" y="549" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="16" font-weight="800" fill="#888888" text-anchor="start" dominant-baseline="middle" letter-spacing="0">확인 어려움</text>
-<line x1="42" y1="562" x2="348" y2="562" stroke="#E5E5E5" stroke-width="1" stroke-linecap="round"/>
-<text x="42" y="580" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="12" font-weight="600" fill="#555555" text-anchor="start" dominant-baseline="middle" letter-spacing="0">다음으로 빠르게 도착해요</text>
-<g transform="translate(326 563) scale(0.9166666666666666)"><path d="m9 18 6-6-6-6" fill="none" stroke="#888888" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></g>
-<rect x="24" y="616" width="342" height="56" rx="8" fill="#F4F5F5" stroke="none" stroke-width="1"/>
-<g transform="translate(42 634) scale(0.8333333333333334)"><path d="M20 11a8.1 8.1 0 1 0 2.2 5.5M20 4v7h-7" fill="none" stroke="#555555" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></g>
-<text x="74" y="644" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="13" font-weight="600" fill="#555555" text-anchor="start" dominant-baseline="middle" letter-spacing="0">혼잡도 데이터가 생기면 자동으로 갱신해요.</text>
+<text x="42" y="520" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="12" font-weight="500" fill="#888888" text-anchor="start" dominant-baseline="middle" letter-spacing="0">종로·시청 방면 · 저상버스</text>
+<text x="42" y="544" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="12" font-weight="600" fill="#888888" text-anchor="start" dominant-baseline="middle" letter-spacing="0">버스 도착</text>
+<text x="42" y="569" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="16" font-weight="800" fill="#B8560A" text-anchor="start" dominant-baseline="middle" letter-spacing="0">7분 후</text>
+<text x="155" y="544" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="12" font-weight="600" fill="#888888" text-anchor="start" dominant-baseline="middle" letter-spacing="0">목적지까지</text>
+<text x="155" y="569" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="16" font-weight="800" fill="#191919" text-anchor="start" dominant-baseline="middle" letter-spacing="0">약 24분</text>
+<text x="274" y="544" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="12" font-weight="600" fill="#888888" text-anchor="start" dominant-baseline="middle" letter-spacing="0">혼잡도</text>
+<text x="274" y="569" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="16" font-weight="800" fill="#888888" text-anchor="start" dominant-baseline="middle" letter-spacing="0">확인 어려움</text>
+<line x1="42" y1="582" x2="348" y2="582" stroke="#E5E5E5" stroke-width="1" stroke-linecap="round"/>
+<text x="42" y="600" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="12" font-weight="600" fill="#555555" text-anchor="start" dominant-baseline="middle" letter-spacing="0">다음으로 빠르게 도착해요</text>
+<g transform="translate(326 583) scale(0.9166666666666666)"><path d="m9 18 6-6-6-6" fill="none" stroke="#888888" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></g>
+<rect x="24" y="636" width="342" height="56" rx="8" fill="#F4F5F5" stroke="none" stroke-width="1"/>
+<g transform="translate(42 654) scale(0.8333333333333334)"><path d="M20 11a8.1 8.1 0 1 0 2.2 5.5M20 4v7h-7" fill="none" stroke="#555555" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></g>
+<text x="74" y="664" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="13" font-weight="600" fill="#555555" text-anchor="start" dominant-baseline="middle" letter-spacing="0">혼잡도 데이터가 생기면 자동으로 갱신해요.</text>
 <text x="195" y="790" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="11" font-weight="500" fill="#888888" text-anchor="middle" dominant-baseline="middle" letter-spacing="0">도착 정보는 실제 운행 상황에 따라 달라질 수 있어요.</text>
 </svg>

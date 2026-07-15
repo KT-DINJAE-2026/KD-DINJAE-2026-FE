@@ -32,7 +32,7 @@
 <circle cx="878" cy="264" r="16" fill="#2F7D4A" stroke="none" stroke-width="1"/>
 <text x="878" y="264" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="13" font-weight="800" fill="#FFFFFF" text-anchor="middle" dominant-baseline="middle" letter-spacing="0">4</text>
 <text x="874" y="306" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="19" font-weight="800" fill="#191919" text-anchor="start" dominant-baseline="middle" letter-spacing="0">구간별 상세</text>
-<text x="874" y="338" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="13" font-weight="500" fill="#555555" text-anchor="start" dominant-baseline="middle" letter-spacing="0">예측 근거·대안 확인</text>
+<text x="874" y="338" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="13" font-weight="500" fill="#555555" text-anchor="start" dominant-baseline="middle" letter-spacing="0">큰 글씨로 구간 정보 확인</text>
   <line x1="436" y1="370" x2="436" y2="474" stroke="#888888" stroke-width="2" stroke-linecap="round" stroke-dasharray="6 6"/>
   <path d="M430 466L436 474L442 466" fill="none" stroke="#888888" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
   <rect x="326" y="474" width="220" height="134" rx="8" fill="#FFFFFF" stroke="#E5E5E5" stroke-width="1"/>
@@ -48,7 +48,7 @@
 <text x="612" y="544" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="19" font-weight="800" fill="#191919" text-anchor="start" dominant-baseline="middle" letter-spacing="0">도착 정보 상세</text>
 <text x="612" y="576" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="13" font-weight="500" fill="#555555" text-anchor="start" dominant-baseline="middle" letter-spacing="0">혼잡도 없이 확인</text>
   <rect x="850" y="474" width="220" height="134" rx="8" fill="#FFF0E6" stroke="none" stroke-width="1"/>
-  <text x="878" y="510" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="15" font-weight="800" fill="#B8560A" text-anchor="start" dominant-baseline="middle" letter-spacing="0">대안 안내 원칙</text>
-  <text x="878" y="548" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="14" font-weight="600" fill="#555555" text-anchor="start" letter-spacing="0"><tspan x="878" dy="0">부담 감소와 추가 시간을</tspan><tspan x="878" dy="22">함께 보여준 뒤 재비교</tspan></text>
+  <text x="878" y="510" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="15" font-weight="800" fill="#B8560A" text-anchor="start" dominant-baseline="middle" letter-spacing="0">상세 화면 원칙</text>
+  <text x="878" y="548" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="14" font-weight="600" fill="#555555" text-anchor="start" letter-spacing="0"><tspan x="878" dy="0">별도 추천 없이 구간별 예상과</tspan><tspan x="878" dy="22">혼잡 단계 의미에 집중</tspan></text>
   <text x="64" y="696" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="13" font-weight="600" fill="#888888" text-anchor="start" dominant-baseline="middle" letter-spacing="0">Prototype · 도착 정류장 선택 후 분석 화면을 거쳐 버스 비교로 이동</text>
 </svg>

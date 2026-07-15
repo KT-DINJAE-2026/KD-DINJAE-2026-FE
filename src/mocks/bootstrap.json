@@ -12,7 +12,7 @@
       "directionDescription": "신설동·동대문 방면",
       "landmark": "보문역 2번 출구 앞",
       "searchKeywords": ["보문역", "보문", "2번 출구"],
-      "servedRouteIds": ["1112", "95"]
+      "servedRouteIds": ["1112", "95", "142", "103"]
     },
     {
       "stopId": "stop-cityhall-front",
@@ -20,7 +20,7 @@
       "directionDescription": "시청·서소문 방면",
       "landmark": "서울광장 맞은편",
       "searchKeywords": ["시청", "서울시청", "서울광장"],
-      "servedRouteIds": ["101", "102"]
+      "servedRouteIds": ["101", "102", "103", "104"]
     }
   ]
 }

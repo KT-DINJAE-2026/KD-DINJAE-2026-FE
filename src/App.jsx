@@ -2,7 +2,6 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import {
   AlertTriangle,
   ArrowLeft,
-  BusFront,
   Check,
   ChevronRight,
   Circle,
@@ -33,7 +32,7 @@ const CONGESTION_META = {
 const DETAIL_GUIDANCE = {
   LOW: "여유는 좌석 이용 가능성이 상대적으로 높은 단계이며 좌석을 보장하지는 않아요.",
   MEDIUM: "보통은 입석 이동이 가능하지만 좌석 이용이 어려울 수 있는 단계예요.",
-  HIGH: "현재 기준에 맞는 덜 붐비는 버스를 찾지 못했어요.",
+  HIGH: "혼잡은 신체 접촉이 발생할 수 있고 이동 부담이 큰 단계예요.",
 };
 
 function getRequestedScreen() {
@@ -73,40 +72,20 @@ function withPrediction(destination, prediction) {
 
 const getTotalMinutes = (route) => route.arrivalMinutes + route.travelMinutes;
 
-const ALTERNATIVE_MAX_TOTAL_RATIO = 1.5;
-const ALTERNATIVE_MAX_EXTRA_MINUTES = 15;
-const ALTERNATIVE_MIN_BURDEN_SAVING_MINUTES = 3;
-
-function findComfortAlternative(currentRoute, routes) {
-  if (currentRoute.standingBurdenLevel !== "HIGH") return null;
-
-  const currentTotalMinutes = getTotalMinutes(currentRoute);
-  return routes
-    .filter((candidate) => candidate.tripId !== currentRoute.tripId)
-    .map((candidate) => ({
-      route: candidate,
-      totalMinutes: getTotalMinutes(candidate),
-      burdenSavingMinutes: currentRoute.standingBurdenMinutes - candidate.standingBurdenMinutes,
-    }))
-    .filter(({ route, totalMinutes, burdenSavingMinutes }) => (
-      Number.isFinite(route.standingBurdenMinutes)
-      && burdenSavingMinutes >= ALTERNATIVE_MIN_BURDEN_SAVING_MINUTES
-      && totalMinutes <= currentTotalMinutes * ALTERNATIVE_MAX_TOTAL_RATIO
-      && totalMinutes - currentTotalMinutes <= ALTERNATIVE_MAX_EXTRA_MINUTES
-    ))
-    .sort((a, b) => (
-      b.burdenSavingMinutes - a.burdenSavingMinutes
-      || a.totalMinutes - b.totalMinutes
-      || a.route.arrivalMinutes - b.route.arrivalMinutes
-    ))[0] ?? null;
-}
-
 function sortRoutes(routes, predictionAvailable) {
   const result = [...routes];
   if (predictionAvailable) {
-    return result.sort(
+    const byComfort = result.sort(
       (a, b) => a.standingBurdenMinutes - b.standingBurdenMinutes || getTotalMinutes(a) - getTotalMinutes(b),
     );
+    const fastest = [...routes].sort(
+      (a, b) => getTotalMinutes(a) - getTotalMinutes(b) || a.arrivalMinutes - b.arrivalMinutes,
+    )[0];
+    return [
+      byComfort[0],
+      ...(fastest.tripId === byComfort[0].tripId ? [] : [fastest]),
+      ...byComfort.filter((route) => route.tripId !== byComfort[0].tripId && route.tripId !== fastest.tripId),
+    ];
   }
   return result.sort(
     (a, b) => getTotalMinutes(a) - getTotalMinutes(b) || a.arrivalMinutes - b.arrivalMinutes,
@@ -283,7 +262,7 @@ function AnalyzingScreen({ currentStop, destinationStop, onBack }) {
 }
 
 function BusOption({ route, isComfortBest, isFastest, predictionAvailable, onClick }) {
-  const isRecommended = isComfortBest || (!predictionAvailable && isFastest);
+  const isRecommended = isComfortBest || isFastest;
   const total = getTotalMinutes(route);
 
   return (
@@ -333,7 +312,7 @@ function CompareScreen({ destinationStop, onBack, onRoute }) {
       <BackHeader title={destinationStop.stopName} onBack={onBack} />
       <section className="screen-heading screen-heading--compare">
         <h1 id="compare-title">어떤 버스가<br />더 나을까요?</h1>
-        <p>이 정류장까지 운행하는 버스를 비교했어요.</p>
+        <p>도착 예정 버스 {routes.length}대를 비교했어요.</p>
       </section>
 
       {destinationStop.hasPrediction ? (
@@ -379,17 +358,10 @@ function CompareScreen({ destinationStop, onBack, onRoute }) {
   );
 }
 
-function DetailScreen({ destinationStop, route, onBack, onCompareRoutes }) {
+function DetailScreen({ destinationStop, route, onBack }) {
   const predictionAvailable = Boolean(destinationStop.hasPrediction && route.segments?.length);
   const bannerTone = predictionAvailable ? route.tone : "fast";
   const total = getTotalMinutes(route);
-  const alternative = predictionAvailable ? findComfortAlternative(route, destinationStop.routes) : null;
-  const extraMinutes = alternative ? alternative.totalMinutes - total : 0;
-  const alternativeTimeMessage = extraMinutes > 0
-    ? `${extraMinutes}분 더 걸리지만`
-    : extraMinutes < 0
-      ? `${Math.abs(extraMinutes)}분 더 빠르고`
-      : "도착시간은 비슷하지만";
 
   return (
     <main className="screen" aria-labelledby="detail-title">
@@ -429,11 +401,9 @@ function DetailScreen({ destinationStop, route, onBack, onCompareRoutes }) {
               ))}
             </ol>
           </section>
-          {!alternative && (
-            <InfoBand tone={route.standingBurdenLevel === "HIGH" ? "warning" : "info"}>
-              {DETAIL_GUIDANCE[route.standingBurdenLevel]}
-            </InfoBand>
-          )}
+          <InfoBand tone={route.standingBurdenLevel === "HIGH" ? "warning" : "info"}>
+            {DETAIL_GUIDANCE[route.standingBurdenLevel]}
+          </InfoBand>
         </>
       ) : (
         <InfoBand tone="warning" icon={AlertTriangle}>
@@ -441,30 +411,11 @@ function DetailScreen({ destinationStop, route, onBack, onCompareRoutes }) {
         </InfoBand>
       )}
 
-      {alternative ? (
-        <section className="alternative-recommendation" aria-labelledby="alternative-title">
-          <div className="alternative-recommendation__heading">
-            <span className="alternative-recommendation__icon"><BusFront aria-hidden="true" /></span>
-            <div>
-              <span>다른 선택지도 있어요</span>
-              <h2 id="alternative-title">{alternative.route.routeNumber}은 {alternativeTimeMessage}</h2>
-            </div>
-          </div>
-          <p>입석 부담 예상 시간이 약 {alternative.burdenSavingMinutes}분 짧아요.</p>
-          <span className="alternative-recommendation__meta">
-            {alternative.route.arrivalMinutes}분 후 도착 · {alternative.route.vehicleType}
-          </span>
-          <button className="secondary-button recommendation-button" type="button" onClick={onCompareRoutes}>
-            {alternative.route.routeNumber}과 비교하기
-          </button>
-        </section>
-      ) : (
-        <div className="detail-return">
-          <button className="text-button" type="button" onClick={onBack}>
-            {predictionAvailable ? "버스 비교로 돌아가기" : "다른 도착 버스 보기"}
-          </button>
-        </div>
-      )}
+      <div className="detail-return">
+        <button className="text-button" type="button" onClick={onBack}>
+          {predictionAvailable ? "버스 비교로 돌아가기" : "다른 도착 버스 보기"}
+        </button>
+      </div>
 
     </main>
   );
@@ -599,7 +550,6 @@ export default function App() {
             destinationStop={destinationStop}
             route={selectedRoute}
             onBack={() => setScreen("compare")}
-            onCompareRoutes={() => setScreen("compare")}
           />
         )}
       </div>

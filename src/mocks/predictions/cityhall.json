@@ -30,6 +30,28 @@
       "arrivalMinutes": 7,
       "travelMinutes": 17,
       "summaryMessage": "다음으로 빠르게 도착해요"
+    },
+    {
+      "tripId": "trip-103-1407",
+      "routeId": "103",
+      "routeNumber": "103번",
+      "direction": "종로·시청 방면",
+      "vehicleType": "일반버스",
+      "isLowFloor": false,
+      "arrivalMinutes": 9,
+      "travelMinutes": 18,
+      "summaryMessage": "약 27분 뒤 목적지에 도착해요"
+    },
+    {
+      "tripId": "trip-104-1410",
+      "routeId": "104",
+      "routeNumber": "104번",
+      "direction": "종로·서소문 방면",
+      "vehicleType": "저상버스",
+      "isLowFloor": true,
+      "arrivalMinutes": 12,
+      "travelMinutes": 18,
+      "summaryMessage": "약 30분 뒤 목적지에 도착해요"
     }
   ]
 }

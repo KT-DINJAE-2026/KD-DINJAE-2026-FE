@@ -42,7 +42,7 @@ GET /api/v1/stops/stop-seongbuk-office/context
       "directionDescription": "신설동·동대문 방면",
       "landmark": "보문역 2번 출구 앞",
       "searchKeywords": ["보문역", "보문", "2번 출구"],
-      "servedRouteIds": ["1112", "95"]
+      "servedRouteIds": ["1112", "95", "142", "103"]
     }
   ]
 }
@@ -64,7 +64,7 @@ GET /api/v1/stops/search?originStopId=stop-seongbuk-office&query=보문역
       "stopName": "보문역 2번 출구 정류장",
       "directionDescription": "신설동·동대문 방면",
       "landmark": "보문역 2번 출구 앞",
-      "servedRouteIds": ["1112", "95"]
+      "servedRouteIds": ["1112", "95", "142", "103"]
     }
   ]
 }
@@ -138,13 +138,7 @@ Content-Type: application/json
 
 대안 버스는 같은 시각의 결과를 비교할 수 있도록 별도 API가 아닌 `routes` 배열에 함께 담습니다. 혼잡도 예측이 있으면 `standingBurdenMinutes`가 짧은 순서로 배치하고, `arrivalMinutes + travelMinutes`가 가장 짧은 버스에는 별도로 `빠른 도착` 표시를 붙입니다. 데이터가 부족하면 빠른 도착순으로 배치합니다.
 
-현재 프로토타입은 사용자가 확인한 버스의 `standingBurdenLevel`이 `HIGH`이고 아래 조건을 모두 만족하는 노선이 있을 때 대안을 안내합니다.
-
-- 입석 부담 예상 시간이 3분 이상 줄어듭니다.
-- 총 소요시간이 현재 버스의 1.5배를 넘지 않습니다.
-- 추가 소요시간이 15분을 넘지 않습니다.
-
-이 수치는 화면 동작 확인용 임시 기준입니다. 환승이나 다른 정류장까지 걷는 우회 경로는 현재 범위에 포함하지 않습니다.
+상세 화면에서는 다른 버스를 별도로 추천하지 않습니다. 사용자는 구간별 예상과 혼잡 단계 의미를 확인한 뒤 비교 화면으로 돌아가 다른 버스를 직접 선택합니다. 환승이나 다른 정류장까지 걷는 우회 경로도 현재 범위에 포함하지 않습니다.
 
 ## 데이터 부족 응답
 
