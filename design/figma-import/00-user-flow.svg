@@ -25,7 +25,7 @@
 <circle cx="616" cy="264" r="16" fill="#B8560A" stroke="none" stroke-width="1"/>
 <text x="616" y="264" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="13" font-weight="800" fill="#FFFFFF" text-anchor="middle" dominant-baseline="middle" letter-spacing="0">3</text>
 <text x="612" y="306" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="19" font-weight="800" fill="#191919" text-anchor="start" dominant-baseline="middle" letter-spacing="0">버스 비교</text>
-<text x="612" y="338" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="13" font-weight="500" fill="#555555" text-anchor="start" dominant-baseline="middle" letter-spacing="0">덜 붐빔·빠른 도착 비교</text>
+<text x="612" y="338" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="13" font-weight="500" fill="#555555" text-anchor="start" dominant-baseline="middle" letter-spacing="0">앉기 편한 시간·빠른 도착</text>
   <line x1="808" y1="303" x2="850" y2="303" stroke="#888888" stroke-width="2" stroke-linecap="round"/>
 <path d="M842 297L850 303L842 309" fill="none" stroke="#888888" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
   <rect x="850" y="236" width="220" height="134" rx="8" fill="#FFFFFF" stroke="#E5E5E5" stroke-width="1"/>

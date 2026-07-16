@@ -138,6 +138,8 @@ Content-Type: application/json
 
 대안 버스는 같은 시각의 결과를 비교할 수 있도록 별도 API가 아닌 `routes` 배열에 함께 담습니다. 혼잡도 예측이 있으면 `standingBurdenMinutes`가 짧은 순서로 배치하고, `arrivalMinutes + travelMinutes`가 가장 짧은 버스에는 별도로 `빠른 도착` 표시를 붙입니다. 데이터가 부족하면 빠른 도착순으로 배치합니다.
 
+화면의 `앉기 편한 시간`은 별도 API 필드가 아니라 `congestionLevel`이 `RELAXED`인 구간의 `durationMinutes` 합계로 계산합니다. 좌석을 보장하는 값이 아니므로 화면에도 여유 예상 구간의 합계라는 안내를 함께 표시합니다.
+
 상세 화면에서는 다른 버스를 별도로 추천하지 않습니다. 사용자는 구간별 예상과 혼잡 단계 의미를 확인한 뒤 비교 화면으로 돌아가 다른 버스를 직접 선택합니다. 환승이나 다른 정류장까지 걷는 우회 경로도 현재 범위에 포함하지 않습니다.
 
 ## 데이터 부족 응답
@@ -171,7 +173,7 @@ Content-Type: application/json
 }
 ```
 
-이 응답에는 `standingBurdenMinutes`, `standingBurdenLevel`, `segments`를 넣지 않습니다. 프론트는 입석 부담 표시 없이 빠른 도착순으로만 보여줍니다.
+이 응답에는 `standingBurdenMinutes`, `standingBurdenLevel`, `segments`를 넣지 않습니다. 프론트는 앉기 편한 시간 표시 없이 빠른 도착순으로만 보여줍니다.
 
 ## enum과 단위
 

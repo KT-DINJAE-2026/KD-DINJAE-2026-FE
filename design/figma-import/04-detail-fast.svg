@@ -2,41 +2,41 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="390" height="844" viewBox="0 0 390 844" role="img" aria-label="빠른 도착 버스의 구간별 혼잡도 화면">
   <title>빠른 도착 버스의 구간별 혼잡도 화면</title>
   <rect x="0" y="0" width="390" height="844" rx="0" fill="#FFFFFF" stroke="none" stroke-width="1"/>
-  <rect x="20" y="24" width="48" height="48" rx="8" fill="#F4F5F5" stroke="none" stroke-width="1"/>
-<g transform="translate(32 36) scale(1)"><path d="M19 12H5M12 19l-7-7 7-7" fill="none" stroke="#191919" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></g>
-<text x="366" y="48" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="14" font-weight="700" fill="#555555" text-anchor="end" dominant-baseline="middle" letter-spacing="0">보문역 2번 출구</text>
-<text x="24" y="104" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="32" font-weight="800" fill="#191919" text-anchor="start" dominant-baseline="middle" letter-spacing="0">95번</text>
-<text x="24" y="140" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="15" font-weight="500" fill="#555555" text-anchor="start" dominant-baseline="middle" letter-spacing="0">보문역·동대문 방면 · 일반버스</text>
-<rect x="24" y="174" width="342" height="112" rx="8" fill="#FBECEC" stroke="none" stroke-width="1"/>
-<rect x="40" y="190" width="100" height="28" rx="6" fill="#C83D3D" stroke="none" stroke-width="1"/>
-<text x="90" y="204" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="12" font-weight="800" fill="#FFFFFF" text-anchor="middle" dominant-baseline="middle" letter-spacing="0">입석 부담 높음</text>
-<text x="40" y="246" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="20" font-weight="800" fill="#191919" text-anchor="start" dominant-baseline="middle" letter-spacing="0">보문역까지 혼잡 구간이 길어요.</text>
-<rect x="24" y="302" width="342" height="76" rx="8" fill="#F4F5F5" stroke="none" stroke-width="1"/>
-<text x="40" y="322" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="12" font-weight="600" fill="#888888" text-anchor="start" dominant-baseline="middle" letter-spacing="0">버스 도착</text>
-<text x="40" y="347" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="16" font-weight="800" fill="#191919" text-anchor="start" dominant-baseline="middle" letter-spacing="0">3분 후</text>
-<text x="148" y="322" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="12" font-weight="600" fill="#888888" text-anchor="start" dominant-baseline="middle" letter-spacing="0">목적지까지</text>
-<text x="148" y="347" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="16" font-weight="800" fill="#191919" text-anchor="start" dominant-baseline="middle" letter-spacing="0">약 15분</text>
-<text x="268" y="322" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="12" font-weight="600" fill="#888888" text-anchor="start" dominant-baseline="middle" letter-spacing="0">입석 부담</text>
-<text x="268" y="347" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="16" font-weight="800" fill="#C83D3D" text-anchor="start" dominant-baseline="middle" letter-spacing="0">약 10분</text>
-<text x="24" y="414" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="17" font-weight="700" fill="#555555" text-anchor="start" dominant-baseline="middle" letter-spacing="0">구간별 예상</text>
-<line x1="42" y1="448" x2="42" y2="628" stroke="#E5E5E5" stroke-width="3" stroke-linecap="round"/>
-<circle cx="42" cy="462" r="8" fill="#C83D3D" stroke="none" stroke-width="1"/>
-<text x="64" y="454" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="16" font-weight="700" fill="#191919" text-anchor="start" dominant-baseline="middle" letter-spacing="0">성북구청 → 성북소방서</text>
-<text x="64" y="480" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="14" font-weight="600" fill="#C83D3D" text-anchor="start" dominant-baseline="middle" letter-spacing="0">4분 · 신체 접촉이 발생할 수 있음</text>
-<rect x="300" y="446" width="66" height="28" rx="6" fill="#FBECEC" stroke="none" stroke-width="1"/>
-<text x="333" y="460" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="13" font-weight="800" fill="#C83D3D" text-anchor="middle" dominant-baseline="middle" letter-spacing="0">혼잡</text>
-<circle cx="42" cy="536" r="8" fill="#B86E00" stroke="none" stroke-width="1"/>
-<text x="64" y="528" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="16" font-weight="700" fill="#191919" text-anchor="start" dominant-baseline="middle" letter-spacing="0">성북소방서 → 성북경찰서</text>
-<text x="64" y="554" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="14" font-weight="600" fill="#B86E00" text-anchor="start" dominant-baseline="middle" letter-spacing="0">6분 · 입석 이동 가능</text>
-<rect x="300" y="520" width="66" height="28" rx="6" fill="#FFF4D6" stroke="none" stroke-width="1"/>
-<text x="333" y="534" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="13" font-weight="800" fill="#B86E00" text-anchor="middle" dominant-baseline="middle" letter-spacing="0">보통</text>
-<circle cx="42" cy="610" r="8" fill="#2F7D4A" stroke="none" stroke-width="1"/>
-<text x="64" y="602" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="16" font-weight="700" fill="#191919" text-anchor="start" dominant-baseline="middle" letter-spacing="0">성북경찰서 → 보문역 2번 출구</text>
-<text x="64" y="628" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="14" font-weight="600" fill="#2F7D4A" text-anchor="start" dominant-baseline="middle" letter-spacing="0">2분 · 좌석 이용 여건 개선 예상</text>
-<rect x="300" y="594" width="66" height="28" rx="6" fill="#EAF4ED" stroke="none" stroke-width="1"/>
-<text x="333" y="608" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="13" font-weight="800" fill="#2F7D4A" text-anchor="middle" dominant-baseline="middle" letter-spacing="0">여유</text>
-<rect x="24" y="662" width="342" height="70" rx="8" fill="#FFF4D6" stroke="none" stroke-width="1"/>
-<g transform="translate(42 685) scale(0.8333333333333334)"><path d="M10.3 3.8 2.2 18a2 2 0 0 0 1.7 3h16.2a2 2 0 0 0 1.7-3L13.7 3.8a2 2 0 0 0-3.4 0Z" fill="none" stroke="#B86E00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 9v4M12 17h.01" fill="none" stroke="#B86E00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></g>
-<text x="74" y="680" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="13" font-weight="600" fill="#555555" text-anchor="start" letter-spacing="0"><tspan x="74" dy="0">혼잡은 신체 접촉이 발생할 수 있고</tspan><tspan x="74" dy="19">이동 부담이 큰 단계예요.</tspan></text>
-<text x="195" y="782" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="16" font-weight="800" fill="#B8560A" text-anchor="middle" dominant-baseline="middle" letter-spacing="0">버스 비교로 돌아가기</text>
+  <rect x="20" y="24" width="52" height="52" rx="8" fill="#F4F5F5" stroke="none" stroke-width="1"/>
+<g transform="translate(33 37) scale(1.0833333333333333)"><path d="M19 12H5M12 19l-7-7 7-7" fill="none" stroke="#191919" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></g>
+<text x="366" y="50" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="16" font-weight="700" fill="#555555" text-anchor="end" dominant-baseline="middle" letter-spacing="0">보문역 2번 출구</text>
+<text x="24" y="108" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="38" font-weight="800" fill="#191919" text-anchor="start" dominant-baseline="middle" letter-spacing="0">95번</text>
+<text x="24" y="148" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="17" font-weight="500" fill="#555555" text-anchor="start" dominant-baseline="middle" letter-spacing="0">보문역·동대문 방면 · 일반버스</text>
+<rect x="24" y="174" width="342" height="126" rx="8" fill="#FBECEC" stroke="none" stroke-width="1"/>
+<rect x="40" y="190" width="116" height="34" rx="6" fill="#C83D3D" stroke="none" stroke-width="1"/>
+<text x="98" y="207" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="14" font-weight="800" fill="#FFFFFF" text-anchor="middle" dominant-baseline="middle" letter-spacing="0">입석 부담 높음</text>
+<text x="40" y="260" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="22" font-weight="800" fill="#191919" text-anchor="start" dominant-baseline="middle" letter-spacing="0">보문역까지 혼잡 구간이 길어요.</text>
+<rect x="24" y="316" width="342" height="88" rx="8" fill="#F4F5F5" stroke="none" stroke-width="1"/>
+<text x="40" y="337" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="13" font-weight="600" fill="#888888" text-anchor="start" dominant-baseline="middle" letter-spacing="0">버스 도착</text>
+<text x="40" y="364" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="18" font-weight="800" fill="#191919" text-anchor="start" dominant-baseline="middle" letter-spacing="0">3분 후</text>
+<text x="142" y="337" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="13" font-weight="600" fill="#888888" text-anchor="start" dominant-baseline="middle" letter-spacing="0">목적지까지</text>
+<text x="142" y="364" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="18" font-weight="800" fill="#191919" text-anchor="start" dominant-baseline="middle" letter-spacing="0">약 15분</text>
+<text x="246" y="337" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="13" font-weight="600" fill="#888888" text-anchor="start" dominant-baseline="middle" letter-spacing="0">앉기 편한 시간</text>
+<text x="246" y="364" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="18" font-weight="800" fill="#2F7D4A" text-anchor="start" dominant-baseline="middle" letter-spacing="0">약 2분</text>
+<text x="24" y="438" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="21" font-weight="700" fill="#555555" text-anchor="start" dominant-baseline="middle" letter-spacing="0">구간별 예상</text>
+<line x1="42" y1="470" x2="42" y2="660" stroke="#E5E5E5" stroke-width="3" stroke-linecap="round"/>
+<circle cx="42" cy="478" r="8" fill="#C83D3D" stroke="none" stroke-width="1"/>
+<text x="64" y="468" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="18" font-weight="700" fill="#191919" text-anchor="start" dominant-baseline="middle" letter-spacing="0">성북구청 → 성북소방서</text>
+<text x="64" y="496" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="16" font-weight="600" fill="#C83D3D" text-anchor="start" dominant-baseline="middle" letter-spacing="0">4분 · 신체 접촉이 발생할 수 있음</text>
+<rect x="300" y="484" width="66" height="34" rx="6" fill="#FBECEC" stroke="none" stroke-width="1"/>
+<text x="333" y="501" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="14" font-weight="800" fill="#C83D3D" text-anchor="middle" dominant-baseline="middle" letter-spacing="0">혼잡</text>
+<circle cx="42" cy="558" r="8" fill="#B86E00" stroke="none" stroke-width="1"/>
+<text x="64" y="548" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="18" font-weight="700" fill="#191919" text-anchor="start" dominant-baseline="middle" letter-spacing="0">성북소방서 → 성북경찰서</text>
+<text x="64" y="576" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="16" font-weight="600" fill="#B86E00" text-anchor="start" dominant-baseline="middle" letter-spacing="0">6분 · 입석 이동 가능</text>
+<rect x="300" y="564" width="66" height="34" rx="6" fill="#FFF4D6" stroke="none" stroke-width="1"/>
+<text x="333" y="581" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="14" font-weight="800" fill="#B86E00" text-anchor="middle" dominant-baseline="middle" letter-spacing="0">보통</text>
+<circle cx="42" cy="638" r="8" fill="#2F7D4A" stroke="none" stroke-width="1"/>
+<text x="64" y="628" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="18" font-weight="700" fill="#191919" text-anchor="start" dominant-baseline="middle" letter-spacing="0">성북경찰서 → 보문역 2번 출구</text>
+<text x="64" y="656" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="16" font-weight="600" fill="#2F7D4A" text-anchor="start" dominant-baseline="middle" letter-spacing="0">2분 · 좌석 이용 여건 개선 예상</text>
+<rect x="300" y="644" width="66" height="34" rx="6" fill="#EAF4ED" stroke="none" stroke-width="1"/>
+<text x="333" y="661" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="14" font-weight="800" fill="#2F7D4A" text-anchor="middle" dominant-baseline="middle" letter-spacing="0">여유</text>
+<rect x="24" y="686" width="342" height="72" rx="8" fill="#FFF4D6" stroke="none" stroke-width="1"/>
+<g transform="translate(42 709) scale(0.9166666666666666)"><path d="M10.3 3.8 2.2 18a2 2 0 0 0 1.7 3h16.2a2 2 0 0 0 1.7-3L13.7 3.8a2 2 0 0 0-3.4 0Z" fill="none" stroke="#B86E00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 9v4M12 17h.01" fill="none" stroke="#B86E00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></g>
+<text x="78" y="706" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="14" font-weight="600" fill="#555555" text-anchor="start" letter-spacing="0"><tspan x="78" dy="0">앉기 편한 시간은 여유 예상 구간만 더한 값이며</tspan><tspan x="78" dy="20">혼잡 구간에서는 좌석 이용이 어려울 수 있어요.</tspan></text>
+<text x="195" y="808" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="18" font-weight="800" fill="#B8560A" text-anchor="middle" dominant-baseline="middle" letter-spacing="0">버스 비교로 돌아가기</text>
 </svg>

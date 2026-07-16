@@ -30,9 +30,9 @@ const CONGESTION_META = {
 };
 
 const DETAIL_GUIDANCE = {
-  LOW: "여유는 좌석 이용 가능성이 상대적으로 높은 단계이며 좌석을 보장하지는 않아요.",
-  MEDIUM: "보통은 입석 이동이 가능하지만 좌석 이용이 어려울 수 있는 단계예요.",
-  HIGH: "혼잡은 신체 접촉이 발생할 수 있고 이동 부담이 큰 단계예요.",
+  LOW: "앉기 편한 시간은 여유 예상 구간의 합계이며 좌석을 보장하지는 않아요.",
+  MEDIUM: "앉기 편한 시간은 여유 예상 구간만 더한 값이며 보통 구간에서는 좌석 이용이 어려울 수 있어요.",
+  HIGH: "앉기 편한 시간은 여유 예상 구간만 더한 값이며 혼잡 구간에서는 좌석 이용이 어려울 수 있어요.",
 };
 
 function getRequestedScreen() {
@@ -53,10 +53,15 @@ function withPrediction(destination, prediction) {
     predictionBasis: prediction.predictionBasis,
     routes: prediction.routes.map((route) => {
       const burdenMeta = STANDING_BURDEN_META[route.standingBurdenLevel];
+      const seatFriendlyMinutes = route.segments?.reduce(
+        (minutes, segment) => minutes + (segment.congestionLevel === "RELAXED" ? segment.durationMinutes : 0),
+        0,
+      );
       return {
         ...route,
         burdenLabel: burdenMeta?.label,
         tone: burdenMeta?.tone,
+        seatFriendlyMinutes,
         segments: route.segments?.map((segment) => {
           const congestionMeta = CONGESTION_META[segment.congestionLevel];
           return {
@@ -254,7 +259,7 @@ function AnalyzingScreen({ currentStop, destinationStop, onBack }) {
       <ol className="progress-list">
         <li className="is-complete"><span><Check aria-hidden="true" /></span>두 정류장 운행 버스 확인</li>
         <li className="is-active"><span><Circle aria-hidden="true" /></span>구간별 탑승 인원 예측</li>
-        <li><span><Circle aria-hidden="true" /></span>입석 부담과 도착시간 비교</li>
+        <li><span><Circle aria-hidden="true" /></span>앉기 편한 시간과 도착시간 비교</li>
       </ol>
       <p className="fine-print analysis-footnote">과거 승하차 패턴과 현재 운행 정보를 함께 사용해요.</p>
     </main>
@@ -279,9 +284,9 @@ function BusOption({ route, isComfortBest, isFastest, predictionAvailable, onCli
         <span><small>버스 도착</small><strong className="metric-primary">{route.arrivalMinutes}분 후</strong></span>
         <span><small>목적지까지</small><strong>약 {total}분</strong></span>
         <span>
-          <small>{predictionAvailable ? "입석 부담" : "혼잡도"}</small>
-          <strong className={predictionAvailable ? route.tone : ""}>
-            {predictionAvailable ? `약 ${route.standingBurdenMinutes}분` : "확인 어려움"}
+          <small>{predictionAvailable ? "앉기 편한 시간" : "좌석 정보"}</small>
+          <strong className={predictionAvailable ? "comfortable" : ""}>
+            {predictionAvailable ? `약 ${route.seatFriendlyMinutes}분` : "확인 어려움"}
           </strong>
         </span>
       </span>
@@ -303,8 +308,8 @@ function CompareScreen({ destinationStop, onBack, onRoute }) {
     (a, b) => getTotalMinutes(a) - getTotalMinutes(b) || a.arrivalMinutes - b.arrivalMinutes,
   )[0];
   const comfortDelay = comfortable ? getTotalMinutes(comfortable) - getTotalMinutes(fastest) : 0;
-  const burdenSaved = comfortable
-    ? fastest.standingBurdenMinutes - comfortable.standingBurdenMinutes
+  const extraSeatFriendlyMinutes = comfortable
+    ? comfortable.seatFriendlyMinutes - fastest.seatFriendlyMinutes
     : 0;
 
   return (
@@ -319,10 +324,10 @@ function CompareScreen({ destinationStop, onBack, onRoute }) {
         <InfoBand>
           <strong>
             {comfortable.tripId === fastest.tripId
-              ? `${comfortable.routeNumber}이 빠르고 입석 부담도 가장 적어요.`
+              ? `${comfortable.routeNumber}이 빠르고 앉아서 갈 가능성도 높아요.`
               : `${comfortable.routeNumber}은 ${comfortDelay}분 늦지만`}
           </strong>
-          {comfortable.tripId !== fastest.tripId && <span>입석 부담 예상 시간이 약 {burdenSaved}분 짧아요.</span>}
+          {comfortable.tripId !== fastest.tripId && <span>앉기 편한 시간이 약 {extraSeatFriendlyMinutes}분 더 길어요.</span>}
         </InfoBand>
       ) : (
         <InfoBand tone="warning" icon={AlertTriangle}>
@@ -353,7 +358,7 @@ function CompareScreen({ destinationStop, onBack, onRoute }) {
             : "혼잡도 데이터가 생기면 자동으로 갱신해요."}
         </span>
       </div>
-      <p className="fine-print compare-footnote">예측 결과는 실제 승하차 상황에 따라 달라질 수 있어요.</p>
+      <p className="fine-print compare-footnote">앉기 편한 시간은 여유 예상 구간이며 좌석을 보장하지 않아요.</p>
     </main>
   );
 }
@@ -381,7 +386,7 @@ function DetailScreen({ destinationStop, route, onBack }) {
       <section className="journey-metrics" aria-label="여정 요약">
         <div><small>버스 도착</small><strong>{route.arrivalMinutes}분 후</strong></div>
         <div><small>목적지까지</small><strong>약 {total}분</strong></div>
-        <div><small>입석 부담</small><strong>{predictionAvailable ? `약 ${route.standingBurdenMinutes}분` : "확인 어려움"}</strong></div>
+        <div><small>앉기 편한 시간</small><strong className={predictionAvailable ? "comfortable" : ""}>{predictionAvailable ? `약 ${route.seatFriendlyMinutes}분` : "확인 어려움"}</strong></div>
       </section>
 
       {predictionAvailable ? (
@@ -407,7 +412,7 @@ function DetailScreen({ destinationStop, route, onBack }) {
         </>
       ) : (
         <InfoBand tone="warning" icon={AlertTriangle}>
-          <strong>아직 데이터가 부족해 구간별 입석 부담은 보여드리기 어려워요.</strong>
+          <strong>아직 데이터가 부족해 구간별 앉기 편한 시간은 보여드리기 어려워요.</strong>
         </InfoBand>
       )}
 

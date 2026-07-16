@@ -27,6 +27,7 @@ body {
   margin: 0;
   overflow-x: hidden;
   background: #f2f3f3;
+  font-size: 18px;
 }
 
 button,
@@ -86,11 +87,12 @@ input:focus-visible {
   display: flex;
   flex-direction: column;
   overflow-wrap: anywhere;
+  word-break: keep-all;
   background: #ffffff;
 }
 
 .top-bar {
-  min-height: 48px;
+  min-height: 52px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -101,16 +103,16 @@ input:focus-visible {
   min-width: 0;
   overflow: hidden;
   color: #555555;
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 700;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
 .icon-button {
-  width: 48px;
-  height: 48px;
-  flex: 0 0 48px;
+  width: 52px;
+  height: 52px;
+  flex: 0 0 52px;
   padding: 0;
   border: 0;
   border-radius: 8px;
@@ -122,14 +124,14 @@ input:focus-visible {
 }
 
 .icon-button svg {
-  width: 24px;
-  height: 24px;
+  width: 26px;
+  height: 26px;
 }
 
 .stop-badge {
   align-self: flex-start;
-  min-height: 54px;
-  padding: 8px 14px;
+  min-height: 64px;
+  padding: 10px 16px;
   border-radius: 8px;
   display: inline-flex;
   align-items: center;
@@ -152,12 +154,12 @@ input:focus-visible {
 }
 
 .stop-badge strong {
-  font-size: 15px;
+  font-size: 17px;
 }
 
 .stop-badge small {
   color: #7a4c28;
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 600;
 }
 
@@ -172,26 +174,26 @@ input:focus-visible {
 .screen-heading h1,
 .analysis-heading h1 {
   margin: 0;
-  font-size: 34px;
+  font-size: 38px;
   line-height: 1.2;
   font-weight: 800;
   letter-spacing: 0;
 }
 
 .screen-heading--compare h1 {
-  font-size: 30px;
+  font-size: 34px;
 }
 
 .screen-heading p,
 .analysis-heading p {
   margin: 18px 0 0;
   color: #555555;
-  font-size: 16px;
+  font-size: 18px;
   line-height: 1.55;
 }
 
 .search-form {
-  min-height: 64px;
+  min-height: 72px;
   margin-top: 28px;
   padding: 0 18px;
   border: 1px solid transparent;
@@ -208,8 +210,8 @@ input:focus-visible {
 }
 
 .search-form > svg {
-  width: 22px;
-  flex: 0 0 22px;
+  width: 24px;
+  flex: 0 0 24px;
   color: #666666;
 }
 
@@ -220,7 +222,7 @@ input:focus-visible {
   outline: 0;
   color: #191919;
   background: transparent;
-  font-size: 16px;
+  font-size: 18px;
 }
 
 .search-form input::placeholder {
@@ -228,10 +230,10 @@ input:focus-visible {
 }
 
 .search-message {
-  min-height: 20px;
+  min-height: 24px;
   margin: 6px 0 0;
   color: #666666;
-  font-size: 13px;
+  font-size: 15px;
 }
 
 .place-section {
@@ -242,19 +244,19 @@ input:focus-visible {
 .segment-section > h2 {
   margin: 0 0 12px;
   color: #555555;
-  font-size: 15px;
+  font-size: 17px;
 }
 
 .place-list,
 .bus-list {
   display: grid;
-  gap: 10px;
+  gap: 14px;
 }
 
 .place-row {
   width: 100%;
-  min-height: 72px;
-  padding: 10px 14px;
+  min-height: 88px;
+  padding: 13px 16px;
   border: 0;
   border-radius: 8px;
   display: flex;
@@ -266,9 +268,9 @@ input:focus-visible {
 }
 
 .place-row__icon {
-  width: 36px;
-  height: 36px;
-  flex: 0 0 36px;
+  width: 42px;
+  height: 42px;
+  flex: 0 0 42px;
   border-radius: 50%;
   display: inline-flex;
   align-items: center;
@@ -278,7 +280,7 @@ input:focus-visible {
 }
 
 .place-row__icon svg {
-  width: 19px;
+  width: 22px;
 }
 
 .place-row__copy {
@@ -289,15 +291,13 @@ input:focus-visible {
 }
 
 .place-row__copy strong {
-  font-size: 16px;
+  font-size: 18px;
 }
 
 .place-row__copy small {
-  overflow: hidden;
   color: #777777;
-  font-size: 12px;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  font-size: 14px;
+  line-height: 1.4;
 }
 
 .place-row > svg {
@@ -314,7 +314,7 @@ input:focus-visible {
   justify-content: center;
   color: #666666;
   background: #f2f3f3;
-  font-size: 14px;
+  font-size: 16px;
 }
 
 .screen-bottom {
@@ -329,11 +329,11 @@ input:focus-visible {
 
 .primary-button {
   width: 100%;
-  min-height: 56px;
+  min-height: 64px;
   padding: 0 18px;
   border: 0;
   border-radius: 8px;
-  font-size: 17px;
+  font-size: 19px;
   font-weight: 800;
   cursor: pointer;
 }
@@ -344,26 +344,26 @@ input:focus-visible {
 }
 
 .text-button {
-  min-height: 44px;
+  min-height: 52px;
   padding: 0 8px;
   border: 0;
   color: #8f4107;
   background: transparent;
-  font-size: 14px;
+  font-size: 17px;
   font-weight: 800;
   cursor: pointer;
 }
 
 .info-band {
-  min-height: 60px;
-  padding: 14px 16px;
+  min-height: 72px;
+  padding: 16px 18px;
   border-radius: 8px;
   display: flex;
   align-items: flex-start;
   gap: 12px;
   color: #555555;
   background: #fff0e6;
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 600;
   line-height: 1.5;
 }
@@ -373,9 +373,9 @@ input:focus-visible {
 }
 
 .info-band__icon {
-  width: 20px;
-  height: 20px;
-  flex: 0 0 20px;
+  width: 22px;
+  height: 22px;
+  flex: 0 0 22px;
   margin-top: 1px;
   color: #b8560a;
 }
@@ -393,7 +393,7 @@ input:focus-visible {
 .fine-print {
   margin: 12px 0 0;
   color: #888888;
-  font-size: 12px;
+  font-size: 14px;
   line-height: 1.45;
   text-align: center;
 }
@@ -446,13 +446,13 @@ input:focus-visible {
 }
 
 .analysis-heading h1 {
-  font-size: 27px;
+  font-size: 32px;
 }
 
 .progress-list {
   width: 100%;
   margin: 42px 0 0;
-  padding: 20px 24px;
+  padding: 24px;
   border-radius: 8px;
   display: grid;
   gap: 24px;
@@ -466,14 +466,14 @@ input:focus-visible {
   display: flex;
   align-items: center;
   gap: 14px;
-  font-size: 15px;
+  font-size: 17px;
   font-weight: 700;
 }
 
 .progress-list li > span {
-  width: 28px;
-  height: 28px;
-  flex: 0 0 28px;
+  width: 32px;
+  height: 32px;
+  flex: 0 0 32px;
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -483,7 +483,7 @@ input:focus-visible {
 }
 
 .progress-list svg {
-  width: 17px;
+  width: 19px;
 }
 
 .progress-list .is-complete {
@@ -515,8 +515,8 @@ input:focus-visible {
 
 .bus-option {
   width: 100%;
-  min-height: 168px;
-  padding: 14px 16px 0;
+  min-height: 202px;
+  padding: 18px 18px 0;
   overflow: hidden;
   border: 1px solid #e3e4e4;
   border-radius: 8px;
@@ -528,12 +528,12 @@ input:focus-visible {
 }
 
 .bus-option.is-recommended {
-  padding: 13px 15px 0;
+  padding: 17px 17px 0;
   border: 2px solid #b8560a;
 }
 
 .bus-option__header {
-  min-height: 32px;
+  min-height: 36px;
   display: flex;
   align-items: center;
   flex-wrap: wrap;
@@ -541,7 +541,7 @@ input:focus-visible {
 }
 
 .bus-option__header > strong {
-  font-size: 23px;
+  font-size: 27px;
 }
 
 .bus-option__badges {
@@ -552,13 +552,13 @@ input:focus-visible {
 }
 
 .status-badge {
-  min-height: 28px;
-  padding: 0 10px;
+  min-height: 32px;
+  padding: 0 11px;
   border-radius: 6px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 800;
 }
 
@@ -583,14 +583,15 @@ input:focus-visible {
 }
 
 .route-meta {
-  margin-top: 3px;
+  margin-top: 4px;
   color: #777777;
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 600;
+  line-height: 1.4;
 }
 
 .bus-metrics {
-  margin-top: 14px;
+  margin-top: 16px;
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }
@@ -605,13 +606,15 @@ input:focus-visible {
 .bus-metrics small,
 .journey-metrics small {
   color: #888888;
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 600;
+  line-height: 1.35;
 }
 
 .bus-metrics strong,
 .journey-metrics strong {
-  font-size: 15px;
+  font-size: 19px;
+  line-height: 1.35;
   white-space: nowrap;
 }
 
@@ -627,28 +630,30 @@ input:focus-visible {
   color: #c83d3d;
 }
 
+.journey-metrics .comfortable {
+  color: #2f7d4a;
+}
+
 .metric-primary {
   color: #b8560a;
 }
 
 .bus-option__footer {
-  min-height: 42px;
-  margin-top: 12px;
+  min-height: 54px;
+  margin-top: 14px;
   border-top: 1px solid #e3e4e4;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 8px;
   color: #555555;
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 700;
+  line-height: 1.4;
 }
 
 .bus-option__footer span {
   min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
 }
 
 .bus-option__footer svg {
@@ -662,17 +667,18 @@ input:focus-visible {
 }
 
 .compare-note {
-  min-height: 56px;
+  min-height: 68px;
   margin-top: 16px;
-  padding: 0 16px;
+  padding: 14px 16px;
   border-radius: 8px;
   display: flex;
   align-items: center;
   gap: 12px;
   color: #555555;
   background: #f2f3f3;
-  font-size: 13px;
+  font-size: 15px;
   font-weight: 600;
+  line-height: 1.45;
 }
 
 .compare-note svg {
@@ -691,26 +697,26 @@ input:focus-visible {
 
 .route-title h1 {
   margin: 0;
-  font-size: 34px;
+  font-size: 40px;
 }
 
 .route-title p {
   margin: 8px 0 0;
   color: #555555;
-  font-size: 16px;
+  font-size: 18px;
   line-height: 1.45;
 }
 
 .route-summary {
-  min-height: 120px;
+  min-height: 136px;
   margin-top: 24px;
   padding: 20px;
   border-radius: 8px;
 }
 
 .route-summary .status-badge {
-  min-height: 30px;
-  font-size: 13px;
+  min-height: 34px;
+  font-size: 14px;
 }
 
 .route-summary--comfortable {
@@ -731,13 +737,13 @@ input:focus-visible {
 
 .route-summary h2 {
   margin: 18px 0 0;
-  font-size: 21px;
+  font-size: 24px;
   line-height: 1.4;
 }
 
 .journey-metrics {
   margin-top: 16px;
-  padding: 20px 16px;
+  padding: 22px 16px;
   border-radius: 8px;
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -746,11 +752,11 @@ input:focus-visible {
 }
 
 .journey-metrics small {
-  font-size: 13px;
+  font-size: 14px;
 }
 
 .journey-metrics strong {
-  font-size: 18px;
+  font-size: 20px;
 }
 
 .segment-section {
@@ -759,7 +765,7 @@ input:focus-visible {
 
 .segment-section > h2 {
   margin-bottom: 18px;
-  font-size: 19px;
+  font-size: 22px;
 }
 
 .segment-list {
@@ -782,7 +788,7 @@ input:focus-visible {
 
 .segment {
   position: relative;
-  min-height: 100px;
+  min-height: 116px;
   padding-left: 44px;
   padding-right: 80px;
   display: flex;
@@ -814,13 +820,13 @@ input:focus-visible {
 
 .segment strong {
   display: block;
-  font-size: 17px;
+  font-size: 19px;
   line-height: 1.45;
 }
 
 .segment p {
   margin: 5px 0 0;
-  font-size: 15px;
+  font-size: 17px;
   font-weight: 600;
   line-height: 1.4;
 }
@@ -842,13 +848,13 @@ input:focus-visible {
   top: 4px;
   right: 0;
   min-width: 70px;
-  min-height: 30px;
+  min-height: 34px;
   padding: 0 10px;
   border-radius: 6px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 800;
 }
 
@@ -879,8 +885,8 @@ input:focus-visible {
 
 .detail-return .text-button {
   width: 100%;
-  min-height: 52px;
-  font-size: 16px;
+  min-height: 60px;
+  font-size: 18px;
 }
 
 @media (max-width: 460px) {
@@ -897,7 +903,7 @@ input:focus-visible {
 
   .screen-heading h1,
   .analysis-heading h1 {
-    font-size: 30px;
+    font-size: 34px;
   }
 
   .bus-option {
@@ -906,11 +912,17 @@ input:focus-visible {
   }
 
   .bus-metrics strong {
-    font-size: 14px;
+    font-size: 17px;
+    white-space: normal;
+  }
+
+  .bus-metrics small,
+  .journey-metrics small {
+    font-size: 13px;
   }
 
   .journey-metrics strong {
-    font-size: 16px;
+    font-size: 18px;
     white-space: normal;
   }
 
@@ -919,11 +931,11 @@ input:focus-visible {
   }
 
   .segment strong {
-    font-size: 16px;
+    font-size: 18px;
   }
 
   .segment p {
-    font-size: 14px;
+    font-size: 16px;
   }
 
   .segment__badge {
@@ -939,17 +951,17 @@ input:focus-visible {
 
   .screen-heading h1,
   .analysis-heading h1 {
-    font-size: 27px;
+    font-size: 31px;
   }
 
   .status-badge {
     padding-inline: 7px;
-    font-size: 11px;
+    font-size: 13px;
   }
 
   .primary-button {
     padding-inline: 10px;
-    font-size: 15px;
+    font-size: 17px;
   }
 }
 
