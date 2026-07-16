@@ -282,7 +282,7 @@ function BusOption({ route, isComfortBest, isFastest, predictionAvailable, onCli
       <span className="route-meta">{route.direction} · {route.vehicleType}</span>
       <span className="bus-metrics">
         <span><small>버스 도착</small><strong className="metric-primary">{route.arrivalMinutes}분 후</strong></span>
-        <span><small>목적지까지</small><strong>약 {total}분</strong></span>
+        <span><small>전체 소요</small><strong>약 {total}분</strong></span>
         <span>
           <small>{predictionAvailable ? "앉기 편한 시간" : "좌석 정보"}</small>
           <strong className={predictionAvailable ? "comfortable" : ""}>
@@ -385,8 +385,9 @@ function DetailScreen({ destinationStop, route, onBack }) {
 
       <section className="journey-metrics" aria-label="여정 요약">
         <div><small>버스 도착</small><strong>{route.arrivalMinutes}분 후</strong></div>
-        <div><small>목적지까지</small><strong>약 {total}분</strong></div>
-        <div><small>앉기 편한 시간</small><strong className={predictionAvailable ? "comfortable" : ""}>{predictionAvailable ? `약 ${route.seatFriendlyMinutes}분` : "확인 어려움"}</strong></div>
+        <div><small>버스 이동</small><strong>약 {route.travelMinutes}분</strong></div>
+        <div><small>전체 소요</small><strong>약 {total}분</strong></div>
+        <div><small>{predictionAvailable ? "앉기 편한 시간" : "좌석 정보"}</small><strong className={predictionAvailable ? "comfortable" : ""}>{predictionAvailable ? `약 ${route.seatFriendlyMinutes}분` : "확인 어려움"}</strong></div>
       </section>
 
       {predictionAvailable ? (

@@ -11,16 +11,18 @@
 <rect x="40" y="190" width="96" height="34" rx="6" fill="#B8560A" stroke="none" stroke-width="1"/>
 <text x="88" y="207" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="14" font-weight="800" fill="#FFFFFF" text-anchor="middle" dominant-baseline="middle" letter-spacing="0">빠른 도착</text>
 <text x="40" y="260" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="23" font-weight="800" fill="#191919" text-anchor="start" dominant-baseline="middle" letter-spacing="0">4분 후 도착해요.</text>
-<rect x="24" y="316" width="342" height="88" rx="8" fill="#F4F5F5" stroke="none" stroke-width="1"/>
-<text x="40" y="337" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="13" font-weight="600" fill="#888888" text-anchor="start" dominant-baseline="middle" letter-spacing="0">버스 도착</text>
-<text x="40" y="364" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="18" font-weight="800" fill="#B8560A" text-anchor="start" dominant-baseline="middle" letter-spacing="0">4분 후</text>
-<text x="142" y="337" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="13" font-weight="600" fill="#888888" text-anchor="start" dominant-baseline="middle" letter-spacing="0">목적지까지</text>
-<text x="142" y="364" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="18" font-weight="800" fill="#191919" text-anchor="start" dominant-baseline="middle" letter-spacing="0">약 22분</text>
-<text x="246" y="337" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="13" font-weight="600" fill="#888888" text-anchor="start" dominant-baseline="middle" letter-spacing="0">좌석 정보</text>
-<text x="246" y="364" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="18" font-weight="800" fill="#888888" text-anchor="start" dominant-baseline="middle" letter-spacing="0">확인 어려움</text>
-<rect x="24" y="434" width="342" height="116" rx="8" fill="#FFF4D6" stroke="none" stroke-width="1"/>
-<g transform="translate(42 468) scale(0.9166666666666666)"><path d="M10.3 3.8 2.2 18a2 2 0 0 0 1.7 3h16.2a2 2 0 0 0 1.7-3L13.7 3.8a2 2 0 0 0-3.4 0Z" fill="none" stroke="#B86E00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 9v4M12 17h.01" fill="none" stroke="#B86E00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></g>
-<text x="78" y="454" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="16" font-weight="700" fill="#555555" text-anchor="start" letter-spacing="0"><tspan x="78" dy="0">아직 데이터가 부족해</tspan><tspan x="78" dy="24">구간별 앉기 편한 시간은</tspan><tspan x="78" dy="24">보여드리기 어려워요.</tspan></text>
-<text x="195" y="604" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="18" font-weight="800" fill="#B8560A" text-anchor="middle" dominant-baseline="middle" letter-spacing="0">다른 도착 버스 보기</text>
+<rect x="24" y="316" width="342" height="126" rx="8" fill="#F4F5F5" stroke="none" stroke-width="1"/>
+<text x="40" y="338" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="13" font-weight="600" fill="#888888" text-anchor="start" dominant-baseline="middle" letter-spacing="0">버스 도착</text>
+<text x="40" y="365" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="18" font-weight="800" fill="#B8560A" text-anchor="start" dominant-baseline="middle" letter-spacing="0">4분 후</text>
+<text x="205" y="338" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="13" font-weight="600" fill="#888888" text-anchor="start" dominant-baseline="middle" letter-spacing="0">버스 이동</text>
+<text x="205" y="365" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="18" font-weight="800" fill="#191919" text-anchor="start" dominant-baseline="middle" letter-spacing="0">약 18분</text>
+<text x="40" y="394" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="13" font-weight="600" fill="#888888" text-anchor="start" dominant-baseline="middle" letter-spacing="0">전체 소요</text>
+<text x="40" y="421" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="18" font-weight="800" fill="#191919" text-anchor="start" dominant-baseline="middle" letter-spacing="0">약 22분</text>
+<text x="205" y="394" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="13" font-weight="600" fill="#888888" text-anchor="start" dominant-baseline="middle" letter-spacing="0">좌석 정보</text>
+<text x="205" y="421" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="18" font-weight="800" fill="#888888" text-anchor="start" dominant-baseline="middle" letter-spacing="0">확인 어려움</text>
+<rect x="24" y="472" width="342" height="116" rx="8" fill="#FFF4D6" stroke="none" stroke-width="1"/>
+<g transform="translate(42 506) scale(0.9166666666666666)"><path d="M10.3 3.8 2.2 18a2 2 0 0 0 1.7 3h16.2a2 2 0 0 0 1.7-3L13.7 3.8a2 2 0 0 0-3.4 0Z" fill="none" stroke="#B86E00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 9v4M12 17h.01" fill="none" stroke="#B86E00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></g>
+<text x="78" y="492" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="16" font-weight="700" fill="#555555" text-anchor="start" letter-spacing="0"><tspan x="78" dy="0">아직 데이터가 부족해</tspan><tspan x="78" dy="24">구간별 앉기 편한 시간은</tspan><tspan x="78" dy="24">보여드리기 어려워요.</tspan></text>
+<text x="195" y="642" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="18" font-weight="800" fill="#B8560A" text-anchor="middle" dominant-baseline="middle" letter-spacing="0">다른 도착 버스 보기</text>
 <text x="195" y="804" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="13" font-weight="500" fill="#888888" text-anchor="middle" dominant-baseline="middle" letter-spacing="0">도착 정보는 실제 운행 상황에 따라 달라질 수 있어요.</text>
 </svg>
