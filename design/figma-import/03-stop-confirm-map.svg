@@ -13,31 +13,33 @@
 <rect x="197" y="238" width="165" height="52" rx="6" fill="#FFFFFF" stroke="none" stroke-width="1"/>
 <g transform="translate(230 254) scale(0.8333333333333334)"><path d="m3 6 6-3 6 3 6-3v15l-6 3-6-3-6 3Z" fill="none" stroke="#B8560A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M9 3v15M15 6v15" fill="none" stroke="#B8560A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></g>
 <text x="296" y="264" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="18" font-weight="800" fill="#9C4708" text-anchor="middle" dominant-baseline="middle" letter-spacing="0">지도</text>
-<rect x="24" y="306" width="342" height="224" rx="8" fill="#EEF1EE" stroke="none" stroke-width="1"/>
+<rect x="24" y="306" width="342" height="184" rx="8" fill="#EEF1EE" stroke="none" stroke-width="1"/>
+<path d="M12 456L378 411" stroke="#C8CFCB" stroke-width="62"/>
 <path d="M12 456L378 411" stroke="#FFFFFF" stroke-width="58"/>
-<path d="M89 294L142 542" stroke="#FFFFFF" stroke-width="45"/>
-<line x1="96" y1="454" x2="289" y2="426" stroke="#B8560A" stroke-width="7" stroke-linecap="round"/>
-<circle cx="269" cy="428" r="24" fill="#B8560A" stroke="#FFFFFF" stroke-width="4"/>
-<g transform="translate(259 418) scale(0.8333333333333334)"><path d="M20 10c0 5-8 12-8 12S4 15 4 10a8 8 0 1 1 16 0Z" fill="none" stroke="#FFFFFF" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="10" r="2.5" fill="none" stroke="#FFFFFF" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></g>
-<rect x="104" y="456" width="238" height="34" rx="5" fill="#FFFFFF" stroke="#E5E5E5" stroke-width="1"/>
-<text x="223" y="473" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="18" font-weight="800" fill="#191919" text-anchor="middle" dominant-baseline="middle" letter-spacing="0">보문동 주민센터 정류장</text>
-<rect x="184" y="334" width="158" height="32" rx="5" fill="#FFFFFF" stroke="#E5E5E5" stroke-width="1"/>
-<text x="263" y="350" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="18" font-weight="700" fill="#2F7248" text-anchor="middle" dominant-baseline="middle" letter-spacing="0">주민센터 맞은편</text>
-<rect x="38" y="484" width="292" height="32" rx="5" fill="#303030" stroke="none" stroke-width="1"/>
-<text x="184" y="500" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="18" font-weight="800" fill="#FFFFFF" text-anchor="middle" dominant-baseline="middle" letter-spacing="0">정류장 모습이 없어 지도 안내</text>
-<text x="24" y="568" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="27" font-weight="800" fill="#191919" text-anchor="start" dominant-baseline="middle" letter-spacing="0">보문동 주민센터 정류장</text>
-<g transform="translate(26 602) scale(0.8333333333333334)"><path d="M5 12h14M12 5l7 7-7 7" fill="none" stroke="#B8560A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></g>
-<text x="58" y="612" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="18" font-weight="700" fill="#555555" text-anchor="start" dominant-baseline="middle" letter-spacing="0">가는 방향</text>
-<text x="170" y="612" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="18" font-weight="800" fill="#191919" text-anchor="start" dominant-baseline="middle" letter-spacing="0">신설동 방면</text>
-<g transform="translate(26 638) scale(0.8333333333333334)"><path d="M20 10c0 5-8 12-8 12S4 15 4 10a8 8 0 1 1 16 0Z" fill="none" stroke="#B8560A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="10" r="2.5" fill="none" stroke="#B8560A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></g>
-<text x="58" y="648" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="18" font-weight="700" fill="#555555" text-anchor="start" dominant-baseline="middle" letter-spacing="0">가까운 곳</text>
-<text x="170" y="648" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="18" font-weight="800" fill="#191919" text-anchor="start" dominant-baseline="middle" letter-spacing="0">주민센터 맞은편</text>
-<g transform="translate(26 674) scale(0.8333333333333334)"><circle cx="12" cy="4" r="2" fill="none" stroke="#B8560A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="m10 22 1-6-3-3 2-5 4 3 3 1M14 11l-2 5 4 6" fill="none" stroke="#B8560A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></g>
-<text x="58" y="684" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="18" font-weight="700" fill="#555555" text-anchor="start" dominant-baseline="middle" letter-spacing="0">내린 다음</text>
-<text x="170" y="684" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="18" font-weight="800" fill="#191919" text-anchor="start" dominant-baseline="middle" letter-spacing="0">보문역까지 도보 5분</text>
-<rect x="24" y="708" width="342" height="42" rx="8" fill="#FFF0E6" stroke="none" stroke-width="1"/>
-<g transform="translate(42 719) scale(0.8333333333333334)"><rect x="4" y="3" width="16" height="16" rx="3" fill="none" stroke="#B8560A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M4 11h16M8 19v2M16 19v2" fill="none" stroke="#B8560A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="8" cy="15" r="1" fill="#B8560A"/><circle cx="16" cy="15" r="1" fill="#B8560A"/></g>
-<text x="76" y="729" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="18" font-weight="700" fill="#555555" text-anchor="start" dominant-baseline="middle" letter-spacing="0">성북구청에서 바로 가는 버스 2개</text>
-<rect x="24" y="764" width="342" height="64" rx="8" fill="#B8560A" stroke="none" stroke-width="1"/>
-<text x="195" y="796" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="21.38" font-weight="700" fill="#FFFFFF" text-anchor="middle" dominant-baseline="middle" letter-spacing="0">이 정류장으로 가기</text>
+<path d="M89 294L142 502" stroke="#C8CFCB" stroke-width="49"/>
+<path d="M89 294L142 502" stroke="#FFFFFF" stroke-width="45"/>
+<circle cx="269" cy="402" r="29" fill="#B8560A" stroke="#FFFFFF" stroke-width="5"/>
+<g transform="translate(257 390) scale(1)"><path d="M20 10c0 5-8 12-8 12S4 15 4 10a8 8 0 1 1 16 0Z" fill="none" stroke="#FFFFFF" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="10" r="2.5" fill="none" stroke="#FFFFFF" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></g>
+<rect x="50" y="438" width="292" height="42" rx="5" fill="#FFFFFF" stroke="#E5E5E5" stroke-width="1"/>
+<text x="196" y="459" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="19.13" font-weight="800" fill="#191919" text-anchor="middle" dominant-baseline="middle" letter-spacing="0">보문동 주민센터 정류장</text>
+<rect x="144" y="324" width="198" height="40" rx="5" fill="#FFFFFF" stroke="#E5E5E5" stroke-width="1"/>
+<text x="243" y="344" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="19.13" font-weight="700" fill="#191919" text-anchor="middle" dominant-baseline="middle" letter-spacing="0">주민센터 맞은편</text>
+<rect x="24" y="502" width="342" height="58" rx="8" fill="#FFF4D6" stroke="none" stroke-width="1"/>
+<g transform="translate(42 520) scale(0.9166666666666666)"><circle cx="12" cy="12" r="9" fill="none" stroke="#9D5F00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 11v5M12 8h.01" fill="none" stroke="#9D5F00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></g>
+<text x="76" y="522" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="16.88" font-weight="800" fill="#5F4A18" text-anchor="start" letter-spacing="0"><tspan x="76" dy="0">정류장 사진이 없어</tspan><tspan x="76" dy="21">지도로 안내해요.</tspan></text>
+<text x="24" y="592" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="27" font-weight="800" fill="#191919" text-anchor="start" dominant-baseline="middle" letter-spacing="0">보문동 주민센터 정류장</text>
+<g transform="translate(26 610) scale(0.8333333333333334)"><path d="M5 12h14M12 5l7 7-7 7" fill="none" stroke="#B8560A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></g>
+<text x="58" y="620" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="18" font-weight="700" fill="#555555" text-anchor="start" dominant-baseline="middle" letter-spacing="0">가는 방향</text>
+<text x="170" y="620" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="18" font-weight="800" fill="#191919" text-anchor="start" dominant-baseline="middle" letter-spacing="0">신설동 방면</text>
+<g transform="translate(26 646) scale(0.8333333333333334)"><path d="M20 10c0 5-8 12-8 12S4 15 4 10a8 8 0 1 1 16 0Z" fill="none" stroke="#B8560A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="10" r="2.5" fill="none" stroke="#B8560A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></g>
+<text x="58" y="656" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="18" font-weight="700" fill="#555555" text-anchor="start" dominant-baseline="middle" letter-spacing="0">가까운 곳</text>
+<text x="170" y="656" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="18" font-weight="800" fill="#191919" text-anchor="start" dominant-baseline="middle" letter-spacing="0">주민센터 맞은편</text>
+<g transform="translate(26 682) scale(0.8333333333333334)"><circle cx="12" cy="4" r="2" fill="none" stroke="#B8560A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="m10 22 1-6-3-3 2-5 4 3 3 1M14 11l-2 5 4 6" fill="none" stroke="#B8560A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></g>
+<text x="58" y="692" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="18" font-weight="700" fill="#555555" text-anchor="start" dominant-baseline="middle" letter-spacing="0">내린 다음</text>
+<text x="170" y="692" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="18" font-weight="800" fill="#191919" text-anchor="start" dominant-baseline="middle" letter-spacing="0">보문역까지 도보 5분</text>
+<rect x="24" y="716" width="342" height="42" rx="8" fill="#FFF0E6" stroke="none" stroke-width="1"/>
+<g transform="translate(42 727) scale(0.8333333333333334)"><rect x="4" y="3" width="16" height="16" rx="3" fill="none" stroke="#B8560A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M4 11h16M8 19v2M16 19v2" fill="none" stroke="#B8560A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="8" cy="15" r="1" fill="#B8560A"/><circle cx="16" cy="15" r="1" fill="#B8560A"/></g>
+<text x="76" y="737" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="18" font-weight="700" fill="#555555" text-anchor="start" dominant-baseline="middle" letter-spacing="0">성북구청에서 바로 가는 버스 2개</text>
+<rect x="24" y="772" width="342" height="64" rx="8" fill="#B8560A" stroke="none" stroke-width="1"/>
+<text x="195" y="804" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="21.38" font-weight="700" fill="#FFFFFF" text-anchor="middle" dominant-baseline="middle" letter-spacing="0">이 정류장으로 가기</text>
 </svg>

@@ -364,7 +364,6 @@ function StopMapPreview({ destinationStop }) {
       <span className="stop-map__road stop-map__road--vertical" aria-hidden="true" />
       <span className="stop-map__block stop-map__block--one" aria-hidden="true" />
       <span className="stop-map__block stop-map__block--two" aria-hidden="true" />
-      <span className="stop-map__route" aria-hidden="true" />
       <span className="stop-map__pin"><MapPin aria-hidden="true" /></span>
       <span className="stop-map__label stop-map__label--stop">{destinationStop.stopName}</span>
       <span className="stop-map__label stop-map__label--landmark">{destinationStop.landmark}</span>
@@ -483,12 +482,15 @@ function StopConfirmationScreen({
             <figcaption>{destinationStop.roadview.capturedAtLabel}</figcaption>
           </>
         ) : (
-          <>
-            <StopMapPreview destinationStop={destinationStop} />
-            <figcaption>{hasRoadview ? "정류장 위치 안내" : "정류장 모습이 없어 지도로 안내해요"}</figcaption>
-          </>
+          <StopMapPreview destinationStop={destinationStop} />
         )}
       </figure>
+
+      {previewMode === "map" && !hasRoadview && (
+        <p className="map-fallback-note">
+          <Info aria-hidden="true" />정류장 사진이 없어 지도로 안내해요.
+        </p>
+      )}
 
       <section className="stop-confirmation" aria-label="선택한 도착 정류장 정보">
         <h2>{destinationStop.stopName}</h2>
