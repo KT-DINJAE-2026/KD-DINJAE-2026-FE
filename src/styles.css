@@ -20,6 +20,7 @@ body,
 
 html {
   background: #f2f3f3;
+  font-size: 112.5%;
 }
 
 body {
@@ -746,7 +747,7 @@ input:focus-visible {
   padding: 22px 16px;
   border-radius: 8px;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(9rem, 100%), 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(8rem, 100%), 1fr));
   gap: 20px 16px;
   background: #f2f3f3;
 }
