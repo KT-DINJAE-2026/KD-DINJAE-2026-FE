@@ -5,6 +5,7 @@ import { fileURLToPath } from "node:url";
 const OUT_DIR = path.dirname(fileURLToPath(import.meta.url));
 const W = 390;
 const H = 844;
+const TYPE_SCALE = 1.125;
 
 const C = {
   page: "#F4F5F5",
@@ -43,16 +44,21 @@ function circle(cx, cy, r, fill, stroke = "none", strokeWidth = 1) {
   return `<circle cx="${cx}" cy="${cy}" r="${r}" fill="${fill}" stroke="${stroke}" stroke-width="${strokeWidth}"/>`;
 }
 
+function typeSize(size) {
+  return Number((size * TYPE_SCALE).toFixed(2));
+}
+
 function text(x, y, value, size = 16, weight = 500, color = C.text, options = {}) {
   const anchor = options.anchor || "start";
   const baseline = options.baseline || "middle";
-  return `<text x="${x}" y="${y}" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="${size}" font-weight="${weight}" fill="${color}" text-anchor="${anchor}" dominant-baseline="${baseline}" letter-spacing="0">${esc(value)}</text>`;
+  return `<text x="${x}" y="${y}" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="${typeSize(size)}" font-weight="${weight}" fill="${color}" text-anchor="${anchor}" dominant-baseline="${baseline}" letter-spacing="0">${esc(value)}</text>`;
 }
 
 function multiline(x, y, lines, size = 16, weight = 500, color = C.text, lineHeight = 1.4, options = {}) {
   const anchor = options.anchor || "start";
-  const spans = lines.map((value, index) => `<tspan x="${x}" dy="${index === 0 ? 0 : Math.round(size * lineHeight)}">${esc(value)}</tspan>`).join("");
-  return `<text x="${x}" y="${y}" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="${size}" font-weight="${weight}" fill="${color}" text-anchor="${anchor}" letter-spacing="0">${spans}</text>`;
+  const scaledSize = typeSize(size);
+  const spans = lines.map((value, index) => `<tspan x="${x}" dy="${index === 0 ? 0 : Math.round(scaledSize * lineHeight)}">${esc(value)}</tspan>`).join("");
+  return `<text x="${x}" y="${y}" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="${scaledSize}" font-weight="${weight}" fill="${color}" text-anchor="${anchor}" letter-spacing="0">${spans}</text>`;
 }
 
 function icon(name, x, y, size = 24, color = C.text, strokeWidth = 2) {
@@ -138,11 +144,13 @@ function routeCard(y, options) {
     description,
     recommended = false,
   } = options;
+  const badgeX = route.length >= 5 ? 154 : 132;
+  const badgeWidth = badge === "빠른 도착" ? 100 : 130;
   return [
     rect(24, y, 342, 184, C.surface, 8, recommended ? C.blue : C.border, recommended ? 2 : 1),
     text(42, y + 30, route, 28, 800),
-    badge ? rect(132, y + 13, badge === "빠른 도착" ? 100 : 130, 36, badgeFill, 6) : "",
-    badge ? text(badge === "빠른 도착" ? 182 : 197, y + 31, badge, 16, 800, badgeColor, { anchor: "middle" }) : "",
+    badge ? rect(badgeX, y + 13, badgeWidth, 36, badgeFill, 6) : "",
+    badge ? text(badgeX + badgeWidth / 2, y + 31, badge, 16, 800, badgeColor, { anchor: "middle" }) : "",
     text(42, y + 66, meta, 16, 600, C.subtext),
     metric(42, y + 96, "버스 도착", wait, C.blue),
     metric(142, y + 96, "전체 소요", total),
@@ -303,7 +311,7 @@ const screens = [
       rect(24, 174, 342, 126, C.redSoft, 8),
       rect(40, 190, 130, 38, C.red, 6),
       text(105, 209, "입석 부담 높음", 16, 800, C.surface, { anchor: "middle" }),
-      text(40, 262, "보문역까지 혼잡 구간이 길어요.", 24, 800),
+      multiline(40, 258, ["보문역까지 혼잡 구간이", "길어요."], 24, 800, C.text, 1.2),
       rect(24, 316, 342, 126, C.page, 8),
       metric(40, 338, "버스 도착", "3분 후"),
       metric(205, 338, "버스 이동", "약 12분"),
@@ -361,7 +369,7 @@ const screens = [
       }),
       rect(24, 716, 342, 68, C.page, 8),
       icon("refresh", 42, 739, 22, C.subtext),
-      text(78, 750, "혼잡도 데이터가 생기면 자동으로 갱신해요.", 16, 600, C.subtext),
+      multiline(78, 738, ["혼잡도 데이터가 생기면", "자동으로 갱신해요."], 16, 600, C.subtext, 1.35),
       multiline(195, 808, ["도착 정보는 실제 운행 상황에 따라", "달라질 수 있어요."], 16, 600, C.subtext, 1.4, { anchor: "middle" }),
     ].join("\n")),
   },
@@ -391,12 +399,14 @@ const screens = [
 ];
 
 function flowCard(x, y, number, titleValue, detail, color = C.blue) {
+  const detailLines = Array.isArray(detail) ? detail : [detail];
+  const detailY = detailLines.length > 1 ? y + 100 : y + 102;
   return [
     rect(x, y, 220, 134, C.surface, 8, C.border),
     circle(x + 28, y + 28, 16, color),
-    text(x + 28, y + 28, number, 13, 800, C.surface, { anchor: "middle" }),
+    text(x + 28, y + 28, number, 16, 800, C.surface, { anchor: "middle" }),
     text(x + 24, y + 70, titleValue, 19, 800),
-    text(x + 24, y + 102, detail, 13, 500, C.subtext),
+    multiline(x + 24, detailY, detailLines, 16, 500, C.subtext, 1.3),
   ].join("\n");
 }
 
@@ -413,25 +423,25 @@ const flowSvg = `<?xml version="1.0" encoding="UTF-8"?>
   ${rect(0, 0, 1440, 760, C.page, 0)}
   ${text(64, 70, "교통약자 버스 서비스 · 사용자 흐름", 32, 800)}
   ${text(64, 110, "QR로 출발 정류장을 확인하고, 입력한 도착 정류장까지 운행하는 버스를 비교합니다.", 16, 500, C.subtext)}
-  ${rect(64, 148, 232, 38, C.blueSoft, 8)}
+  ${rect(64, 148, 290, 38, C.blueSoft, 8)}
   ${icon("pin", 80, 157, 20, C.blue)}
-  ${text(110, 167, "QR 확인 · 성북구청 정류장", 14, 700, C.blue)}
-  ${flowCard(64, 236, "1", "도착 정류장 검색", "이름·방향으로 구분")}
+  ${text(110, 167, "QR 확인 · 성북구청 정류장", 16, 700, C.blue)}
+  ${flowCard(64, 236, "1", "도착 정류장 검색", ["이름·방향으로", "정류장 구분"])}
   ${flowArrow(284, 303, 326)}
-  ${flowCard(326, 236, "2", "여정 분석", "운행 버스·탑승 인원 예측")}
+  ${flowCard(326, 236, "2", "여정 분석", ["운행 버스·탑승 인원", "예측"])}
   ${flowArrow(546, 303, 588)}
-  ${flowCard(588, 236, "3", "버스 비교", "앉기 편한 시간·빠른 도착")}
+  ${flowCard(588, 236, "3", "버스 비교", ["앉기 편한 시간", "빠른 도착 비교"])}
   ${flowArrow(808, 303, 850)}
-  ${flowCard(850, 236, "4", "구간별 상세", "큰 글씨로 구간 정보 확인", C.green)}
+  ${flowCard(850, 236, "4", "구간별 상세", ["큰 글씨로 구간 정보", "확인"], C.green)}
   ${line(436, 370, 436, 474, C.muted, 2, "6 6")}
   <path d="M430 466L436 474L442 466" fill="none" stroke="${C.muted}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
   ${flowCard(326, 474, "3-B", "데이터 부족", "빠른 도착만 제공", C.muted)}
   ${flowArrow(546, 541, 588)}
   ${flowCard(588, 474, "4-B", "도착 정보 상세", "혼잡도 없이 확인", C.muted)}
-  ${rect(850, 474, 220, 134, C.blueSoft, 8)}
-  ${text(878, 510, "상세 화면 원칙", 15, 800, C.blue)}
-  ${multiline(878, 548, ["별도 추천 없이 구간별 예상과", "혼잡 단계 의미에 집중"], 14, 600, C.subtext, 1.55)}
-  ${text(64, 696, "Prototype · 도착 정류장 선택 후 분석 화면을 거쳐 버스 비교로 이동", 13, 600, C.muted)}
+  ${rect(850, 474, 260, 134, C.blueSoft, 8)}
+  ${text(878, 506, "상세 화면 원칙", 16, 800, C.blue)}
+  ${multiline(878, 538, ["별도 추천 없이", "구간별 예상과", "혼잡 단계 의미에 집중"], 16, 600, C.subtext, 1.3)}
+  ${text(64, 696, "Prototype · 도착 정류장 선택 후 분석 화면을 거쳐 버스 비교로 이동", 16, 600, C.muted)}
 </svg>\n`;
 
 await fs.mkdir(OUT_DIR, { recursive: true });
@@ -446,6 +456,8 @@ const legacyFiles = [
   "04-compare.svg", "04-compare-fast.svg", "04-compare-unavailable.svg",
   "05-detail.svg", "05-detail-fast.svg", "05-detail-unavailable.svg",
   "03-compare-fast.svg",
+  "01-destination-stop", "02-analyzing", "03-compare", "03-compare-unavailable",
+  "04-detail", "04-detail-fast", "04-detail-unavailable",
 ];
 await Promise.all(legacyFiles.map((file) => fs.rm(path.join(OUT_DIR, file), { force: true })));
 
@@ -487,7 +499,7 @@ const preview = `<!doctype html>
     main { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 390px)); gap: 28px; align-items: start; }
     figure { margin: 0; }
     figure img { display: block; width: 100%; border: 1px solid #dddddd; box-shadow: 0 10px 30px rgba(25,25,25,.08); }
-    figcaption { padding-top: 10px; font-size: 16px; font-weight: 700; }
+    figcaption { padding-top: 10px; font-size: 18px; font-weight: 700; }
   </style>
 </head>
 <body>

@@ -1,31 +1,70 @@
-# FE-백엔드 API 계약 초안
+# 버스 여정 조회 API 규격
 
-프론트 Mock JSON과 Spring Swagger를 맞추기 위한 회의용 초안입니다. URL과 필드명은 확정 전이지만 화면에 필요한 요청 시점과 데이터 범위는 아래와 같습니다.
+React 프로토타입의 Mock JSON을 Spring API로 교체하기 위한 FE·백엔드 협의 문서입니다.
 
-## 요청 시점
+- 문서 버전: `0.2`
+- 작성 기준일: `2026-07-17`
+- 기본 경로: `/api/v1`
+- 데이터 형식: `application/json; charset=UTF-8`
+- 인증: 프로토타입 범위에서는 사용하지 않음
 
-| 사용자 동작 | 요청 | 화면에서 쓰는 값 |
+URL이나 일부 이름은 Swagger 작성 과정에서 바꿀 수 있지만, 응답이 제공해야 하는 정보와 필드 조건은 이 문서를 기준으로 맞춥니다.
+
+## 1. 현재 Mock과 API 대응
+
+| Mock 파일 | API | 프론트 호출 |
 | --- | --- | --- |
-| 정류장 QR 진입 | `GET /api/v1/stops/{stopId}/context` | 현재 정류장과 최근 도착 정류장 |
-| 도착 정류장 검색 | `GET /api/v1/stops/search?originStopId={id}&query={text}` | 현재 정류장에서 갈 수 있는 정류장 |
-| 도착 정류장 선택 | `POST /api/v1/journeys/predictions` | 운행 가능한 버스와 구간별 입석 부담 |
-| 다시 분석 | 위 예측 API 재호출 | 최신 `generatedAt` 결과 |
+| `src/mocks/bootstrap.json` | `GET /api/v1/stops/{stopId}/context` | `getBootstrap(stopId)` |
+| `src/mocks/predictions/bomun.json` | `POST /api/v1/journeys/predictions` | `getJourneyPrediction(...)` |
+| `src/mocks/predictions/cityhall.json` | `POST /api/v1/journeys/predictions` | `getJourneyPrediction(...)` |
 
-프로토타입은 `context` 응답의 `destinationStops`를 브라우저에서 검색합니다. 실제 연동에서는 검색어가 바뀔 때 정류장 검색 API를 호출하는 방식으로 바꿀 예정입니다.
+Mock 모드와 서버 모드는 같은 응답 구조를 사용합니다. Spring 연동을 위해 별도의 화면용 변환 계층을 추가하기보다는 Mock JSON 자체를 API 예시 응답으로 유지합니다.
 
-## ID 기준
+현재 정류장 검색은 `bootstrap.json`에 들어 있는 목록을 브라우저에서 필터링합니다. `GET /api/v1/stops/search`는 실제 연동 시 추가할 API이며 현재 `busApi.js`에는 아직 구현되어 있지 않습니다.
 
-- `stopId`: 출발 정류장과 도착 정류장을 식별합니다.
-- `routeId`: 1112번처럼 노선 자체를 식별합니다.
-- `tripId`: 현재 도착 예정인 특정 운행 버스를 식별합니다.
+## 2. 공통 규칙
 
-같은 노선의 차량이 연달아 올 수 있으므로 비교 결과와 상세 화면 연결에는 `tripId`가 필요합니다. 모델이 예측할 범위는 `originStopId`부터 `destinationStopId`까지입니다.
+### ID
 
-## 1. QR 진입
+| 필드 | 설명 | 예시 |
+| --- | --- | --- |
+| `stopId` | 정류장 고유 ID | `stop-seongbuk-office` |
+| `routeId` | 노선 고유 ID | `1112` |
+| `tripId` | 현재 도착 예정인 특정 운행 버스 ID | `trip-1112-1403` |
+
+같은 노선 차량이 연달아 올 수 있으므로 `tripId`는 한 응답 안에서 반드시 고유해야 합니다. 프론트는 버스 카드에서 상세 화면으로 이동할 때 `tripId`를 사용합니다.
+
+### 시간과 날짜
+
+- 분 단위 값은 0 이상의 정수이며 필드명에 `Minutes`를 붙입니다.
+- `generatedAt`은 시간대가 포함된 ISO 8601 문자열을 사용합니다.
+- `arrivalMinutes`는 `generatedAt` 시점부터 버스가 도착할 때까지의 예상 시간입니다.
+- 선택 필드가 없을 때는 `null` 대신 필드를 생략합니다.
+
+### 배열
+
+- `routes`는 현재 프로토타입에서 최소 1개가 필요합니다.
+- `segments`는 출발 정류장부터 도착 정류장까지 순서대로 전달합니다.
+- 직접 운행하는 버스가 없다면 빈 `routes` 대신 `404 NO_DIRECT_ROUTE`를 사용합니다. 빈 결과 화면이 추가되면 이 규칙을 다시 협의합니다.
+
+## 3. 요청 목록
+
+| 시점 | Method | URL | 현재 구현 |
+| --- | --- | --- | --- |
+| QR 진입 | `GET` | `/api/v1/stops/{stopId}/context` | 사용 중 |
+| 도착 정류장 검색 | `GET` | `/api/v1/stops/search` | 연동 전 추가 예정 |
+| 도착 정류장 선택 | `POST` | `/api/v1/journeys/predictions` | 사용 중 |
+
+## 4. QR 진입 정보
+
+QR에 들어 있는 `stopId`를 이용해 현재 출발 정류장과 초기 도착 정류장 목록을 가져옵니다.
 
 ```http
 GET /api/v1/stops/stop-seongbuk-office/context
+Accept: application/json
 ```
+
+### 응답 예시
 
 ```json
 {
@@ -48,13 +87,44 @@ GET /api/v1/stops/stop-seongbuk-office/context
 }
 ```
 
-`destinationStops`는 최근 검색이나 데모용 초기 목록입니다. 버스 도착시간의 기준 시각은 여정 분석 응답에서 따로 제공합니다.
+### 필드
 
-## 2. 도착 정류장 검색
+| 경로 | 타입 | 필수 | 설명 |
+| --- | --- | --- | --- |
+| `generatedAt` | string | O | 응답 생성 시각 |
+| `currentStop` | object | O | QR로 확인한 출발 정류장 |
+| `currentStop.stopId` | string | O | 출발 정류장 ID |
+| `currentStop.stopName` | string | O | 화면에 표시할 정류장 이름 |
+| `currentStop.directionDescription` | string | O | 정류장 운행 방향 |
+| `destinationStops` | array | O | 최근 검색 또는 초기 추천 목록 |
+| `destinationStops[].stopId` | string | O | 도착 정류장 ID |
+| `destinationStops[].stopName` | string | O | 도착 정류장 이름 |
+| `destinationStops[].directionDescription` | string | O | 동명 정류장 구분용 방향 |
+| `destinationStops[].landmark` | string | O | 동명 정류장 구분용 주변 장소 |
+| `destinationStops[].searchKeywords` | string[] | O | Mock의 클라이언트 검색용 키워드 |
+| `destinationStops[].servedRouteIds` | string[] | O | 두 정류장을 모두 지나는 노선 ID |
+
+`destinationStops`는 전체 정류장 목록이 아닙니다. QR 진입 직후 보여줄 최근 목적지나 데모용 초기 목록으로 사용합니다.
+
+## 5. 도착 정류장 검색
+
+실제 데이터 규모에서는 전체 정류장을 브라우저에 내려받지 않고 서버에서 검색합니다.
 
 ```http
 GET /api/v1/stops/search?originStopId=stop-seongbuk-office&query=보문역
+Accept: application/json
 ```
+
+### Query parameter
+
+| 이름 | 타입 | 필수 | 설명 |
+| --- | --- | --- | --- |
+| `originStopId` | string | O | 출발 정류장 ID |
+| `query` | string | O | 사용자가 입력한 정류장 이름 또는 주변 장소 |
+
+검색어 앞뒤 공백을 제거한 뒤 최소 1글자 이상일 때 요청합니다. 디바운스 시간은 프론트에서 결정합니다.
+
+### 응답 예시
 
 ```json
 {
@@ -70,14 +140,21 @@ GET /api/v1/stops/search?originStopId=stop-seongbuk-office&query=보문역
 }
 ```
 
-검색 결과에는 현재 정류장에서 한 번에 갈 수 있는 도착 정류장만 포함합니다. 같은 이름의 정류장을 구분할 수 있도록 `directionDescription`과 `landmark`가 필요합니다. `servedRouteIds`에는 출발 정류장과 도착 정류장을 모두 지나는 노선만 넣습니다.
+검색 결과에는 `originStopId`에서 한 번에 갈 수 있는 정류장만 포함합니다. 같은 이름의 정류장을 구분할 수 있도록 `directionDescription`과 `landmark`는 필수입니다.
 
-## 3. 여정 분석
+검색 결과가 없으면 `200 OK`와 빈 `destinationStops` 배열을 반환합니다.
+
+## 6. 여정 분석
+
+도착 정류장을 선택했을 때 두 정류장 사이를 운행하는 도착 예정 버스와 구간별 혼잡도 예측을 요청합니다.
 
 ```http
 POST /api/v1/journeys/predictions
 Content-Type: application/json
+Accept: application/json
 ```
+
+### 요청 본문
 
 ```json
 {
@@ -86,7 +163,26 @@ Content-Type: application/json
 }
 ```
 
-### 예측 성공 응답
+| 필드 | 타입 | 필수 | 설명 |
+| --- | --- | --- | --- |
+| `originStopId` | string | O | QR로 확인한 출발 정류장 ID |
+| `destinationStopId` | string | O | 사용자가 선택한 도착 정류장 ID |
+
+### 공통 응답 필드
+
+| 경로 | 타입 | 필수 | 설명 |
+| --- | --- | --- | --- |
+| `status` | enum | O | `SUCCESS` 또는 `INSUFFICIENT_DATA` |
+| `reasonCode` | string | 조건부 | 데이터 부족 사유 코드 |
+| `generatedAt` | string | O | 도착·혼잡도 예측 기준 시각 |
+| `originStopId` | string | O | 요청한 출발 정류장 ID |
+| `destinationStopId` | string | O | 요청한 도착 정류장 ID |
+| `predictionBasis` | object | O | 예측 설명과 신뢰도 |
+| `predictionBasis.description` | string | O | 화면에 표시할 예측 기준 문구 |
+| `predictionBasis.confidence` | enum | O | 예측 신뢰도 |
+| `routes` | array | O | 도착 예정 버스 목록 |
+
+## 7. 예측 성공 응답
 
 ```json
 {
@@ -136,17 +232,40 @@ Content-Type: application/json
 }
 ```
 
-대안 버스는 같은 시각의 결과를 비교할 수 있도록 별도 API가 아닌 `routes` 배열에 함께 담습니다. 혼잡도 예측이 있으면 `standingBurdenMinutes`가 짧은 순서로 배치하고, `arrivalMinutes + travelMinutes`가 가장 짧은 버스에는 별도로 `빠른 도착` 표시를 붙입니다. 데이터가 부족하면 빠른 도착순으로 배치합니다.
+### `routes[]`
 
-화면의 `앉기 편한 시간`은 별도 API 필드가 아니라 `congestionLevel`이 `RELAXED`인 구간의 `durationMinutes` 합계로 계산합니다. 좌석을 보장하는 값이 아니므로 화면에도 여유 예상 구간의 합계라는 안내를 함께 표시합니다.
+| 필드 | 타입 | 필수 | 설명 |
+| --- | --- | --- | --- |
+| `tripId` | string | O | 도착 예정 차량 단위 ID |
+| `routeId` | string | O | 노선 ID |
+| `routeNumber` | string | O | 화면 표시용 노선 번호 |
+| `direction` | string | O | 운행 방향 |
+| `vehicleType` | string | O | `저상버스`, `일반버스` 등 표시 문구 |
+| `isLowFloor` | boolean | O | 저상버스 여부 |
+| `arrivalMinutes` | integer | O | 버스 도착까지 남은 시간 |
+| `travelMinutes` | integer | O | 승차 후 도착 정류장까지 이동시간 |
+| `standingBurdenMinutes` | integer | O | `NORMAL` 이상 구간 시간의 합계 |
+| `standingBurdenLevel` | enum | O | 여정 전체 입석 부담 단계 |
+| `summaryMessage` | string | O | 비교·상세 카드에 표시할 요약 문구 |
+| `segments` | array | O | 출발부터 도착까지 순서가 보장된 구간 목록 |
 
-프론트의 `전체 소요`는 `arrivalMinutes + travelMinutes`로 계산합니다. `segments[].durationMinutes`의 합계는 탑승 후 이동시간인 `travelMinutes`와 같아야 하며, 다를 경우 서버 데이터 오류로 봅니다.
+### `segments[]`
 
-상세 화면에서는 다른 버스를 별도로 추천하지 않습니다. 사용자는 구간별 예상과 혼잡 단계 의미를 확인한 뒤 비교 화면으로 돌아가 다른 버스를 직접 선택합니다. 환승이나 다른 정류장까지 걷는 우회 경로도 현재 범위에 포함하지 않습니다.
+| 필드 | 타입 | 필수 | 설명 |
+| --- | --- | --- | --- |
+| `fromStopId` | string | O | 구간 출발 정류장 ID |
+| `fromStopName` | string | O | 구간 출발 정류장 표시 이름 |
+| `toStopId` | string | O | 구간 도착 정류장 ID |
+| `toStopName` | string | O | 구간 도착 정류장 표시 이름 |
+| `durationMinutes` | integer | O | 해당 구간 이동시간 |
+| `congestionLevel` | enum | O | 구간 혼잡도 단계 |
+| `description` | string | O | 구간 아래에 표시할 쉬운 설명 |
 
-## 데이터 부족 응답
+현재 프론트는 `summaryMessage`, `predictionBasis.description`, `segments[].description`을 그대로 화면에 표시합니다. 색상, 배지 이름, 정렬용 `tone`은 프론트가 enum 값에서 결정하므로 API에 포함하지 않습니다.
 
-혼잡도 데이터 부족은 서버 오류가 아닙니다. 도착시간과 이동시간을 제공할 수 있다면 `200 OK`와 `INSUFFICIENT_DATA`를 반환합니다.
+## 8. 데이터 부족 응답
+
+혼잡도 표본이 부족해도 도착시간과 이동시간을 제공할 수 있다면 HTTP 오류로 처리하지 않습니다. `200 OK`와 `INSUFFICIENT_DATA`를 반환합니다.
 
 ```json
 {
@@ -175,22 +294,69 @@ Content-Type: application/json
 }
 ```
 
-이 응답에는 `standingBurdenMinutes`, `standingBurdenLevel`, `segments`를 넣지 않습니다. 프론트는 앉기 편한 시간 표시 없이 빠른 도착순으로만 보여줍니다.
+이 응답에서는 아래 필드를 보내지 않습니다.
 
-## enum과 단위
+- `standingBurdenMinutes`
+- `standingBurdenLevel`
+- `segments`
+
+프론트는 좌석·혼잡 정보를 숨기고 `arrivalMinutes + travelMinutes`가 짧은 순서로 버스를 보여줍니다.
+
+## 9. 프론트 계산과 정렬
+
+서버와 프론트가 같은 의미로 값을 사용하도록 아래 규칙을 고정합니다.
+
+```text
+전체 소요시간 = arrivalMinutes + travelMinutes
+앉기 편한 시간 = RELAXED 구간의 durationMinutes 합계
+입석 부담 시간 = NORMAL 이상 구간의 durationMinutes 합계
+```
+
+예측 성공 시 프론트 정렬 기준은 다음과 같습니다.
+
+1. `standingBurdenMinutes`가 가장 짧은 버스를 먼저 표시합니다.
+2. 전체 소요시간이 가장 짧은 버스를 빠른 도착으로 표시합니다.
+3. 나머지 버스는 입석 부담 시간, 전체 소요시간 순으로 정렬합니다.
+
+데이터 부족 시에는 전체 소요시간, 버스 도착시간 순으로 정렬합니다. 서버가 전달한 배열 순서에는 의존하지 않습니다.
+
+## 10. 서버 데이터 검증 규칙
+
+예측 성공 응답은 아래 조건을 만족해야 합니다.
+
+- 모든 `Minutes` 값은 0 이상의 정수입니다.
+- `segments[].durationMinutes` 합계는 `travelMinutes`와 같습니다.
+- `RELAXED`를 제외한 구간 시간 합계는 `standingBurdenMinutes`와 같습니다.
+- 첫 구간의 `fromStopId`는 `originStopId`와 같습니다.
+- 마지막 구간의 `toStopId`는 `destinationStopId`와 같습니다.
+- 앞 구간의 `toStopId`와 다음 구간의 `fromStopId`는 같습니다.
+- `tripId`는 한 응답의 `routes` 안에서 중복되지 않습니다.
+- `routeId`는 선택한 도착 정류장의 `servedRouteIds`에 포함됩니다.
+
+조건이 맞지 않으면 화면 계산 결과도 달라지므로 Swagger 예시와 백엔드 테스트에 포함하는 것이 좋습니다.
+
+## 11. enum
 
 | 필드 | 값 |
 | --- | --- |
 | `status` | `SUCCESS`, `INSUFFICIENT_DATA` |
-| `confidence` | `HIGH`, `MEDIUM`, `LOW`, `UNAVAILABLE` |
+| `predictionBasis.confidence` | `HIGH`, `MEDIUM`, `LOW`, `UNAVAILABLE` |
 | `standingBurdenLevel` | `LOW`, `MEDIUM`, `HIGH` |
 | `congestionLevel` | `RELAXED`, `NORMAL`, `CROWDED`, `VERY_CROWDED` |
+| `reasonCode` | `NOT_ENOUGH_HISTORICAL_SAMPLES`부터 시작하며 추가 값은 Swagger에서 협의 |
 
-시간은 분 단위이며 필드명에 `Minutes`를 붙입니다. `generatedAt`은 시간대가 포함된 ISO 8601 문자열을 사용합니다.
+프론트 표시 기준은 다음과 같습니다.
 
-## 오류 응답
+| `congestionLevel` | 화면 표시 |
+| --- | --- |
+| `RELAXED` | 여유 |
+| `NORMAL` | 보통 |
+| `CROWDED` | 혼잡 |
+| `VERY_CROWDED` | 매우 혼잡 |
 
-HTTP 오류는 데이터 부족 응답과 구분합니다.
+## 12. 오류 응답
+
+HTTP 오류는 혼잡도 데이터 부족과 구분합니다.
 
 ```json
 {
@@ -200,17 +366,42 @@ HTTP 오류는 데이터 부족 응답과 구분합니다.
 }
 ```
 
-최소한 `400`, `404`, `409`, `500`의 오류 코드와 프론트 처리 방식을 Swagger에서 합의해야 합니다.
+| HTTP status | `code` 예시 | 사용 상황 |
+| --- | --- | --- |
+| `400` | `INVALID_REQUEST` | 필수값 누락, 잘못된 ID 형식 |
+| `404` | `STOP_NOT_FOUND` | 출발 또는 도착 정류장 없음 |
+| `404` | `NO_DIRECT_ROUTE` | 두 정류장을 한 번에 잇는 버스 없음 |
+| `409` | `STOP_DIRECTION_MISMATCH` | 정류장은 있지만 선택 방향으로 이동 불가 |
+| `500` | `INTERNAL_SERVER_ERROR` | 서버 처리 실패 |
 
-## 회의에서 확정할 항목
+`message`는 사용자 안내에 직접 사용하지 않고 개발 로그 확인용으로 사용합니다. `traceId`는 서버 로그와 프론트 오류를 맞춰 보기 위해 포함합니다.
 
-- 검색 결과를 현재 정류장에서 갈 수 있는 정류장으로 제한할 수 있는지
-- 동명 정류장 구분용 방향·랜드마크 데이터 제공 여부
-- 실제 도착 차량을 구분할 수 있는 `tripId` 제공 여부
-- 각 필드의 필수·선택 여부와 `null` 허용 여부
-- enum 값과 데이터 부족 `reasonCode`
+## 13. CORS
+
+최소한 아래 Origin에서 `GET`, `POST`, `OPTIONS` 요청을 허용해야 합니다.
+
+- `http://localhost:5173`
+- `https://kd-dinjae-2026-fe.vercel.app`
+
+개발 포트가 달라지면 해당 Origin을 추가합니다. 요청 헤더는 `Accept`, `Content-Type`을 허용합니다.
+
+## 14. Swagger 확정 전 체크
+
+- URL과 HTTP method
+- 각 필드의 필수·조건부 여부
+- `null` 대신 필드 생략 규칙
+- `tripId` 제공 가능 여부와 고유성
+- 동명 정류장 구분용 방향·랜드마크 제공 여부
+- 검색 결과를 출발 정류장에서 바로 갈 수 있는 곳으로 제한할 수 있는지
 - 도착시간 갱신 주기와 캐시 기준
-- 로컬 개발 주소와 Vercel 주소에 대한 Spring CORS 설정
-- 공통 오류 형식과 Swagger 예시 응답
+- 입석 부담 단계 산정 기준
+- `reasonCode`와 공통 오류 코드
+- Vercel·로컬 CORS 설정
 
-Swagger가 확정되면 이 문서, `src/mocks`, `src/api/busApi.js` 순서로 맞춘 뒤 `VITE_API_MODE=server`로 전환합니다.
+Swagger가 확정되면 다음 순서로 맞춥니다.
+
+1. 이 문서의 URL과 필드명을 수정합니다.
+2. `src/mocks` JSON을 Swagger 예시와 동일하게 바꿉니다.
+3. `src/api/busApi.js` 요청 함수를 맞춥니다.
+4. `VITE_API_MODE=server`로 실제 응답을 확인합니다.
+5. 성공, 데이터 부족, HTTP 오류 세 경우를 각각 테스트합니다.
