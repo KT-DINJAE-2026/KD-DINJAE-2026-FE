@@ -1,0 +1,58 @@
+{
+  "results": [
+    {
+      "type": "PLACE",
+      "placeId": "place-bomun-station",
+      "name": "보문역",
+      "address": "서울 성북구 보문로",
+      "searchKeywords": ["보문", "보문역", "지하철", "6호선", "우이신설선"]
+    },
+    {
+      "type": "STOP",
+      "searchKeywords": ["보문", "보문역", "2번 출구", "정류장"],
+      "stop": {
+        "stopId": "stop-bomun-exit2",
+        "stopName": "보문역 2번 출구 정류장",
+        "directionDescription": "신설동·동대문 방면",
+        "landmark": "보문역 2번 출구 앞",
+        "latitude": 37.5854,
+        "longitude": 127.0194,
+        "directRouteCount": 4,
+        "servedRouteIds": ["1112", "95", "142", "103"],
+        "roadview": {
+          "available": true,
+          "imageUrl": "/images/stop-preview/bomun-stop.webp",
+          "altText": "지하철 출입구 옆 인도에 있는 버스 정류장 모습 예시",
+          "capturedAtLabel": "정류장 모습 예시"
+        }
+      }
+    },
+    {
+      "type": "PLACE",
+      "placeId": "place-seoul-cityhall",
+      "name": "서울시청",
+      "address": "서울 중구 세종대로",
+      "searchKeywords": ["시청", "서울시청", "서울광장", "시청역"]
+    },
+    {
+      "type": "STOP",
+      "searchKeywords": ["시청", "서울시청", "서울광장", "정류장"],
+      "stop": {
+        "stopId": "stop-cityhall-front",
+        "stopName": "서울시청 앞 정류장",
+        "directionDescription": "시청·서소문 방면",
+        "landmark": "서울광장 맞은편",
+        "latitude": 37.5662,
+        "longitude": 126.9782,
+        "directRouteCount": 4,
+        "servedRouteIds": ["101", "102", "103", "104"],
+        "roadview": {
+          "available": true,
+          "imageUrl": "/images/stop-preview/cityhall-stop.webp",
+          "altText": "넓은 광장 맞은편 인도에 있는 버스 정류장 모습 예시",
+          "capturedAtLabel": "정류장 모습 예시"
+        }
+      }
+    }
+  ]
+}

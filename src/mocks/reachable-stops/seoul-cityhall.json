@@ -1,0 +1,29 @@
+{
+  "place": {
+    "placeId": "place-seoul-cityhall",
+    "name": "서울시청",
+    "address": "서울 중구 세종대로",
+    "latitude": 37.5666,
+    "longitude": 126.9784
+  },
+  "stops": [
+    {
+      "stopId": "stop-cityhall-front",
+      "stopName": "서울시청 앞 정류장",
+      "directionDescription": "시청·서소문 방면",
+      "landmark": "서울광장 맞은편",
+      "latitude": 37.5662,
+      "longitude": 126.9782,
+      "walkMinutes": 3,
+      "distanceMeters": 180,
+      "directRouteCount": 4,
+      "servedRouteIds": ["101", "102", "103", "104"],
+      "roadview": {
+        "available": true,
+        "imageUrl": "/images/stop-preview/cityhall-stop.webp",
+        "altText": "넓은 광장 맞은편 인도에 있는 버스 정류장 모습 예시",
+        "capturedAtLabel": "정류장 모습 예시"
+      }
+    }
+  ]
+}

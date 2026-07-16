@@ -1,26 +1,37 @@
 {
-  "generatedAt": "2026-07-13T13:58:00+09:00",
+  "generatedAt": "2026-07-17T14:00:00+09:00",
   "currentStop": {
     "stopId": "stop-seongbuk-office",
     "stopName": "성북구청 정류장",
-    "directionDescription": "보문역·종로 방면"
+    "directionDescription": "보문역·종로 방면",
+    "latitude": 37.5898,
+    "longitude": 127.0167
   },
-  "destinationStops": [
+  "recentDestinations": [
     {
-      "stopId": "stop-bomun-exit2",
-      "stopName": "보문역 2번 출구 정류장",
-      "directionDescription": "신설동·동대문 방면",
-      "landmark": "보문역 2번 출구 앞",
-      "searchKeywords": ["보문역", "보문", "2번 출구"],
-      "servedRouteIds": ["1112", "95", "142", "103"]
+      "type": "PLACE",
+      "placeId": "place-bomun-station",
+      "name": "보문역",
+      "address": "서울 성북구 보문로"
     },
     {
-      "stopId": "stop-cityhall-front",
-      "stopName": "서울시청 앞 정류장",
-      "directionDescription": "시청·서소문 방면",
-      "landmark": "서울광장 맞은편",
-      "searchKeywords": ["시청", "서울시청", "서울광장"],
-      "servedRouteIds": ["101", "102", "103", "104"]
+      "type": "STOP",
+      "stop": {
+        "stopId": "stop-cityhall-front",
+        "stopName": "서울시청 앞 정류장",
+        "directionDescription": "시청·서소문 방면",
+        "landmark": "서울광장 맞은편",
+        "latitude": 37.5662,
+        "longitude": 126.9782,
+        "directRouteCount": 4,
+        "servedRouteIds": ["101", "102", "103", "104"],
+        "roadview": {
+          "available": true,
+          "imageUrl": "/images/stop-preview/cityhall-stop.webp",
+          "altText": "넓은 광장 맞은편 인도에 있는 버스 정류장 모습 예시",
+          "capturedAtLabel": "정류장 모습 예시"
+        }
+      }
     }
   ]
 }

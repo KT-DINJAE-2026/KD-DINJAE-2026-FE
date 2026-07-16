@@ -1,0 +1,87 @@
+{
+  "status": "SUCCESS",
+  "generatedAt": "2026-07-17T14:00:00+09:00",
+  "originStopId": "stop-seongbuk-office",
+  "destinationStopId": "stop-bomun-community-center",
+  "predictionBasis": {
+    "description": "평일 오후 2시 승하차 패턴",
+    "confidence": "MEDIUM"
+  },
+  "routes": [
+    {
+      "tripId": "trip-142-1412",
+      "routeId": "142",
+      "routeNumber": "142번",
+      "direction": "보문역·신설동 방면",
+      "vehicleType": "저상버스",
+      "isLowFloor": true,
+      "arrivalMinutes": 6,
+      "travelMinutes": 10,
+      "standingBurdenMinutes": 3,
+      "standingBurdenLevel": "LOW",
+      "summaryMessage": "성북소방서부터 여유 예상",
+      "segments": [
+        {
+          "fromStopId": "stop-seongbuk-office",
+          "fromStopName": "성북구청",
+          "toStopId": "stop-seongbuk-fire-station",
+          "toStopName": "성북소방서",
+          "durationMinutes": 3,
+          "congestionLevel": "NORMAL",
+          "description": "서서 갈 가능성이 있어요"
+        },
+        {
+          "fromStopId": "stop-seongbuk-fire-station",
+          "fromStopName": "성북소방서",
+          "toStopId": "stop-bomun-community-center",
+          "toStopName": "보문동 주민센터",
+          "durationMinutes": 7,
+          "congestionLevel": "RELAXED",
+          "description": "앉을 가능성이 높아져요"
+        }
+      ]
+    },
+    {
+      "tripId": "trip-103-1414",
+      "routeId": "103",
+      "routeNumber": "103번",
+      "direction": "보문역·동대문 방면",
+      "vehicleType": "일반버스",
+      "isLowFloor": false,
+      "arrivalMinutes": 4,
+      "travelMinutes": 11,
+      "standingBurdenMinutes": 8,
+      "standingBurdenLevel": "HIGH",
+      "summaryMessage": "초반 입석 구간이 길어요",
+      "segments": [
+        {
+          "fromStopId": "stop-seongbuk-office",
+          "fromStopName": "성북구청",
+          "toStopId": "stop-seongbuk-fire-station",
+          "toStopName": "성북소방서",
+          "durationMinutes": 4,
+          "congestionLevel": "CROWDED",
+          "description": "몸이 닿을 수 있어요"
+        },
+        {
+          "fromStopId": "stop-seongbuk-fire-station",
+          "fromStopName": "성북소방서",
+          "toStopId": "stop-seongbuk-police-station",
+          "toStopName": "성북경찰서",
+          "durationMinutes": 4,
+          "congestionLevel": "NORMAL",
+          "description": "서서 갈 가능성이 있어요"
+        },
+        {
+          "fromStopId": "stop-seongbuk-police-station",
+          "fromStopName": "성북경찰서",
+          "toStopId": "stop-bomun-community-center",
+          "toStopName": "보문동 주민센터",
+          "durationMinutes": 3,
+          "congestionLevel": "RELAXED",
+          "description": "앉을 가능성이 높아져요"
+        }
+      ]
+    }
+  ]
+}
