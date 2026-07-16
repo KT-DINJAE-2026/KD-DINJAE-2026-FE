@@ -30,9 +30,9 @@ const CONGESTION_META = {
 };
 
 const DETAIL_GUIDANCE = {
-  LOW: "앉기 편한 시간은 여유 예상 구간의 합계이며 좌석을 보장하지는 않아요.",
-  MEDIUM: "앉기 편한 시간은 여유 예상 구간만 더한 값이며 보통 구간에서는 좌석 이용이 어려울 수 있어요.",
-  HIGH: "앉기 편한 시간은 여유 예상 구간만 더한 값이며 혼잡 구간에서는 좌석 이용이 어려울 수 있어요.",
+  LOW: "여유 예상 구간을 더한 시간이에요. 실제 좌석을 보장하지는 않아요.",
+  MEDIUM: "여유 예상 구간만 더한 시간이에요. 보통 구간에서는 좌석 이용이 어려울 수 있어요.",
+  HIGH: "여유 예상 구간만 더한 시간이에요. 혼잡 구간에서는 좌석 이용이 어려울 수 있어요.",
 };
 
 function getRequestedScreen() {
@@ -328,6 +328,7 @@ function CompareScreen({ destinationStop, onBack, onRoute }) {
               : `${comfortable.routeNumber}은 ${comfortDelay}분 늦지만`}
           </strong>
           {comfortable.tripId !== fastest.tripId && <span>앉기 편한 시간이 약 {extraSeatFriendlyMinutes}분 더 길어요.</span>}
+          <span>여유 예상 구간을 더한 값이며, 좌석을 보장하지 않아요.</span>
         </InfoBand>
       ) : (
         <InfoBand tone="warning" icon={AlertTriangle}>
@@ -358,7 +359,7 @@ function CompareScreen({ destinationStop, onBack, onRoute }) {
             : "혼잡도 데이터가 생기면 자동으로 갱신해요."}
         </span>
       </div>
-      <p className="fine-print compare-footnote">앉기 편한 시간은 여유 예상 구간이며 좌석을 보장하지 않아요.</p>
+      <p className="fine-print compare-footnote">도착 및 혼잡 예측은 실제 운행 상황에 따라 달라질 수 있어요.</p>
     </main>
   );
 }
@@ -392,6 +393,9 @@ function DetailScreen({ destinationStop, route, onBack }) {
 
       {predictionAvailable ? (
         <>
+          <InfoBand tone={route.standingBurdenLevel === "HIGH" ? "warning" : "info"}>
+            {DETAIL_GUIDANCE[route.standingBurdenLevel]}
+          </InfoBand>
           <section className="segment-section" aria-labelledby="segment-title">
             <h2 id="segment-title">구간별 예상</h2>
             <ol className="segment-list">
@@ -407,9 +411,6 @@ function DetailScreen({ destinationStop, route, onBack }) {
               ))}
             </ol>
           </section>
-          <InfoBand tone={route.standingBurdenLevel === "HIGH" ? "warning" : "info"}>
-            {DETAIL_GUIDANCE[route.standingBurdenLevel]}
-          </InfoBand>
         </>
       ) : (
         <InfoBand tone="warning" icon={AlertTriangle}>

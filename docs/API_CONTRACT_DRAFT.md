@@ -119,7 +119,7 @@ Content-Type: application/json
           "toStopName": "성북소방서",
           "durationMinutes": 3,
           "congestionLevel": "NORMAL",
-          "description": "입석 이동 가능"
+          "description": "서서 갈 가능성이 있어요"
         },
         {
           "fromStopId": "stop-seongbuk-fire-station",
@@ -128,7 +128,7 @@ Content-Type: application/json
           "toStopName": "보문역 2번 출구",
           "durationMinutes": 12,
           "congestionLevel": "RELAXED",
-          "description": "좌석 이용 여건 개선 예상"
+          "description": "앉을 가능성이 높아져요"
         }
       ]
     }

@@ -11,15 +11,15 @@
 <text x="195" y="280" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="30" font-weight="800" fill="#191919" text-anchor="middle" letter-spacing="0"><tspan x="195" dy="0">두 정류장을 잇는 버스를</tspan><tspan x="195" dy="41">비교하고 있어요</tspan></text>
 <text x="195" y="370" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="18" font-weight="500" fill="#555555" text-anchor="middle" dominant-baseline="middle" letter-spacing="0">성북구청에서 출발해요.</text>
 <rect x="40" y="414" width="310" height="232" rx="8" fill="#F4F5F5" stroke="none" stroke-width="1"/>
-<circle cx="72" cy="462" r="14" fill="#2F7D4A" stroke="none" stroke-width="1"/>
+<circle cx="72" cy="462" r="14" fill="#2F7248" stroke="none" stroke-width="1"/>
 <g transform="translate(64 454) scale(0.6666666666666666)"><path d="m5 12 4 4L19 6" fill="none" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></g>
-<text x="102" y="462" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="17" font-weight="700" fill="#191919" text-anchor="start" dominant-baseline="middle" letter-spacing="0">두 정류장 운행 버스 확인</text>
+<text x="102" y="462" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="18" font-weight="700" fill="#191919" text-anchor="start" dominant-baseline="middle" letter-spacing="0">두 정류장 운행 버스 확인</text>
 <line x1="72" y1="480" x2="72" y2="516" stroke="#E5E5E5" stroke-width="2" stroke-linecap="round"/>
 <circle cx="72" cy="534" r="14" fill="#FFF0E6" stroke="#B8560A" stroke-width="2"/>
 <circle cx="72" cy="534" r="5" fill="#B8560A" stroke="none" stroke-width="1"/>
-<text x="102" y="534" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="17" font-weight="700" fill="#B8560A" text-anchor="start" dominant-baseline="middle" letter-spacing="0">구간별 탑승 인원 예측</text>
+<text x="102" y="534" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="18" font-weight="700" fill="#9C4708" text-anchor="start" dominant-baseline="middle" letter-spacing="0">구간별 탑승 인원 예측</text>
 <line x1="72" y1="552" x2="72" y2="582" stroke="#E5E5E5" stroke-width="2" stroke-linecap="round"/>
 <circle cx="72" cy="598" r="14" fill="#FFFFFF" stroke="#E5E5E5" stroke-width="2"/>
-<text x="102" y="598" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="17" font-weight="600" fill="#888888" text-anchor="start" dominant-baseline="middle" letter-spacing="0">앉기 편한 시간과 도착시간 비교</text>
-<text x="195" y="782" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="14" font-weight="500" fill="#888888" text-anchor="middle" dominant-baseline="middle" letter-spacing="0">과거 승하차 패턴과 현재 운행 정보를 함께 사용해요.</text>
+<text x="102" y="598" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="18" font-weight="600" fill="#5F5F5F" text-anchor="start" dominant-baseline="middle" letter-spacing="0">앉기 편한 시간과 도착시간 비교</text>
+<text x="195" y="774" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="16" font-weight="600" fill="#555555" text-anchor="middle" letter-spacing="0"><tspan x="195" dy="0">과거 승하차 패턴과 현재 운행 정보를</tspan><tspan x="195" dy="23">함께 사용해요.</tspan></text>
 </svg>

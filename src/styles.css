@@ -27,7 +27,8 @@ body {
   margin: 0;
   overflow-x: hidden;
   background: #f2f3f3;
-  font-size: 18px;
+  font-size: 1.125rem;
+  line-height: 1.5;
 }
 
 button,
@@ -43,8 +44,8 @@ button {
 
 button:focus-visible,
 input:focus-visible {
-  outline: 3px solid rgba(184, 86, 10, 0.3);
-  outline-offset: 2px;
+  outline: 4px solid #b8560a;
+  outline-offset: 3px;
 }
 
 .sr-only {
@@ -101,12 +102,11 @@ input:focus-visible {
 
 .top-bar__title {
   min-width: 0;
-  overflow: hidden;
   color: #555555;
-  font-size: 16px;
+  font-size: 1.125rem;
   font-weight: 700;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  line-height: 1.4;
+  text-align: right;
 }
 
 .icon-button {
@@ -154,12 +154,12 @@ input:focus-visible {
 }
 
 .stop-badge strong {
-  font-size: 17px;
+  font-size: 1.125rem;
 }
 
 .stop-badge small {
   color: #7a4c28;
-  font-size: 14px;
+  font-size: 1rem;
   font-weight: 600;
 }
 
@@ -174,21 +174,21 @@ input:focus-visible {
 .screen-heading h1,
 .analysis-heading h1 {
   margin: 0;
-  font-size: 38px;
+  font-size: 2.375rem;
   line-height: 1.2;
   font-weight: 800;
   letter-spacing: 0;
 }
 
 .screen-heading--compare h1 {
-  font-size: 34px;
+  font-size: 2.25rem;
 }
 
 .screen-heading p,
 .analysis-heading p {
   margin: 18px 0 0;
   color: #555555;
-  font-size: 18px;
+  font-size: 1.125rem;
   line-height: 1.55;
 }
 
@@ -217,23 +217,24 @@ input:focus-visible {
 
 .search-form input {
   min-width: 0;
+  min-height: 44px;
   flex: 1;
   border: 0;
   outline: 0;
   color: #191919;
   background: transparent;
-  font-size: 18px;
+  font-size: 1.125rem;
 }
 
 .search-form input::placeholder {
-  color: #888888;
+  color: #5f5f5f;
 }
 
 .search-message {
   min-height: 24px;
   margin: 6px 0 0;
   color: #666666;
-  font-size: 15px;
+  font-size: 1rem;
 }
 
 .place-section {
@@ -244,7 +245,7 @@ input:focus-visible {
 .segment-section > h2 {
   margin: 0 0 12px;
   color: #555555;
-  font-size: 17px;
+  font-size: 1.125rem;
 }
 
 .place-list,
@@ -291,19 +292,19 @@ input:focus-visible {
 }
 
 .place-row__copy strong {
-  font-size: 18px;
+  font-size: 1.25rem;
 }
 
 .place-row__copy small {
-  color: #777777;
-  font-size: 14px;
+  color: #555555;
+  font-size: 1rem;
   line-height: 1.4;
 }
 
 .place-row > svg {
   width: 21px;
   flex: 0 0 21px;
-  color: #888888;
+  color: #5f5f5f;
 }
 
 .empty-result {
@@ -314,7 +315,7 @@ input:focus-visible {
   justify-content: center;
   color: #666666;
   background: #f2f3f3;
-  font-size: 16px;
+  font-size: 1rem;
 }
 
 .screen-bottom {
@@ -333,7 +334,7 @@ input:focus-visible {
   padding: 0 18px;
   border: 0;
   border-radius: 8px;
-  font-size: 19px;
+  font-size: 1.25rem;
   font-weight: 800;
   cursor: pointer;
 }
@@ -349,7 +350,7 @@ input:focus-visible {
   border: 0;
   color: #8f4107;
   background: transparent;
-  font-size: 17px;
+  font-size: 1.125rem;
   font-weight: 800;
   cursor: pointer;
 }
@@ -363,7 +364,7 @@ input:focus-visible {
   gap: 12px;
   color: #555555;
   background: #fff0e6;
-  font-size: 16px;
+  font-size: 1.125rem;
   font-weight: 600;
   line-height: 1.5;
 }
@@ -387,14 +388,14 @@ input:focus-visible {
 .info-band > div {
   min-width: 0;
   display: grid;
-  gap: 2px;
+  gap: 4px;
 }
 
 .fine-print {
   margin: 12px 0 0;
-  color: #888888;
-  font-size: 14px;
-  line-height: 1.45;
+  color: #555555;
+  font-size: 1rem;
+  line-height: 1.55;
   text-align: center;
 }
 
@@ -446,7 +447,7 @@ input:focus-visible {
 }
 
 .analysis-heading h1 {
-  font-size: 32px;
+  font-size: 2rem;
 }
 
 .progress-list {
@@ -456,7 +457,7 @@ input:focus-visible {
   border-radius: 8px;
   display: grid;
   gap: 24px;
-  color: #888888;
+  color: #5f5f5f;
   background: #f2f3f3;
   text-align: left;
   list-style: none;
@@ -466,7 +467,7 @@ input:focus-visible {
   display: flex;
   align-items: center;
   gap: 14px;
-  font-size: 17px;
+  font-size: 1.125rem;
   font-weight: 700;
 }
 
@@ -478,7 +479,7 @@ input:focus-visible {
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #888888;
+  color: #5f5f5f;
   background: #ffffff;
 }
 
@@ -496,7 +497,7 @@ input:focus-visible {
 }
 
 .progress-list .is-active {
-  color: #b8560a;
+  color: #9c4708;
 }
 
 .progress-list .is-active > span {
@@ -517,7 +518,6 @@ input:focus-visible {
   width: 100%;
   min-height: 202px;
   padding: 18px 18px 0;
-  overflow: hidden;
   border: 1px solid #e3e4e4;
   border-radius: 8px;
   display: flex;
@@ -541,7 +541,7 @@ input:focus-visible {
 }
 
 .bus-option__header > strong {
-  font-size: 27px;
+  font-size: 1.75rem;
 }
 
 .bus-option__badges {
@@ -558,7 +558,7 @@ input:focus-visible {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  font-size: 14px;
+  font-size: 1rem;
   font-weight: 800;
 }
 
@@ -584,8 +584,8 @@ input:focus-visible {
 
 .route-meta {
   margin-top: 4px;
-  color: #777777;
-  font-size: 14px;
+  color: #555555;
+  font-size: 1rem;
   font-weight: 600;
   line-height: 1.4;
 }
@@ -593,7 +593,8 @@ input:focus-visible {
 .bus-metrics {
   margin-top: 16px;
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(5.5rem, 100%), 1fr));
+  gap: 16px 12px;
 }
 
 .bus-metrics > span,
@@ -605,21 +606,20 @@ input:focus-visible {
 
 .bus-metrics small,
 .journey-metrics small {
-  color: #888888;
-  font-size: 14px;
+  color: #555555;
+  font-size: 1rem;
   font-weight: 600;
   line-height: 1.35;
 }
 
 .bus-metrics strong,
 .journey-metrics strong {
-  font-size: 19px;
+  font-size: 1.25rem;
   line-height: 1.35;
-  white-space: nowrap;
 }
 
 .bus-metrics .comfortable {
-  color: #2f7d4a;
+  color: #2f7248;
 }
 
 .bus-metrics .moderate {
@@ -631,7 +631,7 @@ input:focus-visible {
 }
 
 .journey-metrics .comfortable {
-  color: #2f7d4a;
+  color: #2f7248;
 }
 
 .metric-primary {
@@ -647,7 +647,7 @@ input:focus-visible {
   justify-content: space-between;
   gap: 8px;
   color: #555555;
-  font-size: 14px;
+  font-size: 1rem;
   font-weight: 700;
   line-height: 1.4;
 }
@@ -659,7 +659,7 @@ input:focus-visible {
 .bus-option__footer svg {
   width: 20px;
   flex: 0 0 20px;
-  color: #888888;
+  color: #5f5f5f;
 }
 
 .bus-option.is-recommended .bus-option__footer svg {
@@ -676,7 +676,7 @@ input:focus-visible {
   gap: 12px;
   color: #555555;
   background: #f2f3f3;
-  font-size: 15px;
+  font-size: 1rem;
   font-weight: 600;
   line-height: 1.45;
 }
@@ -697,13 +697,13 @@ input:focus-visible {
 
 .route-title h1 {
   margin: 0;
-  font-size: 40px;
+  font-size: 2.625rem;
 }
 
 .route-title p {
   margin: 8px 0 0;
   color: #555555;
-  font-size: 18px;
+  font-size: 1.125rem;
   line-height: 1.45;
 }
 
@@ -716,7 +716,7 @@ input:focus-visible {
 
 .route-summary .status-badge {
   min-height: 34px;
-  font-size: 14px;
+  font-size: 1rem;
 }
 
 .route-summary--comfortable {
@@ -737,7 +737,7 @@ input:focus-visible {
 
 .route-summary h2 {
   margin: 18px 0 0;
-  font-size: 24px;
+  font-size: 1.5rem;
   line-height: 1.4;
 }
 
@@ -746,17 +746,17 @@ input:focus-visible {
   padding: 22px 16px;
   border-radius: 8px;
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(9rem, 100%), 1fr));
   gap: 20px 16px;
   background: #f2f3f3;
 }
 
 .journey-metrics small {
-  font-size: 14px;
+  font-size: 1rem;
 }
 
 .journey-metrics strong {
-  font-size: 20px;
+  font-size: 1.375rem;
 }
 
 .segment-section {
@@ -765,7 +765,7 @@ input:focus-visible {
 
 .segment-section > h2 {
   margin-bottom: 18px;
-  font-size: 22px;
+  font-size: 1.5rem;
 }
 
 .segment-list {
@@ -788,11 +788,16 @@ input:focus-visible {
 
 .segment {
   position: relative;
-  min-height: 116px;
+  min-height: 124px;
   padding-left: 44px;
-  padding-right: 80px;
-  display: flex;
-  align-items: flex-start;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: start;
+  gap: 8px 12px;
+}
+
+.segment > div {
+  min-width: 0;
 }
 
 .segment__dot {
@@ -820,19 +825,19 @@ input:focus-visible {
 
 .segment strong {
   display: block;
-  font-size: 19px;
+  font-size: 1.25rem;
   line-height: 1.45;
 }
 
 .segment p {
   margin: 5px 0 0;
-  font-size: 17px;
+  font-size: 1.125rem;
   font-weight: 600;
   line-height: 1.4;
 }
 
 .segment--comfortable p {
-  color: #2f7d4a;
+  color: #2f7248;
 }
 
 .segment--moderate p {
@@ -844,9 +849,9 @@ input:focus-visible {
 }
 
 .segment__badge {
-  position: absolute;
-  top: 4px;
-  right: 0;
+  grid-column: 2;
+  grid-row: 1;
+  justify-self: end;
   min-width: 70px;
   min-height: 34px;
   padding: 0 10px;
@@ -854,7 +859,7 @@ input:focus-visible {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  font-size: 14px;
+  font-size: 1rem;
   font-weight: 800;
 }
 
@@ -886,7 +891,7 @@ input:focus-visible {
 .detail-return .text-button {
   width: 100%;
   min-height: 60px;
-  font-size: 18px;
+  font-size: 1.125rem;
 }
 
 @media (max-width: 460px) {
@@ -901,67 +906,30 @@ input:focus-visible {
     padding: max(20px, env(safe-area-inset-top, 0px)) max(20px, env(safe-area-inset-right, 0px)) max(20px, env(safe-area-inset-bottom, 0px)) max(20px, env(safe-area-inset-left, 0px));
   }
 
-  .screen-heading h1,
-  .analysis-heading h1 {
-    font-size: 34px;
-  }
-
   .bus-option {
-    padding-left: 13px;
-    padding-right: 13px;
-  }
-
-  .bus-metrics strong {
-    font-size: 17px;
-    white-space: normal;
-  }
-
-  .bus-metrics small,
-  .journey-metrics small {
-    font-size: 13px;
-  }
-
-  .journey-metrics strong {
-    font-size: 18px;
-    white-space: normal;
-  }
-
-  .segment {
-    padding-right: 68px;
-  }
-
-  .segment strong {
-    font-size: 18px;
-  }
-
-  .segment p {
-    font-size: 16px;
-  }
-
-  .segment__badge {
-    min-width: 60px;
-    padding-inline: 7px;
+    padding-inline: 15px;
   }
 }
 
-@media (max-width: 300px) {
+@media (max-width: 320px) {
   .screen {
     padding: max(16px, env(safe-area-inset-top, 0px)) max(16px, env(safe-area-inset-right, 0px)) max(16px, env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px));
   }
 
-  .screen-heading h1,
-  .analysis-heading h1 {
-    font-size: 31px;
+  .bus-metrics > span:last-child {
+    grid-column: 1 / -1;
   }
 
-  .status-badge {
-    padding-inline: 7px;
-    font-size: 13px;
+  .segment {
+    min-height: 156px;
+    grid-template-columns: minmax(0, 1fr);
   }
 
-  .primary-button {
-    padding-inline: 10px;
-    font-size: 17px;
+  .segment__badge {
+    grid-column: 1;
+    grid-row: 2;
+    justify-self: start;
+    margin-top: 4px;
   }
 }
 

@@ -28,7 +28,7 @@
           "toStopName": "성북소방서",
           "durationMinutes": 3,
           "congestionLevel": "NORMAL",
-          "description": "입석 이동 가능"
+          "description": "서서 갈 가능성이 있어요"
         },
         {
           "fromStopId": "stop-seongbuk-fire-station",
@@ -37,7 +37,7 @@
           "toStopName": "성북경찰서",
           "durationMinutes": 4,
           "congestionLevel": "RELAXED",
-          "description": "좌석 이용 여건 개선 예상"
+          "description": "앉을 가능성이 높아져요"
         },
         {
           "fromStopId": "stop-seongbuk-police-station",
@@ -46,7 +46,7 @@
           "toStopName": "보문역 2번 출구",
           "durationMinutes": 8,
           "congestionLevel": "RELAXED",
-          "description": "여유 단계 유지 예상"
+          "description": "여유가 이어질 가능성이 높아요"
         }
       ]
     },
@@ -70,7 +70,7 @@
           "toStopName": "성북소방서",
           "durationMinutes": 4,
           "congestionLevel": "CROWDED",
-          "description": "신체 접촉이 발생할 수 있음"
+          "description": "사람들과 몸이 닿을 수 있어요"
         },
         {
           "fromStopId": "stop-seongbuk-fire-station",
@@ -79,7 +79,7 @@
           "toStopName": "성북경찰서",
           "durationMinutes": 6,
           "congestionLevel": "NORMAL",
-          "description": "입석 이동 가능"
+          "description": "서서 갈 가능성이 있어요"
         },
         {
           "fromStopId": "stop-seongbuk-police-station",
@@ -88,7 +88,7 @@
           "toStopName": "보문역 2번 출구",
           "durationMinutes": 2,
           "congestionLevel": "RELAXED",
-          "description": "좌석 이용 여건 개선 예상"
+          "description": "앉을 가능성이 높아져요"
         }
       ]
     },
@@ -112,7 +112,7 @@
           "toStopName": "성북소방서",
           "durationMinutes": 3,
           "congestionLevel": "NORMAL",
-          "description": "입석 이동 가능"
+          "description": "서서 갈 가능성이 있어요"
         },
         {
           "fromStopId": "stop-seongbuk-fire-station",
@@ -121,7 +121,7 @@
           "toStopName": "성북경찰서",
           "durationMinutes": 3,
           "congestionLevel": "NORMAL",
-          "description": "입석 이동 가능"
+          "description": "서서 갈 가능성이 있어요"
         },
         {
           "fromStopId": "stop-seongbuk-police-station",
@@ -130,7 +130,7 @@
           "toStopName": "보문역 2번 출구",
           "durationMinutes": 7,
           "congestionLevel": "RELAXED",
-          "description": "좌석 이용 여건 개선 예상"
+          "description": "앉을 가능성이 높아져요"
         }
       ]
     },
@@ -154,7 +154,7 @@
           "toStopName": "성북소방서",
           "durationMinutes": 4,
           "congestionLevel": "NORMAL",
-          "description": "입석 이동 가능"
+          "description": "서서 갈 가능성이 있어요"
         },
         {
           "fromStopId": "stop-seongbuk-fire-station",
@@ -163,7 +163,7 @@
           "toStopName": "성북경찰서",
           "durationMinutes": 4,
           "congestionLevel": "NORMAL",
-          "description": "좌석 이용이 어려울 수 있음"
+          "description": "앉기 어려울 수 있어요"
         },
         {
           "fromStopId": "stop-seongbuk-police-station",
@@ -172,7 +172,7 @@
           "toStopName": "보문역 2번 출구",
           "durationMinutes": 6,
           "congestionLevel": "RELAXED",
-          "description": "좌석 이용 여건 개선 예상"
+          "description": "앉을 가능성이 높아져요"
         }
       ]
     }
