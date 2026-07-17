@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="390" height="844" viewBox="0 0 390 844" role="img" aria-label="QR 출발 정류장 정보를 불러오는 화면">
+  <title>QR 출발 정류장 정보를 불러오는 화면</title>
+  <rect x="0" y="0" width="390" height="844" rx="0" fill="#FFFFFF" stroke="none" stroke-width="1"/>
+  <circle cx="195" cy="220" r="64" fill="#FFF0E6" stroke="none" stroke-width="1"/>
+<g transform="translate(165 190) scale(2.5)"><rect x="4" y="3" width="16" height="16" rx="3" fill="none" stroke="#B8560A" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M4 11h16M8 19v2M16 19v2" fill="none" stroke="#B8560A" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="8" cy="15" r="1" fill="#B8560A"/><circle cx="16" cy="15" r="1" fill="#B8560A"/></g>
+<text x="195" y="342" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="36" font-weight="800" fill="#191919" text-anchor="middle" letter-spacing="0"><tspan x="195" dy="0">정류장 정보를</tspan><tspan x="195" dy="45">불러오고 있어요</tspan></text>
+<text x="195" y="442" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="20.25" font-weight="600" fill="#555555" text-anchor="middle" dominant-baseline="middle" letter-spacing="0">잠시만 기다려주세요.</text>
+<rect x="24" y="684" width="342" height="104" rx="8" fill="#FFF0E6" stroke="none" stroke-width="1"/>
+<g transform="translate(46 714) scale(1)"><path d="M20 10c0 5-8 12-8 12S4 15 4 10a8 8 0 1 1 16 0Z" fill="none" stroke="#B8560A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="10" r="2.5" fill="none" stroke="#B8560A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></g>
+<text x="84" y="708" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="19.13" font-weight="700" fill="#555555" text-anchor="start" letter-spacing="0"><tspan x="84" dy="0">QR에 등록된 출발 정류장과</tspan><tspan x="84" dy="28">운행 방향을 확인하고 있어요.</tspan></text>
+</svg>

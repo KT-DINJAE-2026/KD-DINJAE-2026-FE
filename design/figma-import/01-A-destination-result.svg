@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="390" height="844" viewBox="0 0 390 844" role="img" aria-label="도착 정류장 검색 결과 화면">
+  <title>도착 정류장 검색 결과 화면</title>
+  <rect x="0" y="0" width="390" height="844" rx="0" fill="#FFFFFF" stroke="none" stroke-width="1"/>
+  <rect x="24" y="24" width="292" height="72" rx="8" fill="#FFF0E6" stroke="none" stroke-width="1"/>
+<circle cx="42" cy="49" r="5" fill="#B8560A" stroke="none" stroke-width="1"/>
+<text x="56" y="46" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="18" font-weight="700" fill="#9C4708" text-anchor="start" dominant-baseline="middle" letter-spacing="0">성북구청·성북경찰서</text>
+<text x="56" y="75" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="16.88" font-weight="600" fill="#9C4708" text-anchor="start" dominant-baseline="middle" letter-spacing="0">보문역 방면 · 정류장 08177</text>
+<text x="24" y="138" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="38.25" font-weight="800" fill="#191919" text-anchor="start" letter-spacing="0"><tspan x="24" dy="0">도착 정류장을</tspan><tspan x="24" dy="47">확인해주세요</tspan></text>
+<rect x="24" y="250" width="342" height="72" rx="8" fill="#FFFFFF" stroke="#B8560A" stroke-width="2"/>
+<g transform="translate(44 274) scale(1)"><circle cx="11" cy="11" r="8" fill="none" stroke="#B8560A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="m21 21-4.35-4.35" fill="none" stroke="#B8560A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></g>
+<text x="82" y="286" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="20.25" font-weight="700" fill="#191919" text-anchor="start" dominant-baseline="middle" letter-spacing="0">보문역</text>
+<text x="24" y="370" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="20.25" font-weight="700" fill="#555555" text-anchor="start" dominant-baseline="middle" letter-spacing="0">검색 결과 1개</text>
+<rect x="24" y="396" width="342" height="88" rx="8" fill="#F4F5F5" stroke="none" stroke-width="1"/>
+<circle cx="54" cy="440" r="19" fill="#FFFFFF" stroke="none" stroke-width="1"/>
+<g transform="translate(44 430) scale(0.8333333333333334)"><path d="M20 10c0 5-8 12-8 12S4 15 4 10a8 8 0 1 1 16 0Z" fill="none" stroke="#5F5F5F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="10" r="2.5" fill="none" stroke="#5F5F5F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></g>
+<text x="84" y="427" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="22.5" font-weight="700" fill="#191919" text-anchor="start" dominant-baseline="middle" letter-spacing="0">보문역 2번 출구</text>
+<text x="84" y="459" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="18" font-weight="600" fill="#555555" text-anchor="start" dominant-baseline="middle" letter-spacing="0">정류장 08179 · 신설동 방면</text>
+<g transform="translate(330 429) scale(0.9166666666666666)"><path d="m9 18 6-6-6-6" fill="none" stroke="#5F5F5F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></g>
+<rect x="24" y="506" width="342" height="88" rx="8" fill="#FFF0E6" stroke="none" stroke-width="1"/>
+<g transform="translate(42 536) scale(0.9166666666666666)"><circle cx="12" cy="12" r="9" fill="none" stroke="#B8560A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 11v5M12 8h.01" fill="none" stroke="#B8560A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></g>
+<text x="78" y="530" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="18" font-weight="700" fill="#555555" text-anchor="start" letter-spacing="0"><tspan x="78" dy="0">같은 이름의 정류장은 번호와</tspan><tspan x="78" dy="25">가는 방향까지 확인해주세요.</tspan></text>
+<rect x="24" y="752" width="342" height="64" rx="8" fill="#B8560A" stroke="none" stroke-width="1"/>
+<text x="195" y="784" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="21.38" font-weight="700" fill="#FFFFFF" text-anchor="middle" dominant-baseline="middle" letter-spacing="0">선택한 정류장 확인하기</text>
+</svg>

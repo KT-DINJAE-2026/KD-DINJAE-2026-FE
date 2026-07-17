@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="390" height="844" viewBox="0 0 390 844" role="img" aria-label="정류장 또는 여정 정보를 불러오지 못한 화면">
+  <title>정류장 또는 여정 정보를 불러오지 못한 화면</title>
+  <rect x="0" y="0" width="390" height="844" rx="0" fill="#FFFFFF" stroke="none" stroke-width="1"/>
+  <circle cx="195" cy="208" r="62" fill="#FBECEC" stroke="none" stroke-width="1"/>
+<g transform="translate(167 180) scale(2.3333333333333335)"><path d="M10.3 3.8 2.2 18a2 2 0 0 0 1.7 3h16.2a2 2 0 0 0 1.7-3L13.7 3.8a2 2 0 0 0-3.4 0Z" fill="none" stroke="#C83D3D" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 9v4M12 17h.01" fill="none" stroke="#C83D3D" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></g>
+<text x="195" y="330" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="36" font-weight="800" fill="#191919" text-anchor="middle" letter-spacing="0"><tspan x="195" dy="0">정보를 불러오지</tspan><tspan x="195" dy="45">못했어요</tspan></text>
+<text x="195" y="430" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="20.25" font-weight="600" fill="#555555" text-anchor="middle" dominant-baseline="middle" letter-spacing="0">잠시 후 다시 시도해주세요.</text>
+<rect x="24" y="506" width="342" height="112" rx="8" fill="#F4F5F5" stroke="none" stroke-width="1"/>
+<g transform="translate(44 538) scale(1)"><circle cx="12" cy="12" r="9" fill="none" stroke="#B8560A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 11v5M12 8h.01" fill="none" stroke="#B8560A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></g>
+<text x="82" y="530" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="19.13" font-weight="700" fill="#555555" text-anchor="start" letter-spacing="0"><tspan x="82" dy="0">인터넷 연결을 확인한 뒤</tspan><tspan x="82" dy="28">아래 버튼을 눌러주세요.</tspan></text>
+<rect x="24" y="724" width="342" height="64" rx="8" fill="#B8560A" stroke="none" stroke-width="1"/>
+<text x="195" y="756" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="21.38" font-weight="700" fill="#FFFFFF" text-anchor="middle" dominant-baseline="middle" letter-spacing="0">다시 시도하기</text>
+</svg>

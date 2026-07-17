@@ -1,88 +1,149 @@
 # Figma 화면 자료
 
-정류장 QR로 출발 정류장을 확인한 뒤 도착 정류장을 입력하고, 로드뷰로 정류장을 확인한 다음 두 정류장 사이를 운행하는 버스를 비교하는 흐름입니다. React 프로토타입과 같은 내용으로 맞췄으며 각 SVG는 Figma에 바로 가져올 수 있습니다.
+정류장 QR로 들어온 뒤 도착 정류장을 검색하고, 로드뷰로 위치를 확인한 다음 버스별 도착시간과 입석 부담을 비교하는 흐름입니다. 정상 화면만 이어 놓지 않고 검색 결과 없음, 로드뷰 실패, 데이터 부족, 직통 버스 없음, API 오류까지 함께 준비했습니다.
 
-## 파일 구성
+각 화면은 `390 × 844` SVG라서 Figma에 바로 가져올 수 있습니다. 전체 연결 관계는 `00-user-flow.svg`에서 먼저 확인할 수 있습니다.
 
-| 파일 | 화면 |
+## 파일 목록
+
+| 파일 | 화면 상태 |
 | --- | --- |
-| `00-user-flow.svg` | 기본 흐름과 데이터 부족 분기 |
-| `01-destination-stop.svg` | QR 출발지와 도착 정류장 검색 |
-| `02-stop-confirm.svg` | 카카오맵 로드뷰·ARS 번호·운행 방향 확인 |
-| `03-analyzing.svg` | 운행 버스와 구간별 탑승 인원 분석 |
-| `04-compare.svg` | 앉기 편한 시간과 빠른 도착을 한 화면에서 비교 |
-| `04-compare-unavailable.svg` | 혼잡도 데이터가 부족한 경우 |
-| `05-detail.svg` | 1014번의 구간별 예상 |
-| `05-detail-fast.svg` | 152번의 구간별 예상과 혼잡 단계 안내 |
-| `05-detail-unavailable.svg` | 혼잡도 없이 도착 정보만 제공하는 상세 |
+| `00-user-flow.svg` | 전체 사용자 흐름과 예외 분기 |
+| `00-app-loading.svg` | QR에 등록된 출발 정류장을 불러오는 중 |
+| `00-app-error.svg` | 출발 정류장 또는 여정 API 요청 실패 |
+| `01-destination-stop.svg` | 도착 정류장 입력 전 기본 화면 |
+| `01-A-destination-result.svg` | 도착 정류장 검색 결과 |
+| `01-B-destination-empty.svg` | 검색 결과 없음 |
+| `02-A-stop-loading.svg` | 사진을 노출하지 않는 로드뷰 로딩 상태 |
+| `02-stop-confirm.svg` | 카카오맵 로드뷰, ARS 번호, 방향 확인 |
+| `02-B-stop-fallback.svg` | 로드뷰 실패 후 정류장 예시 사진 표시 |
+| `03-analyzing.svg` | 직통 버스와 구간별 탑승 인원 분석 중 |
+| `04-compare.svg` | 혼잡도 예측이 가능한 버스 비교 |
+| `04-compare-unavailable.svg` | 혼잡도 데이터가 부족한 버스 비교 |
+| `04-C-no-direct-route.svg` | 두 정류장을 잇는 직통 버스 없음 |
+| `05-detail.svg` | 입석 부담이 적은 버스 상세 |
+| `05-detail-fast.svg` | 빠르지만 혼잡한 버스 상세 |
+| `05-detail-unavailable.svg` | 혼잡도 없이 도착 정보만 있는 상세 |
 
-`index.html`은 모든 화면을 한 페이지에서 확인하는 용도입니다. `contact-sheet.png`는 회의 자료나 Discord 공유용으로 화면을 한 장에 모은 이미지입니다.
+`index.html`은 모든 화면을 브라우저에서 한 번에 확인하는 파일이고, `contact-sheet.png`는 회의나 Discord 공유용 이미지입니다.
 
-## Figma에 가져오기
+## Figma 파일 구성
 
-1. Figma에 `00 User Flow`와 `01 Core Screens` 페이지를 만듭니다.
-2. `00-user-flow.svg`는 첫 페이지로 가져옵니다.
-3. 나머지 SVG는 `01 Core Screens`에 가져온 뒤 각각 `390 × 844` 프레임으로 감쌉니다.
-4. 정류장 표시, 검색 결과, 버스 카드, 상태 표시를 컴포넌트로 묶습니다.
-5. 아래 연결표에 맞춰 Prototype 탭에서 클릭 동작을 연결합니다.
+Figma에는 아래처럼 페이지를 나누면 찾기 쉽습니다.
 
-## 화면 연결
+| Figma 페이지 | 넣을 내용 |
+| --- | --- |
+| `00 Flow` | `00-user-flow.svg` |
+| `01 Screens` | 15개 모바일 화면 SVG |
+| `02 Components` | 버튼, 검색창, 정류장 행, 버스 카드, 상태 배지 |
+
+SVG를 `01 Screens`에 가져온 뒤 각 항목을 같은 이름의 `390 × 844` 프레임으로 감쌉니다. 프레임 이름은 파일명에서 `.svg`만 뺀 값으로 맞춥니다.
+
+## Prototype 연결
+
+### 기본 흐름
 
 ```text
-기본 흐름
+00-app-loading
+  After Delay → 01-destination-stop
+
 01-destination-stop
-  도착 정류장 선택/찾기 → 02-stop-confirm
+  검색 실행 → 01-A-destination-result
+  최근 정류장 선택 → 02-A-stop-loading
+
+01-A-destination-result
+  결과 행 또는 확인 버튼 → 02-A-stop-loading
+
+02-A-stop-loading
+  After Delay → 02-stop-confirm
+
 02-stop-confirm
   이 정류장이 맞아요 → 03-analyzing
-  다시 찾기 → 01-destination-stop
-03-analyzing
-  분석 완료 → 04-compare
-04-compare
-  1014번 → 05-detail
-  152번 → 05-detail-fast
-05-detail
-  버스 비교로 돌아가기 → 04-compare
+  뒤로 / 다시 찾기 → 01-destination-stop
 
-비교와 예외
-05-detail-fast
+03-analyzing
+  After Delay → 04-compare
+
+04-compare
+  1014번 카드 → 05-detail
+  152번 카드 → 05-detail-fast
+
+05-detail / 05-detail-fast
   버스 비교로 돌아가기 → 04-compare
-04-compare-unavailable
-  1014번 → 05-detail-unavailable
-05-detail-unavailable
-  다른 도착 버스 보기 → 04-compare-unavailable
 ```
 
-화면 전환은 `Instant`로 두고 분석 화면만 약 800ms 뒤 비교 화면으로 넘어가게 설정합니다. 고령 사용자가 내용을 읽는 중 화면이 흐려지지 않도록 불투명도 애니메이션은 사용하지 않습니다.
+### 검색·로드뷰 예외
 
-## 표현 기준
+```text
+01-destination-stop
+  검색 결과 0개 → 01-B-destination-empty
 
-- 검색 결과는 정류장 이름과 함께 ARS 번호와 운행 방향을 표시해 동명 정류장을 구분합니다.
-- 정류장을 선택하면 분석 전에 로드뷰, ARS 번호, 운행 방향, 랜드마크를 확인합니다. 장소 검색·주변 정류장·지도 분기는 두지 않습니다.
-- 정류장 ID, ARS 번호, 좌표, 직통 노선은 서울시 2026년 7월 1일 공개 자료를 기준으로 하고 도착·혼잡 수치는 Mock 시나리오로 구분합니다.
-- 비교 기준을 고르는 토글 없이 각 카드에 `입석 부담 적음` 또는 `빠른 도착` 표시를 직접 붙입니다.
-- `빠른 도착`은 버스가 올 때까지의 시간과 승차 후 이동시간을 합쳐 비교합니다.
-- `전체 소요`와 `버스 이동`을 분리해, 구간별 시간의 합계가 버스 이동시간과 바로 맞아야 합니다.
-- `입석 부담 적음` 표시는 이동 중 입석 부담이 예상되는 시간이 짧은 버스에 붙입니다.
-- 분석 과정에는 `재차인원` 대신 `탑승 인원`을 사용합니다.
-- 결과는 `앉기 편한 시간`과 `여유·보통·혼잡` 단계를 함께 보여줍니다.
-- `앉기 편한 시간`은 `여유` 예상 구간의 합계입니다. 앉을 가능성이 상대적으로 높은 시간이며 좌석을 보장하지 않습니다.
-- 예측 데이터가 부족해도 도착 정보가 있으면 빠른 버스는 계속 안내합니다.
-- 상세 화면은 별도 버스를 추천하지 않고 구간별 예상과 혼잡 단계 의미에 집중합니다.
-- 추천 영역을 제거한 공간은 노선 요약과 구간 정보의 글자 크기와 간격을 넓히는 데 사용합니다.
-- React와 같은 1.125배 글자 스케일을 적용해 화면 글자는 최소 18px, 일반 본문은 20px, 핵심 수치는 22px 이상을 기본으로 잡습니다.
-- 작은 화면에서도 글자를 줄이지 않고 정보 열을 세로로 재배치합니다.
-- 보조 글자도 명암비 4.5:1 이상을 유지하며 `#888888`처럼 옅은 회색은 사용하지 않습니다.
-- `좌석 보장 아님` 안내는 비교 요약과 상세 수치 바로 다음에 배치합니다.
-- 환승이나 다른 정류장까지 걷는 우회 경로는 현재 범위에 포함하지 않습니다.
+01-B-destination-empty
+  검색어 다시 입력하기 → 01-destination-stop
 
-주요 동작에는 주황색 `#B8560A`를 사용합니다. 연한 배경 위의 주황색 글자는 더 진한 `#9C4708`을 사용하고, 초록색과 빨간색은 각각 입석 부담이 낮거나 높은 상태에만 사용합니다.
+02-A-stop-loading
+  로드뷰 호출 실패 → 02-B-stop-fallback
+
+02-B-stop-fallback
+  이 정류장이 맞아요 → 03-analyzing
+  뒤로 / 다시 찾기 → 01-destination-stop
+```
+
+### 분석 결과 분기
+
+```text
+03-analyzing
+  SUCCESS → 04-compare
+  INSUFFICIENT_DATA → 04-compare-unavailable
+  NO_DIRECT_ROUTE → 04-C-no-direct-route
+  HTTP 오류 → 00-app-error
+
+04-compare-unavailable
+  버스 카드 → 05-detail-unavailable
+
+05-detail-unavailable
+  다른 도착 버스 보기 → 04-compare-unavailable
+
+04-C-no-direct-route
+  다른 정류장 찾기 → 01-destination-stop
+
+00-app-error
+  다시 시도하기 → 실패한 요청의 직전 화면
+```
+
+Figma Prototype은 실제 API 조건을 판단하지 못하므로 정상, 데이터 부족, 직통 버스 없음 흐름은 각각 별도 Flow starting point로 연결하는 편이 낫습니다. 기본 시연 흐름은 `SUCCESS`로 두고 나머지는 발표할 때 별도 시작점으로 보여줍니다.
+
+## 전환 설정
+
+| 화면 | Trigger | 권장 시간 |
+| --- | --- | --- |
+| `00-app-loading` | After Delay | 600ms |
+| `02-A-stop-loading` | After Delay | 800ms |
+| `03-analyzing` | After Delay | 800ms |
+| 버튼·정류장 행·버스 카드 | On Click | Instant |
+
+고령 사용자가 내용을 읽는 동안 화면이 흐려지지 않도록 Smart Animate나 불투명도 전환은 사용하지 않습니다.
+
+## 화면 표현 기준
+
+- 목적지는 장소가 아니라 도착할 버스 정류장으로 입력합니다.
+- 검색 결과에는 정류장명, ARS 번호, 가는 방향을 함께 표시합니다.
+- 로드뷰 로딩 중에는 사진과 출처 라벨을 보여주지 않습니다.
+- 로드뷰가 준비되면 `카카오맵 로드뷰`, 실패하면 `정류장 모습 예시`라고 구분합니다.
+- 비교 기준을 바꾸는 토글은 두지 않고 각 버스 카드에 `입석 부담 적음`, `빠른 도착` 표시를 붙입니다.
+- `앉기 편한 시간`은 `여유`로 예측된 구간의 합이며 실제 좌석을 보장하지 않습니다.
+- 혼잡도 데이터가 부족하면 혼잡 정보를 만들지 않고 도착시간과 이동시간만 보여줍니다.
+- `재차인원` 대신 `탑승 인원`처럼 바로 이해할 수 있는 표현을 사용합니다.
+- 주황색 `#B8560A`는 주요 동작, 초록과 빨강은 입석 부담 상태에만 사용합니다.
+- 일반 본문은 18px 이상, 핵심 수치와 제목은 22px 이상을 기준으로 합니다.
+- 장소 검색, 주변 정류장 추천, 음성 검색, 지도 선택, 환승·도보 우회 경로는 현재 흐름에 넣지 않습니다.
 
 ## 다시 생성하기
 
-화면을 수정할 때는 생성 스크립트를 고친 뒤 저장소 루트에서 실행합니다.
+저장소 루트에서 아래 명령을 실행합니다.
 
 ```bash
 node design/figma-import/generate.mjs
 ```
 
-생성된 SVG를 직접 수정하면 다음 실행 때 덮어써집니다.
+SVG와 `index.html`은 생성 결과물입니다. 화면 수정은 SVG 파일이 아니라 `generate.mjs`에서 해야 다음 생성 때 사라지지 않습니다.

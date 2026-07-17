@@ -9,7 +9,7 @@
     body { margin: 0; padding: 32px; background: #f0f0ef; color: #191919; font-family: "Noto Sans CJK KR", "Malgun Gothic", sans-serif; }
     h1 { margin: 0 0 8px; font-size: 28px; letter-spacing: 0; }
     p { margin: 0 0 28px; color: #555555; }
-    .flow { display: block; width: min(100%, 1440px); margin-bottom: 36px; border: 1px solid #dddddd; }
+    .flow { display: block; width: min(100%, 2100px); margin-bottom: 36px; border: 1px solid #dddddd; }
     main { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 390px)); gap: 28px; align-items: start; }
     figure { margin: 0; }
     figure img { display: block; width: 100%; border: 1px solid #dddddd; box-shadow: 0 10px 30px rgba(25,25,25,.08); }
@@ -22,12 +22,36 @@
   <img class="flow" src="./00-user-flow.svg" alt="사용자 흐름도">
   <main>
   <figure>
+    <img src="./00-app-loading.svg" alt="00-A QR 정류장 불러오는 중">
+    <figcaption>00-A QR 정류장 불러오는 중</figcaption>
+  </figure>
+  <figure>
+    <img src="./00-app-error.svg" alt="00-B 정보 불러오기 실패">
+    <figcaption>00-B 정보 불러오기 실패</figcaption>
+  </figure>
+  <figure>
     <img src="./01-destination-stop.svg" alt="01 도착 정류장 검색">
     <figcaption>01 도착 정류장 검색</figcaption>
   </figure>
   <figure>
+    <img src="./01-A-destination-result.svg" alt="01-A 도착 정류장 검색 결과">
+    <figcaption>01-A 도착 정류장 검색 결과</figcaption>
+  </figure>
+  <figure>
+    <img src="./01-B-destination-empty.svg" alt="01-B 검색 결과 없음">
+    <figcaption>01-B 검색 결과 없음</figcaption>
+  </figure>
+  <figure>
+    <img src="./02-A-stop-loading.svg" alt="02-A 로드뷰 불러오는 중">
+    <figcaption>02-A 로드뷰 불러오는 중</figcaption>
+  </figure>
+  <figure>
     <img src="./02-stop-confirm.svg" alt="02 정류장 로드뷰 확인">
     <figcaption>02 정류장 로드뷰 확인</figcaption>
+  </figure>
+  <figure>
+    <img src="./02-B-stop-fallback.svg" alt="02-B 로드뷰를 불러오지 못한 경우">
+    <figcaption>02-B 로드뷰를 불러오지 못한 경우</figcaption>
   </figure>
   <figure>
     <img src="./03-analyzing.svg" alt="03 버스 분석 중">
@@ -40,6 +64,10 @@
   <figure>
     <img src="./04-compare-unavailable.svg" alt="04-B 혼잡도 데이터 부족">
     <figcaption>04-B 혼잡도 데이터 부족</figcaption>
+  </figure>
+  <figure>
+    <img src="./04-C-no-direct-route.svg" alt="04-C 직통 버스 없음">
+    <figcaption>04-C 직통 버스 없음</figcaption>
   </figure>
   <figure>
     <img src="./05-detail.svg" alt="05 구간별 상세">

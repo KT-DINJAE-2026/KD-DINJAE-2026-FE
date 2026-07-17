@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="390" height="844" viewBox="0 0 390 844" role="img" aria-label="도착 정류장 검색 결과가 없는 화면">
+  <title>도착 정류장 검색 결과가 없는 화면</title>
+  <rect x="0" y="0" width="390" height="844" rx="0" fill="#FFFFFF" stroke="none" stroke-width="1"/>
+  <rect x="24" y="24" width="292" height="72" rx="8" fill="#FFF0E6" stroke="none" stroke-width="1"/>
+<circle cx="42" cy="49" r="5" fill="#B8560A" stroke="none" stroke-width="1"/>
+<text x="56" y="46" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="18" font-weight="700" fill="#9C4708" text-anchor="start" dominant-baseline="middle" letter-spacing="0">성북구청·성북경찰서</text>
+<text x="56" y="75" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="16.88" font-weight="600" fill="#9C4708" text-anchor="start" dominant-baseline="middle" letter-spacing="0">보문역 방면 · 정류장 08177</text>
+<text x="24" y="138" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="38.25" font-weight="800" fill="#191919" text-anchor="start" letter-spacing="0"><tspan x="24" dy="0">도착 정류장을</tspan><tspan x="24" dy="47">찾아볼게요</tspan></text>
+<rect x="24" y="250" width="342" height="72" rx="8" fill="#FFFFFF" stroke="#C83D3D" stroke-width="2"/>
+<g transform="translate(44 274) scale(1)"><circle cx="11" cy="11" r="8" fill="none" stroke="#555555" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="m21 21-4.35-4.35" fill="none" stroke="#555555" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></g>
+<text x="82" y="286" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="20.25" font-weight="700" fill="#191919" text-anchor="start" dominant-baseline="middle" letter-spacing="0">보문역 9번 출구</text>
+<text x="24" y="370" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="20.25" font-weight="700" fill="#555555" text-anchor="start" dominant-baseline="middle" letter-spacing="0">검색 결과</text>
+<rect x="24" y="398" width="342" height="196" rx="8" fill="#F4F5F5" stroke="none" stroke-width="1"/>
+<circle cx="195" cy="454" r="30" fill="#FFFFFF" stroke="none" stroke-width="1"/>
+<g transform="translate(180 439) scale(1.25)"><circle cx="11" cy="11" r="8" fill="none" stroke="#5F5F5F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="m21 21-4.35-4.35" fill="none" stroke="#5F5F5F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></g>
+<text x="195" y="508" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="21.38" font-weight="800" fill="#191919" text-anchor="middle" dominant-baseline="middle" letter-spacing="0">일치하는 정류장이 없어요.</text>
+<text x="195" y="548" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="18" font-weight="600" fill="#555555" text-anchor="middle" dominant-baseline="middle" letter-spacing="0">다른 이름이나 번호로 검색해주세요.</text>
+<rect x="24" y="752" width="342" height="64" rx="8" fill="#B8560A" stroke="none" stroke-width="1"/>
+<text x="195" y="784" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="21.38" font-weight="700" fill="#FFFFFF" text-anchor="middle" dominant-baseline="middle" letter-spacing="0">검색어 다시 입력하기</text>
+</svg>

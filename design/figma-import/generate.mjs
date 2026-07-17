@@ -122,6 +122,35 @@ function primaryButton(y, label, width = 342, x = 24) {
   ].join("\n");
 }
 
+function stopConfirmationDetails() {
+  return [
+    text(24, 514, "보문역 2번 출구", 24, 800),
+    icon("info", 26, 538, 20, C.blue),
+    text(58, 548, "정류장 번호", 16, 700, C.subtext),
+    text(180, 548, "08179", 16, 800),
+    icon("arrowRight", 26, 576, 20, C.blue),
+    text(58, 586, "가는 방향", 16, 700, C.subtext),
+    text(180, 586, "신설동·창신동 방면", 16, 800),
+    icon("pin", 26, 614, 20, C.blue),
+    text(58, 624, "가까운 곳", 16, 700, C.subtext),
+    text(180, 624, "보문역 2번 출구 앞", 16, 800),
+    rect(24, 654, 342, 58, C.blueSoft, 8),
+    icon("bus", 42, 672, 22, C.blue),
+    text(78, 683, "출발지에서 바로 가는 버스 4개", 16, 700, C.subtext),
+    primaryButton(730, "이 정류장이 맞아요"),
+    text(195, 816, "다시 찾기", 18, 800, C.blueText, { anchor: "middle" }),
+  ].join("\n");
+}
+
+function roadviewLoading() {
+  return [
+    rect(24, 234, 342, 250, C.page, 8, C.border),
+    circle(195, 342, 22, "none", C.border, 4),
+    `<path d="M195 320 A22 22 0 1 1 175 351" fill="none" stroke="${C.blue}" stroke-width="4" stroke-linecap="round"/>`,
+    text(195, 400, "정류장 모습을 불러오고 있어요.", 18, 700, C.subtext, { anchor: "middle" }),
+  ].join("\n");
+}
+
 function placeRow(y, title, detail) {
   return [
     rect(24, y, 342, 88, C.page, 8),
@@ -190,6 +219,33 @@ function fastRouteCard(y, options) {
 
 const screens = [
   {
+    file: "00-app-loading.svg",
+    title: "00-A QR 정류장 불러오는 중",
+    svg: screen("QR 출발 정류장 정보를 불러오는 화면", [
+      circle(195, 220, 64, C.blueSoft),
+      icon("bus", 165, 190, 60, C.blue, 2.2),
+      multiline(195, 342, ["정류장 정보를", "불러오고 있어요"], 32, 800, C.text, 1.25, { anchor: "middle" }),
+      text(195, 442, "잠시만 기다려주세요.", 18, 600, C.subtext, { anchor: "middle" }),
+      rect(24, 684, 342, 104, C.blueSoft, 8),
+      icon("pin", 46, 714, 24, C.blue),
+      multiline(84, 708, ["QR에 등록된 출발 정류장과", "운행 방향을 확인하고 있어요."], 17, 700, C.subtext, 1.45),
+    ].join("\n")),
+  },
+  {
+    file: "00-app-error.svg",
+    title: "00-B 정보 불러오기 실패",
+    svg: screen("정류장 또는 여정 정보를 불러오지 못한 화면", [
+      circle(195, 208, 62, C.redSoft),
+      icon("alert", 167, 180, 56, C.red, 2.2),
+      multiline(195, 330, ["정보를 불러오지", "못했어요"], 32, 800, C.text, 1.25, { anchor: "middle" }),
+      text(195, 430, "잠시 후 다시 시도해주세요.", 18, 600, C.subtext, { anchor: "middle" }),
+      rect(24, 506, 342, 112, C.page, 8),
+      icon("info", 44, 538, 24, C.blue),
+      multiline(82, 530, ["인터넷 연결을 확인한 뒤", "아래 버튼을 눌러주세요."], 17, 700, C.subtext, 1.45),
+      primaryButton(724, "다시 시도하기"),
+    ].join("\n")),
+  },
+  {
     file: "01-destination-stop.svg",
     title: "01 도착 정류장 검색",
     svg: screen("도착 정류장 검색 화면", [
@@ -206,6 +262,52 @@ const screens = [
     ].join("\n")),
   },
   {
+    file: "01-A-destination-result.svg",
+    title: "01-A 도착 정류장 검색 결과",
+    svg: screen("도착 정류장 검색 결과 화면", [
+      currentStop(),
+      multiline(24, 138, ["도착 정류장을", "확인해주세요"], 34, 800, C.text, 1.22),
+      rect(24, 250, 342, 72, C.surface, 8, C.blue, 2),
+      icon("search", 44, 274, 24, C.blue),
+      text(82, 286, "보문역", 18, 700, C.text),
+      text(24, 370, "검색 결과 1개", 18, 700, C.subtext),
+      placeRow(396, "보문역 2번 출구", "정류장 08179 · 신설동 방면"),
+      rect(24, 506, 342, 88, C.blueSoft, 8),
+      icon("info", 42, 536, 22, C.blue),
+      multiline(78, 530, ["같은 이름의 정류장은 번호와", "가는 방향까지 확인해주세요."], 16, 700, C.subtext, 1.4),
+      primaryButton(752, "선택한 정류장 확인하기"),
+    ].join("\n")),
+  },
+  {
+    file: "01-B-destination-empty.svg",
+    title: "01-B 검색 결과 없음",
+    svg: screen("도착 정류장 검색 결과가 없는 화면", [
+      currentStop(),
+      multiline(24, 138, ["도착 정류장을", "찾아볼게요"], 34, 800, C.text, 1.22),
+      rect(24, 250, 342, 72, C.surface, 8, C.red, 2),
+      icon("search", 44, 274, 24, C.subtext),
+      text(82, 286, "보문역 9번 출구", 18, 700, C.text),
+      text(24, 370, "검색 결과", 18, 700, C.subtext),
+      rect(24, 398, 342, 196, C.page, 8),
+      circle(195, 454, 30, C.surface),
+      icon("search", 180, 439, 30, C.muted),
+      text(195, 508, "일치하는 정류장이 없어요.", 19, 800, C.text, { anchor: "middle" }),
+      text(195, 548, "다른 이름이나 번호로 검색해주세요.", 16, 600, C.subtext, { anchor: "middle" }),
+      primaryButton(752, "검색어 다시 입력하기"),
+    ].join("\n")),
+  },
+  {
+    file: "02-A-stop-loading.svg",
+    title: "02-A 로드뷰 불러오는 중",
+    svg: screen("도착 정류장 로드뷰 로딩 화면", [
+      header("도착 정류장 확인"),
+      multiline(24, 112, ["이 정류장이", "맞나요?"], 34, 800, C.text, 1.25),
+      text(24, 208, "정류장 모습과 방향을 확인해주세요.", 17, 500, C.subtext),
+      roadviewLoading(),
+      stopConfirmationDetails(),
+    ].join("\n")),
+  },
+  {
     file: "02-stop-confirm.svg",
     title: "02 정류장 로드뷰 확인",
     svg: screen("도착 정류장 로드뷰 확인 화면", [
@@ -215,21 +317,23 @@ const screens = [
       bitmap(24, 234, 342, 250, ROADVIEW_DATA, "roadview-confirm"),
       rect(38, 438, 138, 34, "#303030", 5),
       text(107, 455, "카카오맵 로드뷰", 16, 800, C.surface, { anchor: "middle" }),
-      text(24, 514, "보문역 2번 출구", 24, 800),
-      icon("info", 26, 538, 20, C.blue),
-      text(58, 548, "정류장 번호", 16, 700, C.subtext),
-      text(180, 548, "08179", 16, 800),
-      icon("arrowRight", 26, 576, 20, C.blue),
-      text(58, 586, "가는 방향", 16, 700, C.subtext),
-      text(180, 586, "신설동·창신동 방면", 16, 800),
-      icon("pin", 26, 614, 20, C.blue),
-      text(58, 624, "가까운 곳", 16, 700, C.subtext),
-      text(180, 624, "보문역 2번 출구 앞", 16, 800),
-      rect(24, 654, 342, 58, C.blueSoft, 8),
-      icon("bus", 42, 672, 22, C.blue),
-      text(78, 683, "출발지에서 바로 가는 버스 4개", 16, 700, C.subtext),
-      primaryButton(730, "이 정류장이 맞아요"),
-      text(195, 816, "다시 찾기", 18, 800, C.blueText, { anchor: "middle" }),
+      stopConfirmationDetails(),
+    ].join("\n")),
+  },
+  {
+    file: "02-B-stop-fallback.svg",
+    title: "02-B 로드뷰를 불러오지 못한 경우",
+    svg: screen("카카오맵 로드뷰 대신 정류장 예시 사진을 보여주는 화면", [
+      header("도착 정류장 확인"),
+      multiline(24, 112, ["이 정류장이", "맞나요?"], 34, 800, C.text, 1.25),
+      text(24, 208, "정류장 모습과 방향을 확인해주세요.", 17, 500, C.subtext),
+      bitmap(24, 234, 342, 250, ROADVIEW_DATA, "roadview-fallback"),
+      rect(38, 248, 314, 62, C.amberSoft, 6),
+      icon("alert", 50, 257, 20, C.amber, 2),
+      multiline(80, 262, ["로드뷰를 불러오지 못해", "예시 사진을 보여드려요."], 14, 800, C.subtext, 1.35),
+      rect(38, 438, 138, 34, "#303030", 5),
+      text(107, 455, "정류장 모습 예시", 16, 800, C.surface, { anchor: "middle" }),
+      stopConfirmationDetails(),
     ].join("\n")),
   },
   {
@@ -393,6 +497,22 @@ const screens = [
     ].join("\n")),
   },
   {
+    file: "04-C-no-direct-route.svg",
+    title: "04-C 직통 버스 없음",
+    svg: screen("두 정류장을 한 번에 잇는 버스가 없는 화면", [
+      header("서울시청"),
+      circle(195, 206, 62, C.blueSoft),
+      icon("bus", 165, 176, 60, C.blue, 2.2),
+      multiline(195, 324, ["한 번에 가는 버스가", "없어요"], 31, 800, C.text, 1.3, { anchor: "middle" }),
+      multiline(195, 424, ["현재 출발 정류장에서", "환승 없이 갈 수 있는 버스를 찾지 못했어요."], 17, 600, C.subtext, 1.5, { anchor: "middle" }),
+      rect(24, 522, 342, 112, C.page, 8),
+      icon("info", 44, 554, 24, C.blue),
+      multiline(82, 546, ["다른 도착 정류장을 검색하면", "직통 버스를 다시 확인할 수 있어요."], 17, 700, C.subtext, 1.45),
+      primaryButton(710, "다른 정류장 찾기"),
+      text(195, 808, "환승 경로는 현재 제공하지 않아요.", 16, 600, C.subtext, { anchor: "middle" }),
+    ].join("\n")),
+  },
+  {
     file: "05-detail-unavailable.svg",
     title: "05-B 데이터 부족 상세",
     svg: screen("혼잡도 데이터가 부족한 버스 상세 화면", [
@@ -420,10 +540,11 @@ const screens = [
 function flowCard(x, y, number, titleValue, detail, color = C.blue) {
   const detailLines = Array.isArray(detail) ? detail : [detail];
   const detailY = detailLines.length > 1 ? y + 100 : y + 102;
+  const badgeWidth = number.length > 2 ? 48 : 32;
   return [
     rect(x, y, 220, 134, C.surface, 8, C.border),
-    circle(x + 28, y + 28, 16, color),
-    text(x + 28, y + 28, number, 16, 800, C.surface, { anchor: "middle" }),
+    rect(x + 12, y + 12, badgeWidth, 32, color, 16),
+    text(x + 12 + badgeWidth / 2, y + 28, number, number.length > 2 ? 14 : 16, 800, C.surface, { anchor: "middle" }),
     text(x + 24, y + 70, titleValue, 19, 800),
     multiline(x + 24, detailY, detailLines, 16, 500, C.subtext, 1.3),
   ].join("\n");
@@ -436,30 +557,60 @@ function flowArrow(x1, y, x2) {
   ].join("\n");
 }
 
+function flowVerticalArrow(x, y1, y2, dashed = false) {
+  return [
+    line(x, y1, x, y2, C.muted, 2, dashed ? "6 6" : ""),
+    `<path d="M${x - 6} ${y2 - 8}L${x} ${y2}L${x + 6} ${y2 - 8}" fill="none" stroke="${C.muted}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>`,
+  ].join("\n");
+}
+
 const flowSvg = `<?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="760" viewBox="0 0 1440 760" role="img" aria-label="사용자 흐름도">
+<svg xmlns="http://www.w3.org/2000/svg" width="2100" height="1180" viewBox="0 0 2100 1180" role="img" aria-label="사용자 흐름도">
   <title>교통약자 버스 서비스 사용자 흐름</title>
-  ${rect(0, 0, 1440, 760, C.page, 0)}
+  ${rect(0, 0, 2100, 1180, C.page, 0)}
   ${text(64, 70, "교통약자 버스 서비스 · 사용자 흐름", 32, 800)}
-  ${text(64, 110, "도착 정류장을 입력하고 로드뷰로 확인한 뒤, 두 정류장 사이를 운행하는 버스를 비교합니다.", 16, 500, C.subtext)}
+  ${text(64, 110, "QR 출발 정류장 확인부터 검색·로드뷰·버스 비교·상세와 예외 상태까지 연결한 Prototype 흐름입니다.", 16, 500, C.subtext)}
   ${rect(64, 148, 290, 38, C.blueSoft, 8)}
   ${icon("pin", 80, 157, 20, C.blue)}
   ${text(110, 167, "QR · 08177 성북구청", 15, 700, C.blue)}
-  ${flowCard(64, 236, "1", "도착 정류장 검색", ["이름·방향으로", "정류장 구분"])}
+  ${text(64, 214, "기본 흐름", 18, 800, C.subtext)}
   ${flowArrow(284, 303, 326)}
-  ${flowCard(326, 236, "2", "로드뷰 확인", ["카카오맵 로드뷰", "방향·랜드마크 확인"])}
   ${flowArrow(546, 303, 588)}
-  ${flowCard(588, 236, "3", "여정 분석", ["운행 버스·탑승 인원", "예측"])}
   ${flowArrow(808, 303, 850)}
-  ${flowCard(850, 236, "4", "버스 비교", ["앉기 편한 시간", "빠른 도착 비교"])}
   ${flowArrow(1070, 303, 1112)}
-  ${flowCard(1112, 236, "5", "구간별 상세", ["큰 글씨로 구간 정보", "확인"], C.green)}
-  ${line(960, 370, 960, 474, C.muted, 2, "6 6")}
-  <path d="M954 466L960 474L966 466" fill="none" stroke="${C.muted}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-  ${flowCard(850, 474, "4-B", "데이터 부족", "빠른 도착만 제공", C.muted)}
-  ${flowArrow(1070, 541, 1112)}
-  ${flowCard(1112, 474, "5-B", "도착 정보 상세", "혼잡도 없이 확인", C.muted)}
-  ${text(64, 696, "Prototype · 도착 정류장을 누르면 로드뷰 확인 화면으로 이동", 16, 600, C.muted)}
+  ${flowArrow(1332, 303, 1374)}
+  ${flowArrow(1594, 303, 1636)}
+  ${flowVerticalArrow(1746, 370, 430)}
+  ${line(1615, 430, 1877, 430, C.muted, 2)}
+  ${flowVerticalArrow(1615, 430, 482)}
+  ${flowVerticalArrow(1877, 430, 482)}
+  ${flowVerticalArrow(174, 370, 760, true)}
+  ${flowVerticalArrow(436, 370, 760, true)}
+  ${flowVerticalArrow(960, 370, 760, true)}
+  ${line(1484, 370, 1484, 708, C.muted, 2, "6 6")}
+  ${line(1484, 708, 1746, 708, C.muted, 2, "6 6")}
+  ${flowVerticalArrow(1484, 708, 760, true)}
+  ${flowVerticalArrow(1746, 708, 760, true)}
+  ${flowVerticalArrow(1484, 894, 980)}
+  ${flowCard(64, 236, "00-A", "QR 정보 로딩", ["출발 정류장·방향", "확인"])}
+  ${flowCard(326, 236, "01", "도착 정류장 입력", ["정류장 이름·번호", "검색"])}
+  ${flowCard(588, 236, "01-A", "검색 결과 확인", ["ARS 번호·방향으로", "정류장 구분"])}
+  ${flowCard(850, 236, "02-A", "로드뷰 로딩", ["사진·출처 없이", "중립 상태 표시"])}
+  ${flowCard(1112, 236, "02", "로드뷰 확인", ["정류장 모습·방향", "확인"])}
+  ${flowCard(1374, 236, "03", "여정 분석", ["운행 버스·탑승 인원", "예측"])}
+  ${flowCard(1636, 236, "04", "버스 비교", ["앉기 편한 시간", "빠른 도착 비교"])}
+  ${text(64, 450, "버스 상세", 18, 800, C.subtext)}
+  ${flowCard(1505, 482, "05", "입석 부담 적음", ["구간별 여유 예상", "큰 글씨로 확인"], C.green)}
+  ${flowCard(1767, 482, "05-A", "빠른 버스 상세", ["혼잡 구간과 시간", "확인"], C.red)}
+  ${text(64, 728, "상태·예외 분기", 18, 800, C.subtext)}
+  ${flowCard(64, 760, "00-B", "불러오기 실패", ["QR·분석 API 오류", "다시 시도"], C.red)}
+  ${flowCard(326, 760, "01-B", "검색 결과 없음", ["검색어 수정 후", "다시 검색"], C.muted)}
+  ${flowCard(850, 760, "02-B", "로드뷰 대체 화면", ["예시 사진과 방향", "확인"], C.amber)}
+  ${flowCard(1374, 760, "04-B", "데이터 부족", ["혼잡도 없이", "빠른 도착 제공"], C.amber)}
+  ${flowCard(1636, 760, "04-C", "직통 버스 없음", ["다른 도착 정류장", "검색"], C.muted)}
+  ${text(64, 950, "데이터 부족 상세", 18, 800, C.subtext)}
+  ${flowCard(1374, 980, "05-B", "도착 정보 상세", ["도착·이동시간만", "확인"], C.amber)}
+  ${text(64, 1140, "Prototype · 모든 화면은 390 × 844 · 로딩·분석은 After Delay, 버튼·카드는 Instant", 16, 600, C.muted)}
 </svg>\n`;
 
 await fs.mkdir(OUT_DIR, { recursive: true });
@@ -476,10 +627,12 @@ const legacyFiles = [
   "03-compare-fast.svg",
   "01-destination-stop", "02-analyzing", "03-compare", "03-compare-unavailable",
   "04-detail", "04-detail-fast", "04-detail-unavailable",
-  "02-stop-confirm.svg", "02-analyzing.svg", "03-compare.svg", "03-compare-unavailable.svg",
+  "02-A-stop-loading.svg", "02-stop-confirm.svg", "02-analyzing.svg", "03-compare.svg", "03-compare-unavailable.svg",
   "04-detail.svg", "04-detail-fast.svg", "04-detail-unavailable.svg",
 ];
-await Promise.all(legacyFiles.map((file) => fs.rm(path.join(OUT_DIR, file), { force: true })));
+const generatedBasenames = ["00-user-flow", ...screens.map((item) => item.file.replace(/\.svg$/, ""))];
+const filesToRemove = [...new Set([...legacyFiles, ...generatedBasenames])];
+await Promise.all(filesToRemove.map((file) => fs.rm(path.join(OUT_DIR, file), { force: true })));
 
 await fs.writeFile(path.join(OUT_DIR, "00-user-flow.svg"), flowSvg, "utf8");
 for (const item of screens) {
@@ -487,11 +640,18 @@ for (const item of screens) {
 }
 
 const previewOrder = [
+  "00-app-loading.svg",
+  "00-app-error.svg",
   "01-destination-stop.svg",
+  "01-A-destination-result.svg",
+  "01-B-destination-empty.svg",
+  "02-A-stop-loading.svg",
   "02-stop-confirm.svg",
+  "02-B-stop-fallback.svg",
   "03-analyzing.svg",
   "04-compare.svg",
   "04-compare-unavailable.svg",
+  "04-C-no-direct-route.svg",
   "05-detail.svg",
   "05-detail-fast.svg",
   "05-detail-unavailable.svg",
@@ -516,7 +676,7 @@ const preview = `<!doctype html>
     body { margin: 0; padding: 32px; background: #f0f0ef; color: #191919; font-family: "Noto Sans CJK KR", "Malgun Gothic", sans-serif; }
     h1 { margin: 0 0 8px; font-size: 28px; letter-spacing: 0; }
     p { margin: 0 0 28px; color: #555555; }
-    .flow { display: block; width: min(100%, 1440px); margin-bottom: 36px; border: 1px solid #dddddd; }
+    .flow { display: block; width: min(100%, 2100px); margin-bottom: 36px; border: 1px solid #dddddd; }
     main { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 390px)); gap: 28px; align-items: start; }
     figure { margin: 0; }
     figure img { display: block; width: 100%; border: 1px solid #dddddd; box-shadow: 0 10px 30px rgba(25,25,25,.08); }

@@ -2,7 +2,7 @@
 
 React 프로토타입의 Mock JSON을 Spring API로 교체하기 위한 FE·백엔드 협의 문서입니다.
 
-- 문서 버전: `0.5`
+- 문서 버전: `0.6`
 - 작성 기준일: `2026-07-17`
 - 기본 경로: `/api/v1`
 - 데이터 형식: `application/json; charset=UTF-8`
@@ -176,7 +176,9 @@ Accept: application/json
 | `originStopId` | string | O | QR로 확인한 출발 정류장 ID |
 | `query` | string | O | 정류장명, ARS 번호 또는 노선 번호 |
 
-검색 결과의 정류장 객체는 5장의 `destinationStops[]`와 같은 구조를 사용합니다. 결과에는 `originStopId`에서 환승 없이 갈 수 있는 정류장만 포함합니다. 같은 이름의 정류장을 구분할 수 있도록 `arsId`, `directionDescription`, `location`을 반드시 제공합니다.
+검색 결과의 정류장 객체는 5장의 `destinationStops[]`와 같은 구조를 사용합니다. 검색은 이름이나 ARS 번호가 일치하는 정류장을 반환하고, `servedRoutes`에는 `originStopId`와 해당 정류장을 함께 지나는 직통 노선을 넣습니다. 직통 노선이 없으면 정류장을 검색 결과에서 숨기지 않고 `servedRoutes: []`로 반환합니다. 그래야 존재하지 않는 정류장과 직통 버스가 없는 정류장을 화면에서 구분할 수 있습니다.
+
+같은 이름의 정류장을 구분할 수 있도록 `arsId`, `directionDescription`, `location`을 반드시 제공합니다. 프론트는 `servedRoutes`가 비어 있어도 정류장 위치를 확인할 수 있게 검색 결과를 표시하고, 사용자가 선택하면 여정 분석 결과의 `NO_DIRECT_ROUTE` 화면으로 안내합니다.
 
 검색 결과가 없으면 `200 OK`와 빈 배열을 반환합니다.
 
@@ -185,6 +187,8 @@ Accept: application/json
   "destinationStops": []
 }
 ```
+
+검색 결과가 있다는 사실은 직통 버스가 있다는 뜻이 아닙니다. `destinationStops: []`는 정류장 검색 실패, `NO_DIRECT_ROUTE`는 정류장은 확인됐지만 두 정류장을 함께 지나는 노선이 없는 경우로 사용합니다.
 
 Spring 서버가 카카오 로드뷰를 대신 요청할 필요는 없습니다. 프론트가 검색 결과의 좌표로 로드뷰를 조회합니다.
 
