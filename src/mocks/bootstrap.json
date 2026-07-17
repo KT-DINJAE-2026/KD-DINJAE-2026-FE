@@ -1,43 +1,83 @@
 {
-  "generatedAt": "2026-07-13T13:58:00+09:00",
+  "generatedAt": "2026-07-17T09:00:00+09:00",
+  "dataSource": {
+    "provider": "서울특별시",
+    "snapshotDate": "2026-07-01",
+    "datasets": [
+      "서울시 버스정류소 위치정보",
+      "서울시 버스 노선별 정류소 정보"
+    ],
+    "routeSelectionBasis": "평일 오후 2시 Mock 운행 시나리오",
+    "officialFields": [
+      "stopId",
+      "arsId",
+      "stopName",
+      "location",
+      "servedRoutes"
+    ],
+    "mockScenarioFields": [
+      "generatedAt",
+      "arrivalMinutes",
+      "travelMinutes",
+      "vehicleType",
+      "congestionLevel"
+    ]
+  },
   "currentStop": {
-    "stopId": "stop-seongbuk-office",
-    "stopName": "성북구청 정류장",
-    "directionDescription": "보문역·종로 방면"
+    "stopId": "107000087",
+    "arsId": "08177",
+    "stopName": "성북구청.성북경찰서",
+    "displayName": "성북구청·성북경찰서",
+    "directionDescription": "보문역 방면",
+    "location": {
+      "latitude": 37.5881513802,
+      "longitude": 127.0174306588
+    }
   },
   "destinationStops": [
     {
-      "stopId": "stop-bomun-exit2",
-      "stopName": "보문역 2번 출구 정류장",
-      "directionDescription": "신설동·동대문 방면",
+      "stopId": "107000089",
+      "arsId": "08179",
+      "stopName": "보문역2번출구",
+      "displayName": "보문역 2번 출구",
+      "directionDescription": "신설동·창신동 방면",
       "landmark": "보문역 2번 출구 앞",
-      "searchKeywords": ["보문역", "보문", "2번 출구"],
-      "servedRouteIds": ["1112", "95", "142", "103"],
+      "searchKeywords": ["보문역", "보문", "2번 출구", "08179"],
+      "servedRoutes": [
+        { "routeId": "100100129", "routeNumber": "1014" },
+        { "routeId": "100100031", "routeNumber": "152" },
+        { "routeId": "100100008", "routeNumber": "103" },
+        { "routeId": "100100021", "routeNumber": "142" }
+      ],
       "location": {
-        "latitude": 37.58575,
-        "longitude": 127.019
+        "latitude": 37.5858514183,
+        "longitude": 127.0189209428
       },
       "roadviewFallback": {
         "imageUrl": "/images/stop-preview/bomun-stop.webp",
-        "altText": "지하철 출입구 옆 인도에 있는 보문역 2번 출구 버스 정류장 모습 예시",
+        "altText": "보문역 2번 출구 인근 버스 정류장 모습 예시",
         "label": "정류장 모습 예시"
       }
     },
     {
-      "stopId": "stop-cityhall-front",
-      "stopName": "서울시청 앞 정류장",
-      "directionDescription": "시청·서소문 방면",
-      "landmark": "서울광장 맞은편",
-      "searchKeywords": ["시청", "서울시청", "서울광장"],
-      "servedRouteIds": ["101", "102", "103", "104"],
+      "stopId": "100000147",
+      "arsId": "01243",
+      "stopName": "신설동역오거리",
+      "displayName": "신설동역 오거리",
+      "directionDescription": "동묘앞·동대문 방면",
+      "landmark": "신설동역 오거리",
+      "searchKeywords": ["신설동", "신설동역", "오거리", "01243"],
+      "servedRoutes": [
+        { "routeId": "100100129", "routeNumber": "1014" },
+        { "routeId": "100100031", "routeNumber": "152" },
+        { "routeId": "100100008", "routeNumber": "103" }
+      ],
       "location": {
-        "latitude": 37.5660511,
-        "longitude": 126.9805006
+        "latitude": 37.5756947252,
+        "longitude": 127.0228414296
       },
       "roadviewFallback": {
-        "imageUrl": "/images/stop-preview/cityhall-stop.webp",
-        "altText": "넓은 광장 맞은편 인도에 있는 서울시청 앞 버스 정류장 모습 예시",
-        "label": "정류장 모습 예시"
+        "label": "정류장 모습 준비 중"
       }
     }
   ]

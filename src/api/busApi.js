@@ -1,14 +1,14 @@
 import bootstrapMock from "../mocks/bootstrap.json";
 import bomunPredictionMock from "../mocks/predictions/bomun.json";
-import cityhallPredictionMock from "../mocks/predictions/cityhall.json";
+import sinseoldongPredictionMock from "../mocks/predictions/sinseoldong.json";
 
 const API_MODE = import.meta.env.VITE_API_MODE ?? "mock";
 const API_BASE_URL = (import.meta.env.VITE_API_BASE_URL ?? "http://localhost:8080").replace(/\/$/, "");
 const MOCK_DELAY_MS = 350;
 
 const predictionMocks = {
-  "stop-bomun-exit2": bomunPredictionMock,
-  "stop-cityhall-front": cityhallPredictionMock,
+  "107000089": bomunPredictionMock,
+  "100000147": sinseoldongPredictionMock,
 };
 
 const wait = (milliseconds) => new Promise((resolve) => window.setTimeout(resolve, milliseconds));
@@ -40,6 +40,9 @@ async function request(path, options = {}) {
 async function getBootstrap(stopId) {
   if (API_MODE === "mock") {
     await wait(MOCK_DELAY_MS);
+    if (String(stopId) !== bootstrapMock.currentStop.stopId) {
+      throw new Error(`등록되지 않은 Mock 출발 정류장: ${stopId}`);
+    }
     return clone(bootstrapMock);
   }
 

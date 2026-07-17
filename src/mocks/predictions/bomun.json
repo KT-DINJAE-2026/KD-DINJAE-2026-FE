@@ -1,178 +1,120 @@
 {
   "status": "SUCCESS",
-  "generatedAt": "2026-07-13T13:58:00+09:00",
-  "originStopId": "stop-seongbuk-office",
-  "destinationStopId": "stop-bomun-exit2",
+  "generatedAt": "2026-07-17T09:00:00+09:00",
+  "originStopId": "107000087",
+  "destinationStopId": "107000089",
+  "dataSource": {
+    "provider": "서울특별시",
+    "snapshotDate": "2026-07-01",
+    "officialRouteAndStopOrder": true,
+    "predictionValuesAreMock": true
+  },
   "predictionBasis": {
-    "description": "평일 오후 2시 승하차 패턴",
+    "description": "평일 오후 2시 Mock 승하차 시나리오",
     "confidence": "MEDIUM"
   },
   "routes": [
     {
-      "tripId": "trip-1112-1403",
-      "routeId": "1112",
-      "routeNumber": "1112번",
+      "tripId": "mock-trip-100100129-1405",
+      "routeId": "100100129",
+      "routeNumber": "1014번",
       "direction": "보문역·신설동 방면",
       "vehicleType": "저상버스",
       "isLowFloor": true,
       "arrivalMinutes": 5,
-      "travelMinutes": 15,
-      "standingBurdenMinutes": 3,
+      "travelMinutes": 3,
+      "standingBurdenMinutes": 0,
       "standingBurdenLevel": "LOW",
-      "summaryMessage": "성북소방서부터 여유 예상",
+      "summaryMessage": "짧은 구간 동안 여유가 예상돼요",
       "segments": [
         {
-          "fromStopId": "stop-seongbuk-office",
-          "fromStopName": "성북구청",
-          "toStopId": "stop-seongbuk-fire-station",
-          "toStopName": "성북소방서",
+          "fromStopId": "107000087",
+          "fromStopName": "성북구청.성북경찰서",
+          "fromStopDisplayName": "성북구청·성북경찰서",
+          "toStopId": "107000089",
+          "toStopName": "보문역2번출구",
+          "toStopDisplayName": "보문역 2번 출구",
           "durationMinutes": 3,
-          "congestionLevel": "NORMAL",
-          "description": "서서 갈 가능성이 있어요"
-        },
-        {
-          "fromStopId": "stop-seongbuk-fire-station",
-          "fromStopName": "성북소방서",
-          "toStopId": "stop-seongbuk-police-station",
-          "toStopName": "성북경찰서",
-          "durationMinutes": 4,
           "congestionLevel": "RELAXED",
-          "description": "앉을 가능성이 높아져요"
-        },
-        {
-          "fromStopId": "stop-seongbuk-police-station",
-          "fromStopName": "성북경찰서",
-          "toStopId": "stop-bomun-exit2",
-          "toStopName": "보문역 2번 출구",
-          "durationMinutes": 8,
-          "congestionLevel": "RELAXED",
-          "description": "여유가 이어질 가능성이 높아요"
+          "description": "앉아서 갈 가능성이 높아요"
         }
       ]
     },
     {
-      "tripId": "trip-95-1401",
-      "routeId": "95",
-      "routeNumber": "95번",
+      "tripId": "mock-trip-100100031-1402",
+      "routeId": "100100031",
+      "routeNumber": "152번",
       "direction": "보문역·동대문 방면",
-      "vehicleType": "일반버스",
-      "isLowFloor": false,
-      "arrivalMinutes": 3,
-      "travelMinutes": 12,
-      "standingBurdenMinutes": 10,
-      "standingBurdenLevel": "HIGH",
-      "summaryMessage": "보문역까지 혼잡 구간이 길어요",
-      "segments": [
-        {
-          "fromStopId": "stop-seongbuk-office",
-          "fromStopName": "성북구청",
-          "toStopId": "stop-seongbuk-fire-station",
-          "toStopName": "성북소방서",
-          "durationMinutes": 4,
-          "congestionLevel": "CROWDED",
-          "description": "사람들과 몸이 닿을 수 있어요"
-        },
-        {
-          "fromStopId": "stop-seongbuk-fire-station",
-          "fromStopName": "성북소방서",
-          "toStopId": "stop-seongbuk-police-station",
-          "toStopName": "성북경찰서",
-          "durationMinutes": 6,
-          "congestionLevel": "NORMAL",
-          "description": "서서 갈 가능성이 있어요"
-        },
-        {
-          "fromStopId": "stop-seongbuk-police-station",
-          "fromStopName": "성북경찰서",
-          "toStopId": "stop-bomun-exit2",
-          "toStopName": "보문역 2번 출구",
-          "durationMinutes": 2,
-          "congestionLevel": "RELAXED",
-          "description": "앉을 가능성이 높아져요"
-        }
-      ]
-    },
-    {
-      "tripId": "trip-142-1408",
-      "routeId": "142",
-      "routeNumber": "142번",
-      "direction": "보문역·신설동 방면",
       "vehicleType": "저상버스",
       "isLowFloor": true,
-      "arrivalMinutes": 9,
-      "travelMinutes": 13,
-      "standingBurdenMinutes": 6,
-      "standingBurdenLevel": "MEDIUM",
-      "summaryMessage": "성북경찰서부터 여유 예상",
+      "arrivalMinutes": 2,
+      "travelMinutes": 3,
+      "standingBurdenMinutes": 3,
+      "standingBurdenLevel": "HIGH",
+      "summaryMessage": "짧은 구간도 서서 갈 수 있어요",
       "segments": [
         {
-          "fromStopId": "stop-seongbuk-office",
-          "fromStopName": "성북구청",
-          "toStopId": "stop-seongbuk-fire-station",
-          "toStopName": "성북소방서",
+          "fromStopId": "107000087",
+          "fromStopName": "성북구청.성북경찰서",
+          "fromStopDisplayName": "성북구청·성북경찰서",
+          "toStopId": "107000089",
+          "toStopName": "보문역2번출구",
+          "toStopDisplayName": "보문역 2번 출구",
           "durationMinutes": 3,
-          "congestionLevel": "NORMAL",
-          "description": "서서 갈 가능성이 있어요"
-        },
-        {
-          "fromStopId": "stop-seongbuk-fire-station",
-          "fromStopName": "성북소방서",
-          "toStopId": "stop-seongbuk-police-station",
-          "toStopName": "성북경찰서",
-          "durationMinutes": 3,
-          "congestionLevel": "NORMAL",
-          "description": "서서 갈 가능성이 있어요"
-        },
-        {
-          "fromStopId": "stop-seongbuk-police-station",
-          "fromStopName": "성북경찰서",
-          "toStopId": "stop-bomun-exit2",
-          "toStopName": "보문역 2번 출구",
-          "durationMinutes": 7,
-          "congestionLevel": "RELAXED",
-          "description": "앉을 가능성이 높아져요"
+          "congestionLevel": "CROWDED",
+          "description": "사람들과 몸이 닿을 수 있어요"
         }
       ]
     },
     {
-      "tripId": "trip-103-1406",
-      "routeId": "103",
+      "tripId": "mock-trip-100100008-1404",
+      "routeId": "100100008",
       "routeNumber": "103번",
       "direction": "보문역·동대문 방면",
       "vehicleType": "일반버스",
       "isLowFloor": false,
-      "arrivalMinutes": 7,
-      "travelMinutes": 14,
-      "standingBurdenMinutes": 8,
+      "arrivalMinutes": 4,
+      "travelMinutes": 3,
+      "standingBurdenMinutes": 3,
       "standingBurdenLevel": "MEDIUM",
-      "summaryMessage": "초반 입석 구간이 이어져요",
+      "summaryMessage": "서서 갈 가능성이 있어요",
       "segments": [
         {
-          "fromStopId": "stop-seongbuk-office",
-          "fromStopName": "성북구청",
-          "toStopId": "stop-seongbuk-fire-station",
-          "toStopName": "성북소방서",
-          "durationMinutes": 4,
+          "fromStopId": "107000087",
+          "fromStopName": "성북구청.성북경찰서",
+          "fromStopDisplayName": "성북구청·성북경찰서",
+          "toStopId": "107000089",
+          "toStopName": "보문역2번출구",
+          "toStopDisplayName": "보문역 2번 출구",
+          "durationMinutes": 3,
           "congestionLevel": "NORMAL",
           "description": "서서 갈 가능성이 있어요"
-        },
+        }
+      ]
+    },
+    {
+      "tripId": "mock-trip-100100021-1407",
+      "routeId": "100100021",
+      "routeNumber": "142번",
+      "direction": "보문역·창신동 방면",
+      "vehicleType": "저상버스",
+      "isLowFloor": true,
+      "arrivalMinutes": 7,
+      "travelMinutes": 3,
+      "standingBurdenMinutes": 0,
+      "standingBurdenLevel": "LOW",
+      "summaryMessage": "짧은 구간 동안 여유가 예상돼요",
+      "segments": [
         {
-          "fromStopId": "stop-seongbuk-fire-station",
-          "fromStopName": "성북소방서",
-          "toStopId": "stop-seongbuk-police-station",
-          "toStopName": "성북경찰서",
-          "durationMinutes": 4,
-          "congestionLevel": "NORMAL",
-          "description": "앉기 어려울 수 있어요"
-        },
-        {
-          "fromStopId": "stop-seongbuk-police-station",
-          "fromStopName": "성북경찰서",
-          "toStopId": "stop-bomun-exit2",
-          "toStopName": "보문역 2번 출구",
-          "durationMinutes": 6,
+          "fromStopId": "107000087",
+          "fromStopName": "성북구청.성북경찰서",
+          "fromStopDisplayName": "성북구청·성북경찰서",
+          "toStopId": "107000089",
+          "toStopName": "보문역2번출구",
+          "toStopDisplayName": "보문역 2번 출구",
+          "durationMinutes": 3,
           "congestionLevel": "RELAXED",
-          "description": "앉을 가능성이 높아져요"
+          "description": "앉아서 갈 가능성이 높아요"
         }
       ]
     }

@@ -5,6 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "validate:mocks": "node scripts/validate-mocks.mjs",
+    "prebuild": "npm run validate:mocks",
     "build": "vite build",
     "preview": "vite preview"
   },

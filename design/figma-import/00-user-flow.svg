@@ -6,7 +6,7 @@
   <text x="64" y="110" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="18" font-weight="500" fill="#555555" text-anchor="start" dominant-baseline="middle" letter-spacing="0">도착 정류장을 입력하고 로드뷰로 확인한 뒤, 두 정류장 사이를 운행하는 버스를 비교합니다.</text>
   <rect x="64" y="148" width="290" height="38" rx="8" fill="#FFF0E6" stroke="none" stroke-width="1"/>
   <g transform="translate(80 157) scale(0.8333333333333334)"><path d="M20 10c0 5-8 12-8 12S4 15 4 10a8 8 0 1 1 16 0Z" fill="none" stroke="#B8560A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="10" r="2.5" fill="none" stroke="#B8560A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></g>
-  <text x="110" y="167" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="18" font-weight="700" fill="#B8560A" text-anchor="start" dominant-baseline="middle" letter-spacing="0">QR 확인 · 성북구청 정류장</text>
+  <text x="110" y="167" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="16.88" font-weight="700" fill="#B8560A" text-anchor="start" dominant-baseline="middle" letter-spacing="0">QR · 08177 성북구청</text>
   <rect x="64" y="236" width="220" height="134" rx="8" fill="#FFFFFF" stroke="#E5E5E5" stroke-width="1"/>
 <circle cx="92" cy="264" r="16" fill="#B8560A" stroke="none" stroke-width="1"/>
 <text x="92" y="264" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="18" font-weight="800" fill="#FFFFFF" text-anchor="middle" dominant-baseline="middle" letter-spacing="0">1</text>

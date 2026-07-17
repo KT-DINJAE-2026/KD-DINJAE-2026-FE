@@ -1,0 +1,52 @@
+{
+  "status": "INSUFFICIENT_DATA",
+  "reasonCode": "NOT_ENOUGH_HISTORICAL_SAMPLES",
+  "generatedAt": "2026-07-17T09:00:00+09:00",
+  "originStopId": "107000087",
+  "destinationStopId": "100000147",
+  "dataSource": {
+    "provider": "서울특별시",
+    "snapshotDate": "2026-07-01",
+    "officialRouteAndStopOrder": true,
+    "predictionValuesAreMock": true
+  },
+  "predictionBasis": {
+    "description": "과거 승하차 Mock 표본 부족",
+    "confidence": "UNAVAILABLE"
+  },
+  "routes": [
+    {
+      "tripId": "mock-trip-100100129-1404",
+      "routeId": "100100129",
+      "routeNumber": "1014번",
+      "direction": "신설동·동묘앞 방면",
+      "vehicleType": "저상버스",
+      "isLowFloor": true,
+      "arrivalMinutes": 4,
+      "travelMinutes": 10,
+      "summaryMessage": "지금 기준 가장 빨리 도착해요"
+    },
+    {
+      "tripId": "mock-trip-100100031-1407",
+      "routeId": "100100031",
+      "routeNumber": "152번",
+      "direction": "신설동·동대문 방면",
+      "vehicleType": "저상버스",
+      "isLowFloor": true,
+      "arrivalMinutes": 7,
+      "travelMinutes": 10,
+      "summaryMessage": "약 17분 뒤 목적지에 도착해요"
+    },
+    {
+      "tripId": "mock-trip-100100008-1409",
+      "routeId": "100100008",
+      "routeNumber": "103번",
+      "direction": "신설동·동대문 방면",
+      "vehicleType": "일반버스",
+      "isLowFloor": false,
+      "arrivalMinutes": 9,
+      "travelMinutes": 11,
+      "summaryMessage": "약 20분 뒤 목적지에 도착해요"
+    }
+  ]
+}

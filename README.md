@@ -57,8 +57,11 @@ npm run dev
 기본 개발 주소는 `http://localhost:5173`입니다. 배포용 빌드는 아래 명령으로 확인합니다.
 
 ```bash
+npm run validate:mocks
 npm run build
 ```
+
+`npm run build`를 실행하면 Mock의 정류장 연결, 노선 ID, 구간 시간 합계도 먼저 검사합니다.
 
 ## Mock과 서버 모드
 
@@ -97,7 +100,7 @@ Mock과 서버 응답은 같은 필드 구조를 사용해야 합니다. 서버 
 | --- | --- | --- |
 | `src/mocks/bootstrap.json` | `GET /api/v1/stops/{stopId}/context` | 출발 정류장, 초기 도착 정류장, 정류장 좌표 |
 | `src/mocks/predictions/bomun.json` | `POST /api/v1/journeys/predictions` | 혼잡도 예측 성공 응답 |
-| `src/mocks/predictions/cityhall.json` | `POST /api/v1/journeys/predictions` | 과거 데이터 부족 응답 |
+| `src/mocks/predictions/sinseoldong.json` | `POST /api/v1/journeys/predictions` | 과거 데이터 부족 응답 |
 
 현재 `busApi`에서 실제로 호출하는 함수는 두 개입니다.
 
@@ -110,19 +113,26 @@ busApi.getJourneyPrediction({ originStopId, destinationStopId })
 
 ## 데모 데이터
 
+정류장 ID, ARS 번호, 정류장명, 좌표는 서울시가 공개한 2026년 7월 1일 자료를 사용했습니다. Mock에 넣은 각 노선도 두 정류장을 실제 운행 순서로 경유하는지 같은 자료에서 확인했습니다.
+
+- [서울시 버스정류소 위치정보](https://data.seoul.go.kr/dataList/OA-15067/S/1/datasetView.do)
+- [서울시 버스 노선별 정류소 정보](https://data.seoul.go.kr/dataList/OA-1095/L/1/datasetView.do)
+
+`arrivalMinutes`, `travelMinutes`, 차량 종류, 혼잡도, 입석 부담은 화면 동작을 확인하기 위한 시나리오 값입니다. 실제 운행·예측 데이터처럼 오해하지 않도록 각 Mock의 `dataSource`에도 이 구분을 기록했습니다.
+
 검색창에는 아래 정류장을 사용할 수 있습니다.
 
-| 검색어 | 확인되는 상태 |
-| --- | --- |
-| `보문`, `보문역` | 혼잡도 예측이 있는 버스 4대 |
-| `시청`, `서울시청` | 혼잡도 데이터가 부족한 버스 4대 |
+| 검색어 | 정류장 | 실제 직통 노선 | 확인되는 상태 |
+| --- | --- | --- | --- |
+| `보문`, `08179` | 보문역2번출구 | 1014, 152, 103, 142 | 혼잡도 예측 성공 |
+| `신설동`, `01243` | 신설동역오거리 | 1014, 152, 103 | 혼잡도 데이터 부족 |
 
-정류장을 선택하면 바로 분석하지 않고 카카오맵 로드뷰 확인 화면을 먼저 거칩니다. 카카오 로드뷰가 없거나 SDK를 불러오지 못하면 Mock에 등록한 정류장 모습 예시를 대신 표시합니다.
+정류장을 선택하면 바로 분석하지 않고 카카오맵 로드뷰 확인 화면을 먼저 거칩니다. 카카오 로드뷰가 없거나 SDK를 불러오지 못하면 등록된 대체 이미지나 준비 중 상태를 표시합니다.
 
 개발 중 특정 화면을 바로 확인하려면 쿼리 문자열을 사용할 수 있습니다.
 
 ```text
-/?stopId=stop-seongbuk-office
+/?stopId=107000087
 /?screen=confirm
 /?screen=compare
 /?screen=limited
@@ -133,11 +143,13 @@ busApi.getJourneyPrediction({ originStopId, destinationStopId })
 
 | 필드 | 용도 | 예시 |
 | --- | --- | --- |
-| `stopId` | 정류장 식별 | `stop-bomun-exit2` |
-| `routeId` | 노선 식별 | `1112` |
-| `tripId` | 현재 도착 예정인 특정 운행 버스 식별 | `trip-1112-1403` |
+| `stopId` | 서울시 정류장 ID | `107000089` |
+| `arsId` | 정류장 표지판에서 확인하는 번호 | `08179` |
+| `routeId` | 서울시 노선 ID | `100100129` |
+| `routeNumber` | 사용자에게 보이는 노선 번호 | `1014번` |
+| `tripId` | 현재 도착 예정인 특정 운행 버스 식별 | `mock-trip-100100129-1405` |
 
-같은 노선의 차량이 연달아 올 수 있으므로 비교 카드와 상세 화면은 `routeId`가 아니라 `tripId`로 연결합니다.
+`stopName`은 서울시 원문 이름, `displayName`은 띄어쓰기와 구분점을 다듬은 화면 표시 이름입니다. 같은 노선의 차량이 연달아 올 수 있으므로 비교 카드와 상세 화면은 `routeId`가 아니라 `tripId`로 연결합니다.
 
 ## 프로젝트 구조
 
@@ -153,7 +165,7 @@ src/
 │   ├── bootstrap.json            QR 진입 응답
 │   └── predictions/
 │       ├── bomun.json             예측 성공 응답
-│       └── cityhall.json          데이터 부족 응답
+│       └── sinseoldong.json       데이터 부족 응답
 ├── App.jsx                        화면 흐름과 데이터 계산
 ├── main.jsx                       React 진입점
 └── styles.css                     큰 글씨·반응형 스타일
@@ -185,6 +197,7 @@ node design/figma-import/generate.mjs
 ## 백엔드 연동 전 확인할 것
 
 - Swagger 응답 필드가 Mock JSON과 같은지
+- 서울시 `stopId`, `arsId`, `routeId`를 그대로 제공할 수 있는지
 - 검색 결과에 정류장의 WGS84 위도·경도가 포함되는지
 - 대체 이미지를 서버에서 제공할지 프론트 정적 파일로 유지할지
 - `tripId`가 도착 예정 차량마다 고유한지

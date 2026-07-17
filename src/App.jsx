@@ -7,6 +7,7 @@ import {
   ChevronRight,
   Circle,
   Clock3,
+  Hash,
   Info,
   Landmark,
   LoaderCircle,
@@ -18,7 +19,7 @@ import {
 import { busApi } from "./api/busApi.js";
 import KakaoRoadview from "./components/KakaoRoadview.jsx";
 
-const DEFAULT_STOP_ID = "stop-seongbuk-office";
+const DEFAULT_STOP_ID = "107000087";
 
 const STANDING_BURDEN_META = {
   LOW: { label: "낮음", tone: "comfortable" },
@@ -80,6 +81,7 @@ function withPrediction(destination, prediction) {
 }
 
 const getTotalMinutes = (route) => route.arrivalMinutes + route.travelMinutes;
+const getStopDisplayName = (stop) => stop?.displayName ?? stop?.stopName ?? "";
 
 function sortRoutes(routes, predictionAvailable) {
   const result = [...routes];
@@ -122,12 +124,14 @@ function BackHeader({ title, onBack }) {
 }
 
 function CurrentStopBadge({ currentStop }) {
+  const stopDisplayName = getStopDisplayName(currentStop);
+
   return (
-    <div className="stop-badge" aria-label={`현재 출발지 ${currentStop.stopName}, ${currentStop.directionDescription}`}>
+    <div className="stop-badge" aria-label={`현재 출발지 ${stopDisplayName}, 정류장 번호 ${currentStop.arsId}, ${currentStop.directionDescription}`}>
       <span className="stop-badge__dot" aria-hidden="true" />
       <span>
-        <strong>{currentStop.stopName}</strong>
-        <small>{currentStop.directionDescription}</small>
+        <strong>{stopDisplayName}</strong>
+        <small>{currentStop.directionDescription} · 정류장 {currentStop.arsId}</small>
       </span>
     </div>
   );
@@ -167,10 +171,12 @@ function DestinationScreen({
     return destinationStops.filter((destinationStop) =>
       [
         destinationStop.stopName,
+        destinationStop.displayName,
+        destinationStop.arsId,
         destinationStop.directionDescription,
         destinationStop.landmark,
         ...destinationStop.searchKeywords,
-        ...destinationStop.servedRouteIds,
+        ...(destinationStop.servedRoutes ?? []).flatMap((route) => [route.routeId, route.routeNumber]),
       ]
         .join(" ")
         .toLocaleLowerCase("ko-KR")
@@ -216,7 +222,7 @@ function DestinationScreen({
             setQuery(event.target.value);
             setSearchMessage("");
           }}
-          placeholder="예: 보문역 2번 출구 정류장"
+          placeholder="예: 보문역 2번 출구"
           autoComplete="off"
         />
       </form>
@@ -234,8 +240,8 @@ function DestinationScreen({
             >
               <span className="place-row__icon"><MapPin aria-hidden="true" /></span>
               <span className="place-row__copy">
-                <strong>{destinationStop.stopName}</strong>
-                <small>{destinationStop.directionDescription} · {destinationStop.landmark}</small>
+                <strong>{getStopDisplayName(destinationStop)}</strong>
+                <small>정류장 {destinationStop.arsId} · {destinationStop.directionDescription}</small>
               </span>
               <ChevronRight aria-hidden="true" />
             </button>
@@ -257,7 +263,9 @@ function StopConfirmationScreen({
   onBack,
   onConfirm,
 }) {
-  const directRouteCount = destinationStop.servedRouteIds?.length ?? 0;
+  const directRouteCount = destinationStop.servedRoutes?.length ?? 0;
+  const destinationDisplayName = getStopDisplayName(destinationStop);
+  const currentStopDisplayName = getStopDisplayName(currentStop);
 
   return (
     <main className="screen screen--confirm" aria-labelledby="confirm-title">
@@ -270,12 +278,16 @@ function StopConfirmationScreen({
       <KakaoRoadview
         location={destinationStop.location}
         fallback={destinationStop.roadviewFallback}
-        stopName={destinationStop.stopName}
+        stopName={destinationDisplayName}
       />
 
       <section className="stop-confirmation" aria-label="선택한 도착 정류장 정보">
-        <h2>{destinationStop.stopName}</h2>
+        <h2>{destinationDisplayName}</h2>
         <dl>
+          <div>
+            <dt><Hash aria-hidden="true" />정류장 번호</dt>
+            <dd>{destinationStop.arsId}</dd>
+          </div>
           <div>
             <dt><Signpost aria-hidden="true" />가는 방향</dt>
             <dd>{destinationStop.directionDescription}</dd>
@@ -288,7 +300,7 @@ function StopConfirmationScreen({
       </section>
 
       <InfoBand icon={BusFront}>
-        <strong>{currentStop.stopName.replace(" 정류장", "")}에서 바로 가는 버스 {directRouteCount}개</strong>
+        <strong>{currentStopDisplayName}에서 바로 가는 버스 {directRouteCount}개</strong>
       </InfoBand>
 
       <div className="screen-bottom confirm-bottom">
@@ -302,11 +314,11 @@ function StopConfirmationScreen({
 function AnalyzingScreen({ currentStop, destinationStop, onBack }) {
   return (
     <main className="screen screen--centered" aria-labelledby="analyzing-title">
-      <BackHeader title={destinationStop.stopName} onBack={onBack} />
+      <BackHeader title={getStopDisplayName(destinationStop)} onBack={onBack} />
       <div className="analysis-visual"><LoaderCircle aria-hidden="true" /></div>
       <section className="analysis-heading">
         <h1 id="analyzing-title">두 정류장을 잇는 버스를<br />비교하고 있어요</h1>
-        <p>{currentStop.stopName.replace(" 정류장", "")}에서 출발해요.</p>
+        <p>{getStopDisplayName(currentStop)}에서 출발해요.</p>
       </section>
       <ol className="progress-list">
         <li className="is-complete"><span><Check aria-hidden="true" /></span>두 정류장 운행 버스 확인</li>
@@ -366,7 +378,7 @@ function CompareScreen({ destinationStop, onBack, onRoute }) {
 
   return (
     <main className="screen" aria-labelledby="compare-title">
-      <BackHeader title={destinationStop.stopName} onBack={onBack} />
+      <BackHeader title={getStopDisplayName(destinationStop)} onBack={onBack} />
       <section className="screen-heading screen-heading--compare">
         <h1 id="compare-title">어떤 버스가<br />더 나을까요?</h1>
         <p>도착 예정 버스 {routes.length}대를 비교했어요.</p>
@@ -423,7 +435,7 @@ function DetailScreen({ destinationStop, route, onBack }) {
 
   return (
     <main className="screen" aria-labelledby="detail-title">
-      <BackHeader title={destinationStop.stopName} onBack={onBack} />
+      <BackHeader title={getStopDisplayName(destinationStop)} onBack={onBack} />
       <section className="route-title">
         <h1 id="detail-title">{route.routeNumber}</h1>
         <p>{route.direction} · {route.vehicleType}</p>
@@ -452,10 +464,10 @@ function DetailScreen({ destinationStop, route, onBack }) {
             <h2 id="segment-title">구간별 예상</h2>
             <ol className="segment-list">
               {route.segments.map((segment) => (
-                <li key={`${segment.fromStopName}-${segment.toStopName}`} className={`segment segment--${segment.tone}`}>
+                <li key={`${segment.fromStopId}-${segment.toStopId}`} className={`segment segment--${segment.tone}`}>
                   <span className="segment__dot" aria-hidden="true" />
                   <div>
-                    <strong>{segment.fromStopName} → {segment.toStopName}</strong>
+                    <strong>{segment.fromStopDisplayName ?? segment.fromStopName} → {segment.toStopDisplayName ?? segment.toStopName}</strong>
                     <p>{segment.durationMinutes}분 · {segment.description}</p>
                   </div>
                   <span className="segment__badge">{segment.congestionLabel}</span>
@@ -510,11 +522,14 @@ export default function App() {
         }
 
         const destinationStopId = requestedScreen === "limited"
-          ? "stop-cityhall-front"
-          : "stop-bomun-exit2";
+          ? "100000147"
+          : "107000089";
         const baseDestinationStop = bootstrap.destinationStops.find(
           (item) => item.stopId === destinationStopId,
         );
+        if (!baseDestinationStop) {
+          throw new Error(`등록되지 않은 도착 정류장: ${destinationStopId}`);
+        }
         setDestinationStop(baseDestinationStop);
         if (requestedScreen === "confirm") {
           setScreen("confirm");

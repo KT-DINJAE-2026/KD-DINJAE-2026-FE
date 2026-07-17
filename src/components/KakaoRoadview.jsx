@@ -14,9 +14,8 @@ export default function KakaoRoadview({ location, fallback, stopName }) {
   const hasCoordinates = Number.isFinite(latitude) && Number.isFinite(longitude);
   const hasFallbackImage = Boolean(fallback?.imageUrl);
   const isReady = status === "ready";
-  const fallbackLabel = hasFallbackImage
-    ? (fallback?.label ?? "정류장 모습 예시")
-    : "정류장 모습 없음";
+  const fallbackLabel = fallback?.label
+    ?? (hasFallbackImage ? "정류장 모습 예시" : "정류장 모습 없음");
 
   useEffect(() => {
     const container = containerRef.current;
