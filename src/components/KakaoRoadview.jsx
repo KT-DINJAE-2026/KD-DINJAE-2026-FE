@@ -84,13 +84,12 @@ export default function KakaoRoadview({ location, fallback, stopName }) {
   }, [hasCoordinates, latitude, longitude]);
 
   return (
-    <figure className={`roadview-preview ${isReady ? "is-ready" : "is-fallback"}`}>
-      {hasFallbackImage && (
+    <figure className={`roadview-preview is-${status}`}>
+      {status === "fallback" && hasFallbackImage && (
         <img
           className="roadview-preview__fallback"
           src={fallback.imageUrl}
-          alt={isReady ? "" : (fallback.altText ?? `${stopName} 정류장 모습 예시`)}
-          aria-hidden={isReady}
+          alt={fallback.altText ?? `${stopName} 정류장 모습 예시`}
         />
       )}
 
@@ -116,7 +115,9 @@ export default function KakaoRoadview({ location, fallback, stopName }) {
         </div>
       )}
 
-      <figcaption>{isReady ? "카카오맵 로드뷰" : fallbackLabel}</figcaption>
+      {status !== "loading" && (
+        <figcaption>{isReady ? "카카오맵 로드뷰" : fallbackLabel}</figcaption>
+      )}
     </figure>
   );
 }

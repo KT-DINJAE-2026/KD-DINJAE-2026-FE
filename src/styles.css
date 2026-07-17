@@ -393,7 +393,7 @@ input:focus-visible {
   justify-content: center;
   gap: 14px;
   color: #555555;
-  background: rgba(255, 255, 255, 0.78);
+  background: #f4f5f5;
   text-align: center;
   pointer-events: none;
 }
