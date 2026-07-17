@@ -12,7 +12,13 @@
       "directionDescription": "신설동·동대문 방면",
       "landmark": "보문역 2번 출구 앞",
       "searchKeywords": ["보문역", "보문", "2번 출구"],
-      "servedRouteIds": ["1112", "95", "142", "103"]
+      "servedRouteIds": ["1112", "95", "142", "103"],
+      "roadview": {
+        "available": true,
+        "imageUrl": "/images/stop-preview/bomun-stop.webp",
+        "altText": "지하철 출입구 옆 인도에 있는 보문역 2번 출구 버스 정류장 모습 예시",
+        "capturedAtLabel": "정류장 모습 예시"
+      }
     },
     {
       "stopId": "stop-cityhall-front",
@@ -20,7 +26,13 @@
       "directionDescription": "시청·서소문 방면",
       "landmark": "서울광장 맞은편",
       "searchKeywords": ["시청", "서울시청", "서울광장"],
-      "servedRouteIds": ["101", "102", "103", "104"]
+      "servedRouteIds": ["101", "102", "103", "104"],
+      "roadview": {
+        "available": true,
+        "imageUrl": "/images/stop-preview/cityhall-stop.webp",
+        "altText": "넓은 광장 맞은편 인도에 있는 서울시청 앞 버스 정류장 모습 예시",
+        "capturedAtLabel": "정류장 모습 예시"
+      }
     }
   ]
 }

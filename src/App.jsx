@@ -2,15 +2,18 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import {
   AlertTriangle,
   ArrowLeft,
+  BusFront,
   Check,
   ChevronRight,
   Circle,
   Clock3,
   Info,
+  Landmark,
   LoaderCircle,
   MapPin,
   RefreshCw,
   Search,
+  Signpost,
 } from "lucide-react";
 import { busApi } from "./api/busApi.js";
 
@@ -247,6 +250,63 @@ function DestinationScreen({
   );
 }
 
+function StopConfirmationScreen({
+  currentStop,
+  destinationStop,
+  onBack,
+  onConfirm,
+}) {
+  const hasRoadview = Boolean(destinationStop.roadview?.available && destinationStop.roadview.imageUrl);
+  const directRouteCount = destinationStop.servedRouteIds?.length ?? 0;
+
+  return (
+    <main className="screen screen--confirm" aria-labelledby="confirm-title">
+      <BackHeader title="도착 정류장 확인" onBack={onBack} />
+      <section className="screen-heading screen-heading--confirm">
+        <h1 id="confirm-title">이 정류장이<br />맞나요?</h1>
+        <p>정류장 모습과 방향을 확인해주세요.</p>
+      </section>
+
+      <figure className="roadview-preview">
+        {hasRoadview ? (
+          <>
+            <img src={destinationStop.roadview.imageUrl} alt={destinationStop.roadview.altText} />
+            <figcaption>{destinationStop.roadview.capturedAtLabel}</figcaption>
+          </>
+        ) : (
+          <div className="roadview-preview__empty" role="img" aria-label="정류장 사진 없음">
+            <Info aria-hidden="true" />
+            <strong>정류장 사진을 준비 중이에요.</strong>
+          </div>
+        )}
+      </figure>
+
+      <section className="stop-confirmation" aria-label="선택한 도착 정류장 정보">
+        <h2>{destinationStop.stopName}</h2>
+        <dl>
+          <div>
+            <dt><Signpost aria-hidden="true" />가는 방향</dt>
+            <dd>{destinationStop.directionDescription}</dd>
+          </div>
+          <div>
+            <dt><Landmark aria-hidden="true" />가까운 곳</dt>
+            <dd>{destinationStop.landmark}</dd>
+          </div>
+        </dl>
+      </section>
+
+      <InfoBand icon={BusFront}>
+        <strong>{currentStop.stopName.replace(" 정류장", "")}에서 바로 가는 버스 {directRouteCount}개</strong>
+      </InfoBand>
+
+      <div className="screen-bottom confirm-bottom">
+        <button className="primary-button" type="button" onClick={onConfirm}>이 정류장이 맞아요</button>
+        <button className="text-button" type="button" onClick={onBack}>다시 찾기</button>
+      </div>
+    </main>
+  );
+}
+
 function AnalyzingScreen({ currentStop, destinationStop, onBack }) {
   return (
     <main className="screen screen--centered" aria-labelledby="analyzing-title">
@@ -452,7 +512,7 @@ export default function App() {
         setCurrentStop(bootstrap.currentStop);
         setDestinationStops(bootstrap.destinationStops);
 
-        if (!["compare", "limited", "detail"].includes(requestedScreen)) {
+        if (!["confirm", "compare", "limited", "detail"].includes(requestedScreen)) {
           setScreen("destination");
           return;
         }
@@ -463,6 +523,12 @@ export default function App() {
         const baseDestinationStop = bootstrap.destinationStops.find(
           (item) => item.stopId === destinationStopId,
         );
+        setDestinationStop(baseDestinationStop);
+        if (requestedScreen === "confirm") {
+          setScreen("confirm");
+          return;
+        }
+
         const prediction = await busApi.getJourneyPrediction({
           originStopId: bootstrap.currentStop.stopId,
           destinationStopId: baseDestinationStop.stopId,
@@ -486,6 +552,13 @@ export default function App() {
   const selectedRoute = destinationStop?.routes?.find((route) => route.tripId === selectedTripId)
     ?? destinationStop?.routes?.[0]
     ?? null;
+
+  const openStopConfirmation = (nextDestinationStop) => {
+    analysisRequestRef.current += 1;
+    setDestinationStop(nextDestinationStop);
+    setSelectedTripId(null);
+    setScreen("confirm");
+  };
 
   const analyzeJourney = async (nextDestinationStop) => {
     const requestId = analysisRequestRef.current + 1;
@@ -514,7 +587,7 @@ export default function App() {
 
   const cancelAnalysis = () => {
     analysisRequestRef.current += 1;
-    setScreen("destination");
+    setScreen("confirm");
   };
 
   if (screen === "loading" || screen === "error") {
@@ -532,7 +605,15 @@ export default function App() {
           <DestinationScreen
             currentStop={currentStop}
             destinationStops={destinationStops}
-            onSelectDestinationStop={analyzeJourney}
+            onSelectDestinationStop={openStopConfirmation}
+          />
+        )}
+        {screen === "confirm" && currentStop && destinationStop && (
+          <StopConfirmationScreen
+            currentStop={currentStop}
+            destinationStop={destinationStop}
+            onBack={() => setScreen("destination")}
+            onConfirm={() => analyzeJourney(destinationStop)}
           />
         )}
         {screen === "analyzing" && currentStop && destinationStop && (
@@ -545,7 +626,7 @@ export default function App() {
         {screen === "compare" && destinationStop && (
           <CompareScreen
             destinationStop={destinationStop}
-            onBack={() => setScreen("destination")}
+            onBack={() => setScreen("confirm")}
             onRoute={(tripId) => {
               setSelectedTripId(tripId);
               setScreen("detail");

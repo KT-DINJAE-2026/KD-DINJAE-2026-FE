@@ -2,7 +2,7 @@
 
 React 프로토타입의 Mock JSON을 Spring API로 교체하기 위한 FE·백엔드 협의 문서입니다.
 
-- 문서 버전: `0.2`
+- 문서 버전: `0.3`
 - 작성 기준일: `2026-07-17`
 - 기본 경로: `/api/v1`
 - 데이터 형식: `application/json; charset=UTF-8`
@@ -53,7 +53,8 @@ Mock 모드와 서버 모드는 같은 응답 구조를 사용합니다. Spring 
 | --- | --- | --- | --- |
 | QR 진입 | `GET` | `/api/v1/stops/{stopId}/context` | 사용 중 |
 | 도착 정류장 검색 | `GET` | `/api/v1/stops/search` | 연동 전 추가 예정 |
-| 도착 정류장 선택 | `POST` | `/api/v1/journeys/predictions` | 사용 중 |
+| 정류장 모습 확인 | `-` | 추가 요청 없음 | 검색 응답의 `roadview` 사용 |
+| 정류장 확인 완료 | `POST` | `/api/v1/journeys/predictions` | 사용 중 |
 
 ## 4. QR 진입 정보
 
@@ -81,7 +82,13 @@ Accept: application/json
       "directionDescription": "신설동·동대문 방면",
       "landmark": "보문역 2번 출구 앞",
       "searchKeywords": ["보문역", "보문", "2번 출구"],
-      "servedRouteIds": ["1112", "95", "142", "103"]
+      "servedRouteIds": ["1112", "95", "142", "103"],
+      "roadview": {
+        "available": true,
+        "imageUrl": "/images/stop-preview/bomun-stop.webp",
+        "altText": "지하철 출입구 옆 인도에 있는 보문역 2번 출구 버스 정류장 모습 예시",
+        "capturedAtLabel": "정류장 모습 예시"
+      }
     }
   ]
 }
@@ -103,6 +110,11 @@ Accept: application/json
 | `destinationStops[].landmark` | string | O | 동명 정류장 구분용 주변 장소 |
 | `destinationStops[].searchKeywords` | string[] | O | Mock의 클라이언트 검색용 키워드 |
 | `destinationStops[].servedRouteIds` | string[] | O | 두 정류장을 모두 지나는 노선 ID |
+| `destinationStops[].roadview` | object | O | 정류장 모습 확인 정보 |
+| `destinationStops[].roadview.available` | boolean | O | 로드뷰 또는 사진 제공 가능 여부 |
+| `destinationStops[].roadview.imageUrl` | string | 조건부 | `available=true`일 때 표시할 이미지 URL |
+| `destinationStops[].roadview.altText` | string | 조건부 | `available=true`일 때 이미지 대체 설명 |
+| `destinationStops[].roadview.capturedAtLabel` | string | 조건부 | 촬영 시점 또는 `정류장 모습 예시`와 같은 출처 문구 |
 
 `destinationStops`는 전체 정류장 목록이 아닙니다. QR 진입 직후 보여줄 최근 목적지나 데모용 초기 목록으로 사용합니다.
 
@@ -120,7 +132,7 @@ Accept: application/json
 | 이름 | 타입 | 필수 | 설명 |
 | --- | --- | --- | --- |
 | `originStopId` | string | O | 출발 정류장 ID |
-| `query` | string | O | 사용자가 입력한 정류장 이름 또는 주변 장소 |
+| `query` | string | O | 사용자가 입력한 정류장 이름, 방향 또는 랜드마크 |
 
 검색어 앞뒤 공백을 제거한 뒤 최소 1글자 이상일 때 요청합니다. 디바운스 시간은 프론트에서 결정합니다.
 
@@ -134,7 +146,13 @@ Accept: application/json
       "stopName": "보문역 2번 출구 정류장",
       "directionDescription": "신설동·동대문 방면",
       "landmark": "보문역 2번 출구 앞",
-      "servedRouteIds": ["1112", "95", "142", "103"]
+      "servedRouteIds": ["1112", "95", "142", "103"],
+      "roadview": {
+        "available": true,
+        "imageUrl": "https://cdn.example.com/stops/stop-bomun-exit2.webp",
+        "altText": "보문역 2번 출구 앞 버스 정류장 모습",
+        "capturedAtLabel": "2026년 7월 촬영"
+      }
     }
   ]
 }
@@ -142,11 +160,13 @@ Accept: application/json
 
 검색 결과에는 `originStopId`에서 한 번에 갈 수 있는 정류장만 포함합니다. 같은 이름의 정류장을 구분할 수 있도록 `directionDescription`과 `landmark`는 필수입니다.
 
+프론트는 사용자가 검색 결과를 누르면 별도 요청 없이 `roadview`를 이용해 정류장 확인 화면을 표시합니다. `available=false`이면 `imageUrl`, `altText`, `capturedAtLabel`을 생략하고 정류장명·방향·랜드마크만 보여줍니다. 서버 연동 시 `imageUrl`은 HTTPS 절대 URL을 권장하며, Mock에서만 프론트 정적 파일을 가리키는 루트 상대 경로를 사용합니다.
+
 검색 결과가 없으면 `200 OK`와 빈 `destinationStops` 배열을 반환합니다.
 
 ## 6. 여정 분석
 
-도착 정류장을 선택했을 때 두 정류장 사이를 운행하는 도착 예정 버스와 구간별 혼잡도 예측을 요청합니다.
+로드뷰를 확인하고 `이 정류장이 맞아요`를 눌렀을 때 두 정류장 사이를 운행하는 도착 예정 버스와 구간별 혼잡도 예측을 요청합니다.
 
 ```http
 POST /api/v1/journeys/predictions
@@ -392,6 +412,7 @@ HTTP 오류는 혼잡도 데이터 부족과 구분합니다.
 - `null` 대신 필드 생략 규칙
 - `tripId` 제공 가능 여부와 고유성
 - 동명 정류장 구분용 방향·랜드마크 제공 여부
+- 로드뷰 제공 가능 여부와 `roadview` 조건부 필드
 - 검색 결과를 출발 정류장에서 바로 갈 수 있는 곳으로 제한할 수 있는지
 - 도착시간 갱신 주기와 캐시 기준
 - 입석 부담 단계 산정 기준

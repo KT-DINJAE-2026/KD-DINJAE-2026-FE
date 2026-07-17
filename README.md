@@ -12,12 +12,13 @@
 
 1. 정류장 QR의 `stopId`로 출발 정류장을 확인합니다.
 2. 사용자가 도착할 정류장을 검색합니다.
-3. 두 정류장을 모두 지나는 도착 예정 버스를 불러옵니다.
-4. 버스 도착시간, 전체 소요시간, 앉기 편한 예상 시간을 비교합니다.
-5. 상세 화면에서 정류장 구간별 `여유`, `보통`, `혼잡` 단계를 확인합니다.
-6. 혼잡도 표본이 부족하면 좌석 관련 정보 없이 빠른 도착순으로 보여줍니다.
+3. 로드뷰와 운행 방향으로 도착 정류장이 맞는지 확인합니다.
+4. 두 정류장을 모두 지나는 도착 예정 버스를 불러옵니다.
+5. 버스 도착시간, 전체 소요시간, 앉기 편한 예상 시간을 비교합니다.
+6. 상세 화면에서 정류장 구간별 `여유`, `보통`, `혼잡` 단계를 확인합니다.
+7. 혼잡도 표본이 부족하면 좌석 관련 정보 없이 빠른 도착순으로 보여줍니다.
 
-환승 경로, 다른 정류장까지 걷는 우회 경로, 좌석 예약 기능은 현재 범위에 포함하지 않습니다.
+장소 검색, 주변 정류장 추천, 지도, 환승 경로, 다른 정류장까지 걷는 우회 경로, 좌석 예약 기능은 현재 범위에 포함하지 않습니다.
 
 ## 화면에서 사용하는 시간
 
@@ -90,7 +91,7 @@ Mock과 서버 응답은 같은 필드 구조를 사용해야 합니다. 서버 
 
 | 파일 | 대신하는 API | 내용 |
 | --- | --- | --- |
-| `src/mocks/bootstrap.json` | `GET /api/v1/stops/{stopId}/context` | 출발 정류장과 초기 도착 정류장 목록 |
+| `src/mocks/bootstrap.json` | `GET /api/v1/stops/{stopId}/context` | 출발 정류장, 초기 도착 정류장, 로드뷰 정보 |
 | `src/mocks/predictions/bomun.json` | `POST /api/v1/journeys/predictions` | 혼잡도 예측 성공 응답 |
 | `src/mocks/predictions/cityhall.json` | `POST /api/v1/journeys/predictions` | 과거 데이터 부족 응답 |
 
@@ -112,10 +113,13 @@ busApi.getJourneyPrediction({ originStopId, destinationStopId })
 | `보문`, `보문역` | 혼잡도 예측이 있는 버스 4대 |
 | `시청`, `서울시청` | 혼잡도 데이터가 부족한 버스 4대 |
 
+정류장을 선택하면 바로 분석하지 않고 로드뷰 확인 화면을 먼저 거칩니다. 두 화면의 사진은 실제 API 연동 전 동작 확인을 위한 예시 이미지입니다.
+
 개발 중 특정 화면을 바로 확인하려면 쿼리 문자열을 사용할 수 있습니다.
 
 ```text
 /?stopId=stop-seongbuk-office
+/?screen=confirm
 /?screen=compare
 /?screen=limited
 /?screen=detail
@@ -146,6 +150,7 @@ src/
 ├── main.jsx                       React 진입점
 └── styles.css                     큰 글씨·반응형 스타일
 
+public/images/stop-preview/         Mock 정류장 모습 예시
 design/figma-import/               Figma 가져오기용 SVG와 생성기
 docs/API_CONTRACT_DRAFT.md         FE·백엔드 API 협의 문서
 ```
@@ -172,6 +177,7 @@ node design/figma-import/generate.mjs
 ## 백엔드 연동 전 확인할 것
 
 - Swagger 응답 필드가 Mock JSON과 같은지
+- 검색 결과에 정류장 로드뷰 제공 여부와 이미지 URL이 포함되는지
 - `tripId`가 도착 예정 차량마다 고유한지
 - 구간 시간의 합이 `travelMinutes`와 일치하는지
 - 데이터 부족을 HTTP 오류가 아닌 `INSUFFICIENT_DATA`로 구분하는지
