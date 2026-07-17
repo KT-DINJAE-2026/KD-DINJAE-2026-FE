@@ -213,8 +213,8 @@ const screens = [
       multiline(24, 112, ["이 정류장이", "맞나요?"], 34, 800, C.text, 1.25),
       text(24, 208, "정류장 모습과 방향을 확인해주세요.", 17, 500, C.subtext),
       bitmap(24, 234, 342, 250, ROADVIEW_DATA, "roadview-confirm"),
-      rect(38, 438, 116, 34, "#303030", 5),
-      text(96, 455, "정류장 모습 예시", 16, 800, C.surface, { anchor: "middle" }),
+      rect(38, 438, 138, 34, "#303030", 5),
+      text(107, 455, "카카오맵 로드뷰", 16, 800, C.surface, { anchor: "middle" }),
       text(24, 522, "보문역 2번 출구 정류장", 24, 800),
       icon("arrowRight", 26, 552, 20, C.blue),
       text(58, 562, "가는 방향", 16, 700, C.subtext),
@@ -462,7 +462,7 @@ const flowSvg = `<?xml version="1.0" encoding="UTF-8"?>
   ${text(110, 167, "QR 확인 · 성북구청 정류장", 16, 700, C.blue)}
   ${flowCard(64, 236, "1", "도착 정류장 검색", ["이름·방향으로", "정류장 구분"])}
   ${flowArrow(284, 303, 326)}
-  ${flowCard(326, 236, "2", "로드뷰 확인", ["정류장 모습·방향", "랜드마크 확인"])}
+  ${flowCard(326, 236, "2", "로드뷰 확인", ["카카오맵 로드뷰", "방향·랜드마크 확인"])}
   ${flowArrow(546, 303, 588)}
   ${flowCard(588, 236, "3", "여정 분석", ["운행 버스·탑승 인원", "예측"])}
   ${flowArrow(808, 303, 850)}

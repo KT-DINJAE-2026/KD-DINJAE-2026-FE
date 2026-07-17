@@ -8,7 +8,7 @@
 | --- | --- |
 | `00-user-flow.svg` | 기본 흐름과 데이터 부족 분기 |
 | `01-destination-stop.svg` | QR 출발지와 도착 정류장 검색 |
-| `02-stop-confirm.svg` | 로드뷰·운행 방향·랜드마크 확인 |
+| `02-stop-confirm.svg` | 카카오맵 로드뷰·운행 방향·랜드마크 확인 |
 | `03-analyzing.svg` | 운행 버스와 구간별 탑승 인원 분석 |
 | `04-compare.svg` | 앉기 편한 시간과 빠른 도착을 한 화면에서 비교 |
 | `04-compare-unavailable.svg` | 혼잡도 데이터가 부족한 경우 |

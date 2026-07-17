@@ -16,6 +16,7 @@ import {
   Signpost,
 } from "lucide-react";
 import { busApi } from "./api/busApi.js";
+import KakaoRoadview from "./components/KakaoRoadview.jsx";
 
 const DEFAULT_STOP_ID = "stop-seongbuk-office";
 
@@ -256,7 +257,6 @@ function StopConfirmationScreen({
   onBack,
   onConfirm,
 }) {
-  const hasRoadview = Boolean(destinationStop.roadview?.available && destinationStop.roadview.imageUrl);
   const directRouteCount = destinationStop.servedRouteIds?.length ?? 0;
 
   return (
@@ -267,19 +267,11 @@ function StopConfirmationScreen({
         <p>정류장 모습과 방향을 확인해주세요.</p>
       </section>
 
-      <figure className="roadview-preview">
-        {hasRoadview ? (
-          <>
-            <img src={destinationStop.roadview.imageUrl} alt={destinationStop.roadview.altText} />
-            <figcaption>{destinationStop.roadview.capturedAtLabel}</figcaption>
-          </>
-        ) : (
-          <div className="roadview-preview__empty" role="img" aria-label="정류장 사진 없음">
-            <Info aria-hidden="true" />
-            <strong>정류장 사진을 준비 중이에요.</strong>
-          </div>
-        )}
-      </figure>
+      <KakaoRoadview
+        location={destinationStop.location}
+        fallback={destinationStop.roadviewFallback}
+        stopName={destinationStop.stopName}
+      />
 
       <section className="stop-confirmation" aria-label="선택한 도착 정류장 정보">
         <h2>{destinationStop.stopName}</h2>

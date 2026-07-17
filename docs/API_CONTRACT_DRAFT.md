@@ -2,7 +2,7 @@
 
 React 프로토타입의 Mock JSON을 Spring API로 교체하기 위한 FE·백엔드 협의 문서입니다.
 
-- 문서 버전: `0.3`
+- 문서 버전: `0.4`
 - 작성 기준일: `2026-07-17`
 - 기본 경로: `/api/v1`
 - 데이터 형식: `application/json; charset=UTF-8`
@@ -53,7 +53,7 @@ Mock 모드와 서버 모드는 같은 응답 구조를 사용합니다. Spring 
 | --- | --- | --- | --- |
 | QR 진입 | `GET` | `/api/v1/stops/{stopId}/context` | 사용 중 |
 | 도착 정류장 검색 | `GET` | `/api/v1/stops/search` | 연동 전 추가 예정 |
-| 정류장 모습 확인 | `-` | 추가 요청 없음 | 검색 응답의 `roadview` 사용 |
+| 정류장 모습 확인 | `-` | 추가 요청 없음 | 검색 응답의 좌표로 프론트에서 카카오 로드뷰 조회 |
 | 정류장 확인 완료 | `POST` | `/api/v1/journeys/predictions` | 사용 중 |
 
 ## 4. QR 진입 정보
@@ -83,11 +83,14 @@ Accept: application/json
       "landmark": "보문역 2번 출구 앞",
       "searchKeywords": ["보문역", "보문", "2번 출구"],
       "servedRouteIds": ["1112", "95", "142", "103"],
-      "roadview": {
-        "available": true,
+      "location": {
+        "latitude": 37.58575,
+        "longitude": 127.019
+      },
+      "roadviewFallback": {
         "imageUrl": "/images/stop-preview/bomun-stop.webp",
         "altText": "지하철 출입구 옆 인도에 있는 보문역 2번 출구 버스 정류장 모습 예시",
-        "capturedAtLabel": "정류장 모습 예시"
+        "label": "정류장 모습 예시"
       }
     }
   ]
@@ -110,11 +113,13 @@ Accept: application/json
 | `destinationStops[].landmark` | string | O | 동명 정류장 구분용 주변 장소 |
 | `destinationStops[].searchKeywords` | string[] | O | Mock의 클라이언트 검색용 키워드 |
 | `destinationStops[].servedRouteIds` | string[] | O | 두 정류장을 모두 지나는 노선 ID |
-| `destinationStops[].roadview` | object | O | 정류장 모습 확인 정보 |
-| `destinationStops[].roadview.available` | boolean | O | 로드뷰 또는 사진 제공 가능 여부 |
-| `destinationStops[].roadview.imageUrl` | string | 조건부 | `available=true`일 때 표시할 이미지 URL |
-| `destinationStops[].roadview.altText` | string | 조건부 | `available=true`일 때 이미지 대체 설명 |
-| `destinationStops[].roadview.capturedAtLabel` | string | 조건부 | 촬영 시점 또는 `정류장 모습 예시`와 같은 출처 문구 |
+| `destinationStops[].location` | object | O | 정류장의 WGS84 좌표 |
+| `destinationStops[].location.latitude` | number | O | 위도, 범위 `-90`~`90` |
+| `destinationStops[].location.longitude` | number | O | 경도, 범위 `-180`~`180` |
+| `destinationStops[].roadviewFallback` | object | 선택 | 카카오 로드뷰를 표시하지 못할 때 사용할 정류장 이미지 |
+| `destinationStops[].roadviewFallback.imageUrl` | string | 조건부 | 대체 이미지 URL |
+| `destinationStops[].roadviewFallback.altText` | string | 조건부 | 대체 이미지의 화면 낭독용 설명 |
+| `destinationStops[].roadviewFallback.label` | string | 조건부 | `정류장 모습 예시`와 같은 이미지 출처 문구 |
 
 `destinationStops`는 전체 정류장 목록이 아닙니다. QR 진입 직후 보여줄 최근 목적지나 데모용 초기 목록으로 사용합니다.
 
@@ -147,11 +152,14 @@ Accept: application/json
       "directionDescription": "신설동·동대문 방면",
       "landmark": "보문역 2번 출구 앞",
       "servedRouteIds": ["1112", "95", "142", "103"],
-      "roadview": {
-        "available": true,
+      "location": {
+        "latitude": 37.58575,
+        "longitude": 127.019
+      },
+      "roadviewFallback": {
         "imageUrl": "https://cdn.example.com/stops/stop-bomun-exit2.webp",
         "altText": "보문역 2번 출구 앞 버스 정류장 모습",
-        "capturedAtLabel": "2026년 7월 촬영"
+        "label": "2026년 7월 촬영"
       }
     }
   ]
@@ -160,7 +168,7 @@ Accept: application/json
 
 검색 결과에는 `originStopId`에서 한 번에 갈 수 있는 정류장만 포함합니다. 같은 이름의 정류장을 구분할 수 있도록 `directionDescription`과 `landmark`는 필수입니다.
 
-프론트는 사용자가 검색 결과를 누르면 별도 요청 없이 `roadview`를 이용해 정류장 확인 화면을 표시합니다. `available=false`이면 `imageUrl`, `altText`, `capturedAtLabel`을 생략하고 정류장명·방향·랜드마크만 보여줍니다. 서버 연동 시 `imageUrl`은 HTTPS 절대 URL을 권장하며, Mock에서만 프론트 정적 파일을 가리키는 루트 상대 경로를 사용합니다.
+프론트는 사용자가 검색 결과를 누르면 `location` 좌표에서 가장 가까운 카카오 로드뷰를 조회합니다. 따라서 Spring 서버가 카카오 로드뷰나 이미지 URL을 대신 조회할 필요는 없습니다. 주변에 로드뷰가 없거나 SDK를 불러오지 못하면 선택 필드인 `roadviewFallback`을 표시하고, 이 값도 없으면 정류장명·방향·랜드마크만 보여줍니다. 서버가 대체 이미지를 제공할 때 `imageUrl`은 HTTPS 절대 URL을 사용합니다.
 
 검색 결과가 없으면 `200 OK`와 빈 `destinationStops` 배열을 반환합니다.
 
@@ -412,7 +420,8 @@ HTTP 오류는 혼잡도 데이터 부족과 구분합니다.
 - `null` 대신 필드 생략 규칙
 - `tripId` 제공 가능 여부와 고유성
 - 동명 정류장 구분용 방향·랜드마크 제공 여부
-- 로드뷰 제공 가능 여부와 `roadview` 조건부 필드
+- 검색 결과에서 WGS84 위도·경도를 제공할 수 있는지
+- 선택 필드인 `roadviewFallback` 이미지 제공 여부
 - 검색 결과를 출발 정류장에서 바로 갈 수 있는 곳으로 제한할 수 있는지
 - 도착시간 갱신 주기와 캐시 기준
 - 입석 부담 단계 산정 기준

@@ -12,7 +12,7 @@
 
 1. 정류장 QR의 `stopId`로 출발 정류장을 확인합니다.
 2. 사용자가 도착할 정류장을 검색합니다.
-3. 로드뷰와 운행 방향으로 도착 정류장이 맞는지 확인합니다.
+3. 카카오맵 로드뷰와 운행 방향으로 도착 정류장이 맞는지 확인합니다.
 4. 두 정류장을 모두 지나는 도착 예정 버스를 불러옵니다.
 5. 버스 도착시간, 전체 소요시간, 앉기 편한 예상 시간을 비교합니다.
 6. 상세 화면에서 정류장 구간별 `여유`, `보통`, `혼잡` 단계를 확인합니다.
@@ -39,6 +39,7 @@
 - React 19
 - Vite 8
 - Lucide React
+- Kakao 지도 Web API
 - Mock JSON
 - Spring API 연동 예정
 - Vercel 배포
@@ -76,7 +77,10 @@ busApi
 ```env
 VITE_API_MODE=mock
 VITE_API_BASE_URL=http://localhost:8080
+VITE_KAKAO_MAP_APP_KEY=카카오_JavaScript_키
 ```
+
+카카오 Developers 앱에서는 `[카카오맵] → [사용 설정]`을 `ON`으로 바꾸고, JavaScript 키의 SDK 도메인에 `http://localhost:5173`과 운영 Vercel 주소를 등록해야 합니다. 키는 `.env.local`과 Vercel 환경변수에서만 관리합니다.
 
 Spring 서버를 연결할 때는 다음과 같이 변경합니다.
 
@@ -91,7 +95,7 @@ Mock과 서버 응답은 같은 필드 구조를 사용해야 합니다. 서버 
 
 | 파일 | 대신하는 API | 내용 |
 | --- | --- | --- |
-| `src/mocks/bootstrap.json` | `GET /api/v1/stops/{stopId}/context` | 출발 정류장, 초기 도착 정류장, 로드뷰 정보 |
+| `src/mocks/bootstrap.json` | `GET /api/v1/stops/{stopId}/context` | 출발 정류장, 초기 도착 정류장, 정류장 좌표 |
 | `src/mocks/predictions/bomun.json` | `POST /api/v1/journeys/predictions` | 혼잡도 예측 성공 응답 |
 | `src/mocks/predictions/cityhall.json` | `POST /api/v1/journeys/predictions` | 과거 데이터 부족 응답 |
 
@@ -113,7 +117,7 @@ busApi.getJourneyPrediction({ originStopId, destinationStopId })
 | `보문`, `보문역` | 혼잡도 예측이 있는 버스 4대 |
 | `시청`, `서울시청` | 혼잡도 데이터가 부족한 버스 4대 |
 
-정류장을 선택하면 바로 분석하지 않고 로드뷰 확인 화면을 먼저 거칩니다. 두 화면의 사진은 실제 API 연동 전 동작 확인을 위한 예시 이미지입니다.
+정류장을 선택하면 바로 분석하지 않고 카카오맵 로드뷰 확인 화면을 먼저 거칩니다. 카카오 로드뷰가 없거나 SDK를 불러오지 못하면 Mock에 등록한 정류장 모습 예시를 대신 표시합니다.
 
 개발 중 특정 화면을 바로 확인하려면 쿼리 문자열을 사용할 수 있습니다.
 
@@ -141,6 +145,10 @@ busApi.getJourneyPrediction({ originStopId, destinationStopId })
 src/
 ├── api/
 │   └── busApi.js                 Mock·Spring 요청 전환
+├── components/
+│   └── KakaoRoadview.jsx         로드뷰와 대체 이미지 상태 처리
+├── lib/
+│   └── kakaoMaps.js              카카오 지도 SDK 로더
 ├── mocks/
 │   ├── bootstrap.json            QR 진입 응답
 │   └── predictions/
@@ -177,7 +185,8 @@ node design/figma-import/generate.mjs
 ## 백엔드 연동 전 확인할 것
 
 - Swagger 응답 필드가 Mock JSON과 같은지
-- 검색 결과에 정류장 로드뷰 제공 여부와 이미지 URL이 포함되는지
+- 검색 결과에 정류장의 WGS84 위도·경도가 포함되는지
+- 대체 이미지를 서버에서 제공할지 프론트 정적 파일로 유지할지
 - `tripId`가 도착 예정 차량마다 고유한지
 - 구간 시간의 합이 `travelMinutes`와 일치하는지
 - 데이터 부족을 HTTP 오류가 아닌 `INSUFFICIENT_DATA`로 구분하는지
