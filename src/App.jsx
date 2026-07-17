@@ -2,23 +2,15 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import {
   AlertTriangle,
   ArrowLeft,
-  Building2,
-  BusFront,
   Check,
   ChevronRight,
   Circle,
   Clock3,
-  Footprints,
   Info,
-  Landmark,
   LoaderCircle,
-  Map as MapIcon,
   MapPin,
-  Maximize2,
   RefreshCw,
   Search,
-  Signpost,
-  X,
 } from "lucide-react";
 import { busApi } from "./api/busApi.js";
 
@@ -42,10 +34,6 @@ const DETAIL_GUIDANCE = {
   MEDIUM: "여유 예상 구간만 더한 시간이에요. 보통 구간에서는 좌석 이용이 어려울 수 있어요.",
   HIGH: "여유 예상 구간만 더한 시간이에요. 혼잡 구간에서는 좌석 이용이 어려울 수 있어요.",
 };
-
-const getDestinationResultKey = (result) => (
-  result.type === "PLACE" ? result.placeId : result.stop.stopId
-);
 
 function getRequestedScreen() {
   return new URLSearchParams(window.location.search).get("screen");
@@ -141,27 +129,19 @@ function CurrentStopBadge({ currentStop }) {
   );
 }
 
-function StatusScreen({
-  error = false,
-  title,
-  description,
-  onRetry = () => window.location.reload(),
-}) {
-  const heading = title ?? (error ? "정보를 불러오지 못했어요" : "정류장 정보를 불러오고 있어요");
-  const body = description ?? (error ? "잠시 후 다시 시도해주세요." : "잠시만 기다려주세요.");
-
+function StatusScreen({ error = false }) {
   return (
     <main className="screen screen--centered status-screen" aria-live="polite">
       <div className={`analysis-visual ${error ? "is-error" : ""}`}>
         {error ? <AlertTriangle aria-hidden="true" /> : <LoaderCircle aria-hidden="true" />}
       </div>
       <section className="analysis-heading">
-        <h1>{heading}</h1>
-        <p>{body}</p>
+        <h1>{error ? "정보를 불러오지 못했어요" : "정류장 정보를 불러오고 있어요"}</h1>
+        <p>{error ? "잠시 후 다시 시도해주세요." : "잠시만 기다려주세요."}</p>
       </section>
       {error && (
         <div className="screen-bottom">
-          <button className="primary-button" type="button" onClick={onRetry}>다시 시도하기</button>
+          <button className="primary-button" type="button" onClick={() => window.location.reload()}>다시 시도하기</button>
         </div>
       )}
     </main>
@@ -170,68 +150,46 @@ function StatusScreen({
 
 function DestinationScreen({
   currentStop,
-  recentDestinations,
-  onSelectResult,
+  destinationStops,
+  onSelectDestinationStop,
 }) {
   const [query, setQuery] = useState("");
-  const [results, setResults] = useState(recentDestinations);
-  const [isSearching, setIsSearching] = useState(false);
   const [searchMessage, setSearchMessage] = useState("");
   const inputRef = useRef(null);
 
-  useEffect(() => {
-    const keyword = query.trim();
-    let active = true;
-
-    if (!keyword) {
-      setResults(recentDestinations);
-      setIsSearching(false);
-      return undefined;
-    }
-
-    setIsSearching(true);
-    const timeoutId = window.setTimeout(async () => {
-      try {
-        const response = await busApi.searchDestinations({
-          originStopId: currentStop.stopId,
-          query: keyword,
-        });
-        if (!active) return;
-        setResults(response.results);
-        setSearchMessage(response.results.length ? "" : "일치하는 장소나 정류장이 없어요.");
-      } catch {
-        if (active) setSearchMessage("검색하지 못했어요. 잠시 후 다시 시도해주세요.");
-      } finally {
-        if (active) setIsSearching(false);
-      }
-    }, 250);
-
-    return () => {
-      active = false;
-      window.clearTimeout(timeoutId);
-    };
-  }, [currentStop.stopId, query, recentDestinations]);
+  const matches = useMemo(() => {
+    const keyword = query.trim().toLocaleLowerCase("ko-KR");
+    if (!keyword) return destinationStops;
+    return destinationStops.filter((destinationStop) =>
+      [
+        destinationStop.stopName,
+        destinationStop.directionDescription,
+        destinationStop.landmark,
+        ...destinationStop.searchKeywords,
+        ...destinationStop.servedRouteIds,
+      ]
+        .join(" ")
+        .toLocaleLowerCase("ko-KR")
+        .includes(keyword),
+    );
+  }, [destinationStops, query]);
 
   const submitSearch = (event) => {
     event.preventDefault();
     if (!query.trim()) {
-      setSearchMessage("가려는 장소나 도착 정류장을 입력해주세요.");
+      setSearchMessage("도착 정류장을 먼저 입력해주세요.");
       inputRef.current?.focus();
       return;
     }
-    if (isSearching) {
-      setSearchMessage("검색하고 있어요. 잠시만 기다려주세요.");
+    if (matches.length === 1) {
+      onSelectDestinationStop(matches[0]);
       return;
     }
-    if (results.length === 1) {
-      onSelectResult(results[0]);
+    if (matches.length > 1) {
+      setSearchMessage("검색 결과에서 도착 정류장을 선택해주세요.");
       return;
     }
-    if (results.length > 1) {
-      setSearchMessage("검색 결과에서 한 곳을 선택해주세요.");
-      return;
-    }
-    setSearchMessage("일치하는 장소나 정류장이 없어요. 다른 이름으로 검색해주세요.");
+    setSearchMessage("일치하는 정류장이 없어요. 다른 이름으로 검색해주세요.");
     inputRef.current?.focus();
   };
 
@@ -239,13 +197,13 @@ function DestinationScreen({
     <main className="screen screen--destination" aria-labelledby="destination-title">
       <CurrentStopBadge currentStop={currentStop} />
       <section className="screen-heading">
-        <h1 id="destination-title">어디까지<br />가세요?</h1>
-        <p>장소나 도착 정류장 이름을 입력해주세요.</p>
+        <h1 id="destination-title">어느 정류장까지<br />가세요?</h1>
+        <p>도착할 정류장 이름을 입력해주세요.</p>
       </section>
 
       <form id="destination-form" className="search-form" onSubmit={submitSearch}>
         <Search aria-hidden="true" />
-        <label className="sr-only" htmlFor="destination-search">장소 또는 도착 정류장 검색</label>
+        <label className="sr-only" htmlFor="destination-search">도착 정류장 검색</label>
         <input
           id="destination-search"
           ref={inputRef}
@@ -254,282 +212,37 @@ function DestinationScreen({
             setQuery(event.target.value);
             setSearchMessage("");
           }}
-          placeholder="예: 보문역 또는 서울시청 앞"
+          placeholder="예: 보문역 2번 출구 정류장"
           autoComplete="off"
-          enterKeyHint="search"
         />
       </form>
       <p className="search-message" aria-live="polite">{searchMessage}</p>
 
-      <section className="place-section" aria-labelledby="place-title" aria-busy={isSearching}>
-        <h2 id="place-title">
-          {query ? `검색 결과 ${isSearching ? "" : `${results.length}개`}` : "최근 목적지"}
-        </h2>
-        <div className="place-list" aria-live="polite">
-          {isSearching && <div className="searching-result"><LoaderCircle aria-hidden="true" />검색하고 있어요</div>}
-          {!isSearching && results.map((result) => {
-            const isPlace = result.type === "PLACE";
-            const title = isPlace ? result.name : result.stop.stopName;
-            const detail = isPlace
-              ? result.address
-              : `${result.stop.directionDescription} · ${result.stop.landmark}`;
-            const ResultIcon = isPlace ? Building2 : BusFront;
-
-            return (
-              <button
-                className="place-row"
-                type="button"
-                key={getDestinationResultKey(result)}
-                onClick={() => onSelectResult(result)}
-              >
-                <span className="place-row__icon"><ResultIcon aria-hidden="true" /></span>
-                <span className="place-row__copy">
-                  <span className={`result-type result-type--${isPlace ? "place" : "stop"}`}>
-                    {isPlace ? "장소" : "정류장"}
-                  </span>
-                  <strong>{title}</strong>
-                  <small>{detail}</small>
-                </span>
-                <ChevronRight aria-hidden="true" />
-              </button>
-            );
-          })}
-          {!isSearching && !results.length && <div className="empty-result">다른 이름으로 검색해주세요.</div>}
+      <section className="place-section" aria-labelledby="place-title">
+        <h2 id="place-title">{query ? "검색 결과" : "최근 도착 정류장"}</h2>
+        <div className="place-list">
+          {matches.map((destinationStop) => (
+            <button
+              className="place-row"
+              type="button"
+              key={destinationStop.stopId}
+              onClick={() => onSelectDestinationStop(destinationStop)}
+            >
+              <span className="place-row__icon"><MapPin aria-hidden="true" /></span>
+              <span className="place-row__copy">
+                <strong>{destinationStop.stopName}</strong>
+                <small>{destinationStop.directionDescription} · {destinationStop.landmark}</small>
+              </span>
+              <ChevronRight aria-hidden="true" />
+            </button>
+          ))}
+          {!matches.length && <div className="empty-result">일치하는 정류장이 없어요.</div>}
         </div>
       </section>
 
       <div className="screen-bottom destination-bottom">
-        <button className="primary-button" type="submit" form="destination-form">검색하기</button>
+        <button className="primary-button" type="submit" form="destination-form">도착 정류장 찾기</button>
       </div>
-    </main>
-  );
-}
-
-function NearbyStopsScreen({ currentStop, place, stops, onBack, onSelectStop }) {
-  return (
-    <main className="screen" aria-labelledby="nearby-title">
-      <BackHeader title="도착 정류장 찾기" onBack={onBack} />
-      <section className="screen-heading screen-heading--nearby">
-        <span className="heading-kicker"><MapPin aria-hidden="true" />{place.name}</span>
-        <h1 id="nearby-title">어느 정류장에서<br />내릴까요?</h1>
-        <p>{place.address}</p>
-      </section>
-
-      <InfoBand icon={BusFront}>
-        <strong>{currentStop.stopName.replace(" 정류장", "")}에서 바로 갈 수 있는 정류장이에요.</strong>
-      </InfoBand>
-
-      {stops.length ? (
-        <section className="nearby-stop-list" aria-label={`${place.name} 주변 정류장`}>
-          {stops.map((stop, index) => (
-            <button
-              className={`nearby-stop ${index === 0 ? "is-nearest" : ""}`}
-              type="button"
-              key={stop.stopId}
-              onClick={() => onSelectStop(stop)}
-            >
-              <span className="nearby-stop__topline">
-                <span className="result-type result-type--stop">정류장</span>
-                {index === 0 && <span className="nearest-badge">가장 가까움</span>}
-              </span>
-              <strong>{stop.stopName}</strong>
-              <span className="nearby-stop__direction">{stop.directionDescription} · {stop.landmark}</span>
-              <span className="nearby-stop__facts">
-                <span><Footprints aria-hidden="true" />{place.name}까지 도보 {stop.walkMinutes}분</span>
-                <span><BusFront aria-hidden="true" />직행 버스 {stop.directRouteCount}개</span>
-              </span>
-              <span className="nearby-stop__distance">약 {stop.distanceMeters}m <ChevronRight aria-hidden="true" /></span>
-            </button>
-          ))}
-        </section>
-      ) : (
-        <div className="no-reachable-stops">
-          <AlertTriangle aria-hidden="true" />
-          <strong>지금 바로 갈 수 있는 정류장이 없어요.</strong>
-          <button className="text-button" type="button" onClick={onBack}>다른 목적지 찾기</button>
-        </div>
-      )}
-    </main>
-  );
-}
-
-function StopMapPreview({ destinationStop }) {
-  return (
-    <div
-      className="stop-map"
-      role="img"
-      aria-label={`${destinationStop.stopName}, ${destinationStop.landmark} 위치 안내`}
-    >
-      <span className="stop-map__road stop-map__road--horizontal" aria-hidden="true" />
-      <span className="stop-map__road stop-map__road--vertical" aria-hidden="true" />
-      <span className="stop-map__block stop-map__block--one" aria-hidden="true" />
-      <span className="stop-map__block stop-map__block--two" aria-hidden="true" />
-      <span className="stop-map__pin"><MapPin aria-hidden="true" /></span>
-      <span className="stop-map__label stop-map__label--stop">{destinationStop.stopName}</span>
-      <span className="stop-map__label stop-map__label--landmark">{destinationStop.landmark}</span>
-    </div>
-  );
-}
-
-function PreviewDialog({ destinationStop, open, onClose }) {
-  const closeButtonRef = useRef(null);
-
-  useEffect(() => {
-    if (!open) return undefined;
-    const previousOverflow = document.body.style.overflow;
-    const handleKeyDown = (event) => {
-      if (event.key === "Escape") onClose();
-      if (event.key === "Tab") {
-        event.preventDefault();
-        closeButtonRef.current?.focus();
-      }
-    };
-
-    document.body.style.overflow = "hidden";
-    document.addEventListener("keydown", handleKeyDown);
-    closeButtonRef.current?.focus();
-    return () => {
-      document.body.style.overflow = previousOverflow;
-      document.removeEventListener("keydown", handleKeyDown);
-    };
-  }, [onClose, open]);
-
-  if (!open) return null;
-
-  return (
-    <div className="preview-dialog" role="dialog" aria-modal="true" aria-labelledby="preview-dialog-title">
-      <div className="preview-dialog__panel">
-        <header>
-          <h2 id="preview-dialog-title">{destinationStop.stopName}</h2>
-          <button
-            ref={closeButtonRef}
-            className="icon-button icon-button--inverse"
-            type="button"
-            onClick={onClose}
-            aria-label="큰 정류장 모습 닫기"
-            title="닫기"
-          >
-            <X aria-hidden="true" />
-          </button>
-        </header>
-        <img src={destinationStop.roadview.imageUrl} alt={destinationStop.roadview.altText} />
-        <p>{destinationStop.directionDescription} · {destinationStop.landmark}</p>
-      </div>
-    </div>
-  );
-}
-
-function StopConfirmationScreen({
-  currentStop,
-  destinationStop,
-  selectedPlace,
-  onBack,
-  onConfirm,
-  onChooseOtherStop,
-}) {
-  const hasRoadview = Boolean(destinationStop.roadview?.available && destinationStop.roadview.imageUrl);
-  const [previewMode, setPreviewMode] = useState(hasRoadview ? "roadview" : "map");
-  const [previewOpen, setPreviewOpen] = useState(false);
-
-  useEffect(() => {
-    setPreviewMode(hasRoadview ? "roadview" : "map");
-    setPreviewOpen(false);
-  }, [destinationStop.stopId, hasRoadview]);
-
-  return (
-    <main className="screen screen--confirm" aria-labelledby="confirm-title">
-      <BackHeader title="도착 정류장 확인" onBack={onBack} />
-      <section className="screen-heading screen-heading--confirm">
-        <h1 id="confirm-title">이 정류장이<br />맞나요?</h1>
-        <p>정류장 모습과 방향을 확인해주세요.</p>
-      </section>
-
-      <div className="preview-tabs" role="tablist" aria-label="정류장 확인 방법">
-        <button
-          type="button"
-          role="tab"
-          aria-selected={previewMode === "roadview"}
-          className={previewMode === "roadview" ? "is-active" : ""}
-          onClick={() => setPreviewMode("roadview")}
-          disabled={!hasRoadview}
-        >
-          <Building2 aria-hidden="true" />정류장 모습
-        </button>
-        <button
-          type="button"
-          role="tab"
-          aria-selected={previewMode === "map"}
-          className={previewMode === "map" ? "is-active" : ""}
-          onClick={() => setPreviewMode("map")}
-        >
-          <MapIcon aria-hidden="true" />지도
-        </button>
-      </div>
-
-      <figure className="stop-preview">
-        {previewMode === "roadview" && hasRoadview ? (
-          <>
-            <img src={destinationStop.roadview.imageUrl} alt={destinationStop.roadview.altText} />
-            <button
-              className="preview-expand"
-              type="button"
-              onClick={() => setPreviewOpen(true)}
-              aria-label="정류장 모습 크게 보기"
-              title="크게 보기"
-            >
-              <Maximize2 aria-hidden="true" />
-            </button>
-            <figcaption>{destinationStop.roadview.capturedAtLabel}</figcaption>
-          </>
-        ) : (
-          <StopMapPreview destinationStop={destinationStop} />
-        )}
-      </figure>
-
-      {previewMode === "map" && !hasRoadview && (
-        <p className="map-fallback-note">
-          <Info aria-hidden="true" />정류장 사진이 없어 지도로 안내해요.
-        </p>
-      )}
-
-      <section className="stop-confirmation" aria-label="선택한 도착 정류장 정보">
-        <h2>{destinationStop.stopName}</h2>
-        <dl>
-          <div>
-            <dt><Signpost aria-hidden="true" />가는 방향</dt>
-            <dd>{destinationStop.directionDescription}</dd>
-          </div>
-          <div>
-            <dt><Landmark aria-hidden="true" />가까운 곳</dt>
-            <dd>{destinationStop.landmark}</dd>
-          </div>
-          {selectedPlace && Number.isFinite(destinationStop.walkMinutes) && (
-            <div>
-              <dt><Footprints aria-hidden="true" />내린 다음</dt>
-              <dd>{selectedPlace.name}까지 도보 {destinationStop.walkMinutes}분</dd>
-            </div>
-          )}
-        </dl>
-      </section>
-
-      <InfoBand icon={BusFront}>
-        <strong>{currentStop.stopName.replace(" 정류장", "")}에서 바로 가는 버스 {destinationStop.directRouteCount}개</strong>
-      </InfoBand>
-
-      <div className="screen-bottom confirm-bottom">
-        <button className="primary-button" type="button" onClick={onConfirm}>이 정류장으로 가기</button>
-        {selectedPlace && (
-          <button className="text-button" type="button" onClick={onChooseOtherStop}>다른 주변 정류장 보기</button>
-        )}
-      </div>
-
-      {hasRoadview && (
-        <PreviewDialog
-          destinationStop={destinationStop}
-          open={previewOpen}
-          onClose={() => setPreviewOpen(false)}
-        />
-      )}
     </main>
   );
 }
@@ -719,12 +432,9 @@ export default function App() {
   const requestedScreen = useMemo(getRequestedScreen, []);
   const requestedStopId = useMemo(getRequestedStopId, []);
   const analysisRequestRef = useRef(0);
-  const placeRequestRef = useRef(0);
   const [screen, setScreen] = useState("loading");
   const [currentStop, setCurrentStop] = useState(null);
-  const [recentDestinations, setRecentDestinations] = useState([]);
-  const [selectedPlace, setSelectedPlace] = useState(null);
-  const [reachableStops, setReachableStops] = useState([]);
+  const [destinationStops, setDestinationStops] = useState([]);
   const [destinationStop, setDestinationStop] = useState(null);
   const [selectedTripId, setSelectedTripId] = useState(null);
 
@@ -740,36 +450,19 @@ export default function App() {
         const bootstrap = await busApi.getBootstrap(requestedStopId);
         if (!active) return;
         setCurrentStop(bootstrap.currentStop);
-        setRecentDestinations(bootstrap.recentDestinations);
+        setDestinationStops(bootstrap.destinationStops);
 
-        if (!["nearby", "confirm", "compare", "limited", "detail"].includes(requestedScreen)) {
+        if (!["compare", "limited", "detail"].includes(requestedScreen)) {
           setScreen("destination");
           return;
         }
 
-        const placeId = requestedScreen === "limited"
-          ? "place-seoul-cityhall"
-          : "place-bomun-station";
-        const nearbyResponse = await busApi.getReachableStops({
-          originStopId: bootstrap.currentStop.stopId,
-          placeId,
-        });
-        if (!active) return;
-        setSelectedPlace(nearbyResponse.place);
-        setReachableStops(nearbyResponse.stops);
-
-        if (requestedScreen === "nearby") {
-          setScreen("nearby");
-          return;
-        }
-
-        const baseDestinationStop = nearbyResponse.stops[0];
-        setDestinationStop(baseDestinationStop);
-        if (requestedScreen === "confirm") {
-          setScreen("confirm");
-          return;
-        }
-
+        const destinationStopId = requestedScreen === "limited"
+          ? "stop-cityhall-front"
+          : "stop-bomun-exit2";
+        const baseDestinationStop = bootstrap.destinationStops.find(
+          (item) => item.stopId === destinationStopId,
+        );
         const prediction = await busApi.getJourneyPrediction({
           originStopId: bootstrap.currentStop.stopId,
           destinationStopId: baseDestinationStop.stopId,
@@ -793,45 +486,6 @@ export default function App() {
   const selectedRoute = destinationStop?.routes?.find((route) => route.tripId === selectedTripId)
     ?? destinationStop?.routes?.[0]
     ?? null;
-
-  const openSearchResult = async (result) => {
-    analysisRequestRef.current += 1;
-
-    if (result.type === "STOP") {
-      setSelectedPlace(null);
-      setReachableStops([]);
-      setDestinationStop(result.stop);
-      setSelectedTripId(null);
-      setScreen("confirm");
-      return;
-    }
-
-    const requestId = placeRequestRef.current + 1;
-    placeRequestRef.current = requestId;
-    setSelectedPlace(result);
-    setReachableStops([]);
-    setDestinationStop(null);
-    setScreen("place-loading");
-
-    try {
-      const response = await busApi.getReachableStops({
-        originStopId: currentStop.stopId,
-        placeId: result.placeId,
-      });
-      if (placeRequestRef.current !== requestId) return;
-      setSelectedPlace(response.place);
-      setReachableStops(response.stops);
-      setScreen("nearby");
-    } catch {
-      if (placeRequestRef.current === requestId) setScreen("error");
-    }
-  };
-
-  const openStopConfirmation = (stop) => {
-    setDestinationStop(stop);
-    setSelectedTripId(null);
-    setScreen("confirm");
-  };
 
   const analyzeJourney = async (nextDestinationStop) => {
     const requestId = analysisRequestRef.current + 1;
@@ -860,20 +514,13 @@ export default function App() {
 
   const cancelAnalysis = () => {
     analysisRequestRef.current += 1;
-    setScreen("confirm");
+    setScreen("destination");
   };
 
-  if (screen === "loading" || screen === "place-loading" || screen === "error") {
-    const isPlaceLoading = screen === "place-loading";
+  if (screen === "loading" || screen === "error") {
     return (
       <div className="app-shell">
-        <div className="phone-frame">
-          <StatusScreen
-            error={screen === "error"}
-            title={isPlaceLoading ? "갈 수 있는 정류장을 찾고 있어요" : undefined}
-            description={isPlaceLoading ? "현재 정류장에서 바로 갈 수 있는 곳만 확인할게요." : undefined}
-          />
-        </div>
+        <div className="phone-frame"><StatusScreen error={screen === "error"} /></div>
       </div>
     );
   }
@@ -884,27 +531,8 @@ export default function App() {
         {screen === "destination" && currentStop && (
           <DestinationScreen
             currentStop={currentStop}
-            recentDestinations={recentDestinations}
-            onSelectResult={openSearchResult}
-          />
-        )}
-        {screen === "nearby" && currentStop && selectedPlace && (
-          <NearbyStopsScreen
-            currentStop={currentStop}
-            place={selectedPlace}
-            stops={reachableStops}
-            onBack={() => setScreen("destination")}
-            onSelectStop={openStopConfirmation}
-          />
-        )}
-        {screen === "confirm" && currentStop && destinationStop && (
-          <StopConfirmationScreen
-            currentStop={currentStop}
-            destinationStop={destinationStop}
-            selectedPlace={selectedPlace}
-            onBack={() => setScreen(selectedPlace ? "nearby" : "destination")}
-            onConfirm={() => analyzeJourney(destinationStop)}
-            onChooseOtherStop={() => setScreen("nearby")}
+            destinationStops={destinationStops}
+            onSelectDestinationStop={analyzeJourney}
           />
         )}
         {screen === "analyzing" && currentStop && destinationStop && (
@@ -917,7 +545,7 @@ export default function App() {
         {screen === "compare" && destinationStop && (
           <CompareScreen
             destinationStop={destinationStop}
-            onBack={() => setScreen("confirm")}
+            onBack={() => setScreen("destination")}
             onRoute={(tripId) => {
               setSelectedTripId(tripId);
               setScreen("detail");

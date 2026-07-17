@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="390" height="844" viewBox="0 0 390 844" role="img" aria-label="도착 정류장 검색 화면">
+  <title>도착 정류장 검색 화면</title>
+  <rect x="0" y="0" width="390" height="844" rx="0" fill="#FFFFFF" stroke="none" stroke-width="1"/>
+  <rect x="24" y="24" width="185" height="72" rx="8" fill="#FFF0E6" stroke="none" stroke-width="1"/>
+<circle cx="42" cy="49" r="5" fill="#B8560A" stroke="none" stroke-width="1"/>
+<text x="56" y="46" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="20.25" font-weight="700" fill="#9C4708" text-anchor="start" dominant-baseline="middle" letter-spacing="0">성북구청 정류장</text>
+<text x="56" y="75" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="18" font-weight="600" fill="#9C4708" text-anchor="start" dominant-baseline="middle" letter-spacing="0">보문역·종로 방면</text>
+<text x="24" y="146" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="45" font-weight="800" fill="#191919" text-anchor="start" letter-spacing="0"><tspan x="24" dy="0">어느 정류장까지</tspan><tspan x="24" dy="54">가세요?</tspan></text>
+<text x="24" y="254" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="20.25" font-weight="500" fill="#555555" text-anchor="start" dominant-baseline="middle" letter-spacing="0">도착할 정류장 이름을 입력해주세요.</text>
+<rect x="24" y="286" width="342" height="72" rx="8" fill="#F4F5F5" stroke="none" stroke-width="1"/>
+<g transform="translate(44 310) scale(1)"><circle cx="11" cy="11" r="8" fill="none" stroke="#555555" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="m21 21-4.35-4.35" fill="none" stroke="#555555" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></g>
+<text x="82" y="322" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="18" font-weight="500" fill="#5F5F5F" text-anchor="start" dominant-baseline="middle" letter-spacing="0">예: 보문역 2번 출구 정류장</text>
+<text x="24" y="408" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="20.25" font-weight="700" fill="#555555" text-anchor="start" dominant-baseline="middle" letter-spacing="0">최근 도착 정류장</text>
+<rect x="24" y="434" width="342" height="88" rx="8" fill="#F4F5F5" stroke="none" stroke-width="1"/>
+<circle cx="54" cy="478" r="19" fill="#FFFFFF" stroke="none" stroke-width="1"/>
+<g transform="translate(44 468) scale(0.8333333333333334)"><path d="M20 10c0 5-8 12-8 12S4 15 4 10a8 8 0 1 1 16 0Z" fill="none" stroke="#5F5F5F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="10" r="2.5" fill="none" stroke="#5F5F5F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></g>
+<text x="84" y="465" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="22.5" font-weight="700" fill="#191919" text-anchor="start" dominant-baseline="middle" letter-spacing="0">보문역 2번 출구 정류장</text>
+<text x="84" y="497" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="18" font-weight="600" fill="#555555" text-anchor="start" dominant-baseline="middle" letter-spacing="0">신설동 방면 · 2번 출구 앞</text>
+<g transform="translate(330 467) scale(0.9166666666666666)"><path d="m9 18 6-6-6-6" fill="none" stroke="#5F5F5F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></g>
+<rect x="24" y="528" width="342" height="88" rx="8" fill="#F4F5F5" stroke="none" stroke-width="1"/>
+<circle cx="54" cy="572" r="19" fill="#FFFFFF" stroke="none" stroke-width="1"/>
+<g transform="translate(44 562) scale(0.8333333333333334)"><path d="M20 10c0 5-8 12-8 12S4 15 4 10a8 8 0 1 1 16 0Z" fill="none" stroke="#5F5F5F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="10" r="2.5" fill="none" stroke="#5F5F5F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></g>
+<text x="84" y="559" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="22.5" font-weight="700" fill="#191919" text-anchor="start" dominant-baseline="middle" letter-spacing="0">서울시청 앞 정류장</text>
+<text x="84" y="591" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="18" font-weight="600" fill="#555555" text-anchor="start" dominant-baseline="middle" letter-spacing="0">서소문 방면 · 서울광장 맞은편</text>
+<g transform="translate(330 561) scale(0.9166666666666666)"><path d="m9 18 6-6-6-6" fill="none" stroke="#5F5F5F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></g>
+<rect x="24" y="752" width="342" height="64" rx="8" fill="#B8560A" stroke="none" stroke-width="1"/>
+<text x="195" y="784" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="21.38" font-weight="700" fill="#FFFFFF" text-anchor="middle" dominant-baseline="middle" letter-spacing="0">도착 정류장 찾기</text>
+</svg>

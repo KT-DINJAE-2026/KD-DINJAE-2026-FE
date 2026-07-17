@@ -9,7 +9,7 @@
     body { margin: 0; padding: 32px; background: #f0f0ef; color: #191919; font-family: "Noto Sans CJK KR", "Malgun Gothic", sans-serif; }
     h1 { margin: 0 0 8px; font-size: 28px; letter-spacing: 0; }
     p { margin: 0 0 28px; color: #555555; }
-    .flow { display: block; width: min(100%, 1720px); margin-bottom: 36px; border: 1px solid #dddddd; }
+    .flow { display: block; width: min(100%, 1440px); margin-bottom: 36px; border: 1px solid #dddddd; }
     main { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 390px)); gap: 28px; align-items: start; }
     figure { margin: 0; }
     figure img { display: block; width: 100%; border: 1px solid #dddddd; box-shadow: 0 10px 30px rgba(25,25,25,.08); }
@@ -18,48 +18,36 @@
 </head>
 <body>
   <h1>교통약자 버스 서비스 · Figma 시안</h1>
-  <p>장소 또는 정류장을 검색하고 실제 도착 정류장을 확인한 뒤, 해당 구간을 운행하는 버스를 비교하는 모바일 프로토타입입니다.</p>
+  <p>출발 정류장에서 입력한 도착 정류장까지 운행하는 버스를 비교하는 모바일 프로토타입입니다.</p>
   <img class="flow" src="./00-user-flow.svg" alt="사용자 흐름도">
   <main>
   <figure>
-    <img src="./01-destination-search.svg" alt="01 장소·정류장 검색">
-    <figcaption>01 장소·정류장 검색</figcaption>
+    <img src="./01-destination-stop.svg" alt="01 도착 정류장 검색">
+    <figcaption>01 도착 정류장 검색</figcaption>
   </figure>
   <figure>
-    <img src="./02-nearby-stops.svg" alt="02 주변 정류장 선택">
-    <figcaption>02 주변 정류장 선택</figcaption>
+    <img src="./02-analyzing.svg" alt="02 버스 분석 중">
+    <figcaption>02 버스 분석 중</figcaption>
   </figure>
   <figure>
-    <img src="./03-stop-confirm.svg" alt="03 정류장 모습 확인">
-    <figcaption>03 정류장 모습 확인</figcaption>
+    <img src="./03-compare.svg" alt="03 버스 비교">
+    <figcaption>03 버스 비교</figcaption>
   </figure>
   <figure>
-    <img src="./03-stop-confirm-map.svg" alt="03-A 지도 확인·사진 없음">
-    <figcaption>03-A 지도 확인·사진 없음</figcaption>
+    <img src="./03-compare-unavailable.svg" alt="03-B 혼잡도 데이터 부족">
+    <figcaption>03-B 혼잡도 데이터 부족</figcaption>
   </figure>
   <figure>
-    <img src="./04-analyzing.svg" alt="04 버스 분석 중">
-    <figcaption>04 버스 분석 중</figcaption>
+    <img src="./04-detail.svg" alt="04 구간별 상세">
+    <figcaption>04 구간별 상세</figcaption>
   </figure>
   <figure>
-    <img src="./05-compare.svg" alt="05 버스 비교">
-    <figcaption>05 버스 비교</figcaption>
+    <img src="./04-detail-fast.svg" alt="04-A 빠른 버스 상세">
+    <figcaption>04-A 빠른 버스 상세</figcaption>
   </figure>
   <figure>
-    <img src="./05-compare-unavailable.svg" alt="05-B 혼잡도 데이터 부족">
-    <figcaption>05-B 혼잡도 데이터 부족</figcaption>
-  </figure>
-  <figure>
-    <img src="./06-detail.svg" alt="06 구간별 상세">
-    <figcaption>06 구간별 상세</figcaption>
-  </figure>
-  <figure>
-    <img src="./06-detail-fast.svg" alt="06-A 빠른 버스 상세">
-    <figcaption>06-A 빠른 버스 상세</figcaption>
-  </figure>
-  <figure>
-    <img src="./06-detail-unavailable.svg" alt="06-B 데이터 부족 상세">
-    <figcaption>06-B 데이터 부족 상세</figcaption>
+    <img src="./04-detail-unavailable.svg" alt="04-B 데이터 부족 상세">
+    <figcaption>04-B 데이터 부족 상세</figcaption>
   </figure></main>
 </body>
 </html>

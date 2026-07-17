@@ -1,9 +1,5 @@
 import bootstrapMock from "../mocks/bootstrap.json";
-import destinationSearchMock from "../mocks/destination-search.json";
-import bomunReachableStopsMock from "../mocks/reachable-stops/bomun-station.json";
-import cityhallReachableStopsMock from "../mocks/reachable-stops/seoul-cityhall.json";
 import bomunPredictionMock from "../mocks/predictions/bomun.json";
-import bomunCommunityPredictionMock from "../mocks/predictions/bomun-community.json";
 import cityhallPredictionMock from "../mocks/predictions/cityhall.json";
 
 const API_MODE = import.meta.env.VITE_API_MODE ?? "mock";
@@ -12,13 +8,7 @@ const MOCK_DELAY_MS = 350;
 
 const predictionMocks = {
   "stop-bomun-exit2": bomunPredictionMock,
-  "stop-bomun-community-center": bomunCommunityPredictionMock,
   "stop-cityhall-front": cityhallPredictionMock,
-};
-
-const reachableStopMocks = {
-  "place-bomun-station": bomunReachableStopsMock,
-  "place-seoul-cityhall": cityhallReachableStopsMock,
 };
 
 const wait = (milliseconds) => new Promise((resolve) => window.setTimeout(resolve, milliseconds));
@@ -56,46 +46,6 @@ async function getBootstrap(stopId) {
   return request(`/api/v1/stops/${encodeURIComponent(stopId)}/context`);
 }
 
-function getSearchText(result) {
-  if (result.type === "STOP") {
-    return [
-      result.stop.stopName,
-      result.stop.directionDescription,
-      result.stop.landmark,
-      ...(result.searchKeywords ?? []),
-      ...(result.stop.servedRouteIds ?? []),
-    ].join(" ");
-  }
-
-  return [result.name, result.address, ...(result.searchKeywords ?? [])].join(" ");
-}
-
-async function searchDestinations({ originStopId, query }) {
-  if (API_MODE === "mock") {
-    await wait(MOCK_DELAY_MS);
-    const keyword = query.trim().toLocaleLowerCase("ko-KR");
-    const results = destinationSearchMock.results.filter((result) =>
-      getSearchText(result).toLocaleLowerCase("ko-KR").includes(keyword),
-    );
-    return clone({ results });
-  }
-
-  const search = new URLSearchParams({ originStopId, query });
-  return request(`/api/v1/destinations/search?${search.toString()}`);
-}
-
-async function getReachableStops({ originStopId, placeId }) {
-  if (API_MODE === "mock") {
-    await wait(MOCK_DELAY_MS);
-    const response = reachableStopMocks[placeId];
-    if (!response) throw new Error(`등록되지 않은 Mock 장소: ${placeId}`);
-    return clone(response);
-  }
-
-  const search = new URLSearchParams({ originStopId });
-  return request(`/api/v1/places/${encodeURIComponent(placeId)}/reachable-stops?${search.toString()}`);
-}
-
 async function getJourneyPrediction({ originStopId, destinationStopId }) {
   if (API_MODE === "mock") {
     await wait(MOCK_DELAY_MS);
@@ -112,7 +62,5 @@ async function getJourneyPrediction({ originStopId, destinationStopId }) {
 
 export const busApi = {
   getBootstrap,
-  searchDestinations,
-  getReachableStops,
   getJourneyPrediction,
 };
