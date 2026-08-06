@@ -31,10 +31,41 @@ async function request(path, options = {}) {
   });
 
   if (!response.ok) {
-    throw new Error(`API 요청 실패: ${response.status}`);
+    const error = await response.json().catch(() => ({}));
+    const apiError = new Error(error.message ?? `API 요청 실패: ${response.status}`);
+    apiError.status = response.status;
+    apiError.code = error.code;
+    apiError.traceId = error.traceId;
+    throw apiError;
   }
 
   return response.json();
+}
+
+async function searchDestinationStops({ originStopId, query }) {
+  if (API_MODE === "mock") {
+    await wait(MOCK_DELAY_MS);
+    const keyword = query.trim().toLocaleLowerCase("ko-KR");
+    const destinationStops = bootstrapMock.destinationStops.filter((destinationStop) =>
+      [
+        destinationStop.stopName,
+        destinationStop.displayName,
+        destinationStop.arsId,
+        destinationStop.directionDescription,
+        destinationStop.landmark,
+        ...(destinationStop.searchKeywords ?? []),
+        ...(destinationStop.servedRoutes ?? []).flatMap((route) => [route.routeId, route.routeNumber]),
+      ]
+        .filter(Boolean)
+        .join(" ")
+        .toLocaleLowerCase("ko-KR")
+        .includes(keyword),
+    );
+    return { destinationStops: clone(destinationStops) };
+  }
+
+  const params = new URLSearchParams({ originStopId, query });
+  return request(`/api/v1/stops/search?${params.toString()}`);
 }
 
 async function getBootstrap(stopId) {
@@ -65,5 +96,6 @@ async function getJourneyPrediction({ originStopId, destinationStopId }) {
 
 export const busApi = {
   getBootstrap,
+  searchDestinationStops,
   getJourneyPrediction,
 };

@@ -8,6 +8,7 @@ import {
   Circle,
   Clock3,
   Hash,
+  House,
   Info,
   Landmark,
   LoaderCircle,
@@ -20,6 +21,7 @@ import { busApi } from "./api/busApi.js";
 import KakaoRoadview from "./components/KakaoRoadview.jsx";
 
 const DEFAULT_STOP_ID = "107000087";
+const MAX_RECENT_DESTINATIONS = 5;
 
 const STANDING_BURDEN_META = {
   LOW: { label: "낮음", tone: "comfortable" },
@@ -40,6 +42,27 @@ const DETAIL_GUIDANCE = {
   HIGH: "여유 예상 구간만 더한 시간이에요. 혼잡 구간에서는 좌석 이용이 어려울 수 있어요.",
 };
 
+const CONGESTION_DESCRIPTION = {
+  RELAXED: "비교적 여유롭게 이동할 수 있어요.",
+  NORMAL: "일반적인 혼잡도가 예상돼요.",
+  CROWDED: "입석 이용이 예상돼요.",
+  VERY_CROWDED: "사람들과 몸이 닿을 수 있어요.",
+};
+
+const CONFIDENCE_LABEL = {
+  HIGH: "높은 신뢰도",
+  MEDIUM: "보통 신뢰도",
+  LOW: "낮은 신뢰도",
+  UNAVAILABLE: "예측 불가",
+};
+
+function getRouteSummary(route, hasPrediction) {
+  if (!hasPrediction) return `${route.arrivalMinutes}분 후 도착해요.`;
+  if (route.standingBurdenLevel === "LOW") return "입석 부담이 적은 버스예요.";
+  if (route.standingBurdenLevel === "HIGH") return "혼잡한 구간이 예상돼요.";
+  return "보통 수준의 입석 부담이 예상돼요.";
+}
+
 function getRequestedScreen() {
   return new URLSearchParams(window.location.search).get("screen");
 }
@@ -48,14 +71,41 @@ function getRequestedStopId() {
   return new URLSearchParams(window.location.search).get("stopId") ?? DEFAULT_STOP_ID;
 }
 
+function getRecentDestinationKey(originStopId) {
+  return `movegap:recent-destinations:${originStopId}`;
+}
+
+function readRecentDestinations(originStopId) {
+  try {
+    const stored = JSON.parse(window.localStorage.getItem(getRecentDestinationKey(originStopId)) ?? "[]");
+    return Array.isArray(stored)
+      ? stored.filter((stop) => stop?.stopId && stop.stopId !== originStopId).slice(0, MAX_RECENT_DESTINATIONS)
+      : [];
+  } catch {
+    return [];
+  }
+}
+
+function saveRecentDestinations(originStopId, destinations) {
+  try {
+    window.localStorage.setItem(getRecentDestinationKey(originStopId), JSON.stringify(destinations));
+  } catch {
+    // 저장 공간이 차단되어도 현재 탐색 흐름은 그대로 진행한다.
+  }
+}
+
 function withPrediction(destination, prediction) {
+  const hasPrediction = prediction.status === "SUCCESS";
   return {
     ...destination,
-    hasPrediction: prediction.status === "SUCCESS",
+    hasPrediction,
     predictionStatus: prediction.status,
     reasonCode: prediction.reasonCode,
     generatedAt: prediction.generatedAt,
-    predictionBasis: prediction.predictionBasis,
+    predictionBasis: {
+      ...prediction.predictionBasis,
+      description: CONFIDENCE_LABEL[prediction.predictionBasis?.confidence] ?? "예측 정보",
+    },
     routes: prediction.routes.map((route) => {
       const burdenMeta = STANDING_BURDEN_META[route.standingBurdenLevel];
       const seatFriendlyMinutes = route.segments?.reduce(
@@ -64,6 +114,7 @@ function withPrediction(destination, prediction) {
       );
       return {
         ...route,
+        summaryMessage: getRouteSummary(route, hasPrediction),
         burdenLabel: burdenMeta?.label,
         tone: burdenMeta?.tone,
         seatFriendlyMinutes,
@@ -71,6 +122,7 @@ function withPrediction(destination, prediction) {
           const congestionMeta = CONGESTION_META[segment.congestionLevel];
           return {
             ...segment,
+            description: CONGESTION_DESCRIPTION[segment.congestionLevel] ?? "혼잡도 정보를 확인해주세요.",
             congestionLabel: congestionMeta?.label ?? segment.congestionLevel,
             tone: congestionMeta?.tone ?? "moderate",
           };
@@ -112,13 +164,24 @@ function InfoBand({ tone = "info", icon: Icon = Info, children }) {
   );
 }
 
-function BackHeader({ title, onBack }) {
+function BackHeader({ title, onBack, onHome }) {
   return (
     <header className="top-bar">
       <button className="icon-button" type="button" onClick={onBack} aria-label="뒤로 가기" title="뒤로 가기">
         <ArrowLeft aria-hidden="true" />
       </button>
       <span className="top-bar__title">{title}</span>
+      {onHome && (
+        <button
+          className="icon-button"
+          type="button"
+          onClick={onHome}
+          aria-label="목적지 검색으로 돌아가기"
+          title="목적지 검색으로 돌아가기"
+        >
+          <House aria-hidden="true" />
+        </button>
+      )}
     </header>
   );
 }
@@ -159,36 +222,58 @@ function StatusScreen({ error = false }) {
 function DestinationScreen({
   currentStop,
   destinationStops,
+  hasRecentDestinations,
   onSelectDestinationStop,
 }) {
   const [query, setQuery] = useState("");
+  const [matches, setMatches] = useState(destinationStops);
+  const [isSearching, setIsSearching] = useState(false);
   const [searchMessage, setSearchMessage] = useState("");
   const inputRef = useRef(null);
+  const searchRequestRef = useRef(0);
 
-  const matches = useMemo(() => {
-    const keyword = query.trim().toLocaleLowerCase("ko-KR");
-    if (!keyword) return destinationStops;
-    return destinationStops.filter((destinationStop) =>
-      [
-        destinationStop.stopName,
-        destinationStop.displayName,
-        destinationStop.arsId,
-        destinationStop.directionDescription,
-        destinationStop.landmark,
-        ...destinationStop.searchKeywords,
-        ...(destinationStop.servedRoutes ?? []).flatMap((route) => [route.routeId, route.routeNumber]),
-      ]
-        .join(" ")
-        .toLocaleLowerCase("ko-KR")
-        .includes(keyword),
-    );
-  }, [destinationStops, query]);
+  useEffect(() => {
+    const keyword = query.trim();
+    const requestId = searchRequestRef.current + 1;
+    searchRequestRef.current = requestId;
+
+    if (!keyword) {
+      setMatches(destinationStops);
+      setIsSearching(false);
+      return undefined;
+    }
+
+    setIsSearching(true);
+    const timeoutId = window.setTimeout(async () => {
+      try {
+        const response = await busApi.searchDestinationStops({
+          originStopId: currentStop.stopId,
+          query: keyword,
+        });
+        if (searchRequestRef.current !== requestId) return;
+        setMatches(response.destinationStops ?? []);
+        setSearchMessage("");
+      } catch {
+        if (searchRequestRef.current !== requestId) return;
+        setMatches([]);
+        setSearchMessage("검색 중 문제가 발생했어요. 잠시 후 다시 시도해주세요.");
+      } finally {
+        if (searchRequestRef.current === requestId) setIsSearching(false);
+      }
+    }, 300);
+
+    return () => window.clearTimeout(timeoutId);
+  }, [currentStop.stopId, destinationStops, query]);
 
   const submitSearch = (event) => {
     event.preventDefault();
     if (!query.trim()) {
       setSearchMessage("도착 정류장을 먼저 입력해주세요.");
       inputRef.current?.focus();
+      return;
+    }
+    if (isSearching) {
+      setSearchMessage("검색 중이에요. 잠시만 기다려주세요.");
       return;
     }
     if (matches.length === 1) {
@@ -219,7 +304,12 @@ function DestinationScreen({
           ref={inputRef}
           value={query}
           onChange={(event) => {
-            setQuery(event.target.value);
+            const nextQuery = event.target.value;
+            setQuery(nextQuery);
+            if (nextQuery.trim()) {
+              setMatches([]);
+              setIsSearching(true);
+            }
             setSearchMessage("");
           }}
           placeholder="예: 보문역 2번 출구"
@@ -229,7 +319,9 @@ function DestinationScreen({
       <p className="search-message" aria-live="polite">{searchMessage}</p>
 
       <section className="place-section" aria-labelledby="place-title">
-        <h2 id="place-title">{query ? "검색 결과" : "최근 도착 정류장"}</h2>
+        <h2 id="place-title">
+          {query ? "검색 결과" : hasRecentDestinations ? "최근 도착 정류장" : "추천 도착 정류장"}
+        </h2>
         <div className="place-list">
           {matches.map((destinationStop) => (
             <button
@@ -246,7 +338,8 @@ function DestinationScreen({
               <ChevronRight aria-hidden="true" />
             </button>
           ))}
-          {!matches.length && <div className="empty-result">일치하는 정류장이 없어요.</div>}
+          {isSearching && <div className="empty-result">정류장을 검색하고 있어요.</div>}
+          {!isSearching && !matches.length && <div className="empty-result">일치하는 정류장이 없어요.</div>}
         </div>
       </section>
 
@@ -292,10 +385,10 @@ function StopConfirmationScreen({
             <dt><Signpost aria-hidden="true" />가는 방향</dt>
             <dd>{destinationStop.directionDescription}</dd>
           </div>
-          <div>
+          {destinationStop.landmark && <div>
             <dt><Landmark aria-hidden="true" />가까운 곳</dt>
             <dd>{destinationStop.landmark}</dd>
-          </div>
+          </div>}
         </dl>
       </section>
 
@@ -330,6 +423,27 @@ function AnalyzingScreen({ currentStop, destinationStop, onBack }) {
   );
 }
 
+function NoDirectRouteScreen({ destinationStop, onBack }) {
+  return (
+    <main className="screen screen--centered" aria-labelledby="no-direct-route-title">
+      <BackHeader title={getStopDisplayName(destinationStop)} onBack={onBack} />
+      <div className="analysis-visual"><BusFront aria-hidden="true" /></div>
+      <section className="analysis-heading">
+        <h1 id="no-direct-route-title">한 번에 가는 버스가<br />없어요</h1>
+        <p>현재 출발 정류장에서<br />환승 없이 갈 수 있는 버스를 찾지 못했어요.</p>
+      </section>
+      <InfoBand>
+        <strong>다른 도착 정류장을 검색하면</strong>
+        <span>직통 버스를 다시 확인할 수 있어요.</span>
+      </InfoBand>
+      <div className="screen-bottom">
+        <button className="primary-button" type="button" onClick={onBack}>다른 정류장 찾기</button>
+        <p className="fine-print">환승 경로는 현재 제공하지 않아요.</p>
+      </div>
+    </main>
+  );
+}
+
 function BusOption({ route, isComfortBest, isFastest, predictionAvailable, onClick }) {
   const isRecommended = isComfortBest || isFastest;
   const total = getTotalMinutes(route);
@@ -337,7 +451,7 @@ function BusOption({ route, isComfortBest, isFastest, predictionAvailable, onCli
   return (
     <button className={`bus-option ${isRecommended ? "is-recommended" : ""}`} type="button" onClick={onClick}>
       <span className="bus-option__header">
-        <strong>{route.routeNumber}</strong>
+        <strong>{route.routeNumber}번</strong>
         <span className="bus-option__badges">
           {isComfortBest && <span className="status-badge status-badge--comfortable">입석 부담 적음</span>}
           {isFastest && <span className="status-badge status-badge--fast">빠른 도착</span>}
@@ -362,7 +476,7 @@ function BusOption({ route, isComfortBest, isFastest, predictionAvailable, onCli
   );
 }
 
-function CompareScreen({ destinationStop, onBack, onRoute }) {
+function CompareScreen({ destinationStop, onBack, onHome, onRoute }) {
   const routes = useMemo(
     () => sortRoutes(destinationStop.routes, destinationStop.hasPrediction),
     [destinationStop],
@@ -378,7 +492,7 @@ function CompareScreen({ destinationStop, onBack, onRoute }) {
 
   return (
     <main className="screen" aria-labelledby="compare-title">
-      <BackHeader title={getStopDisplayName(destinationStop)} onBack={onBack} />
+      <BackHeader title={getStopDisplayName(destinationStop)} onBack={onBack} onHome={onHome} />
       <section className="screen-heading screen-heading--compare">
         <h1 id="compare-title">어떤 버스가<br />더 나을까요?</h1>
         <p>도착 예정 버스 {routes.length}대를 비교했어요.</p>
@@ -388,8 +502,8 @@ function CompareScreen({ destinationStop, onBack, onRoute }) {
         <InfoBand>
           <strong>
             {comfortable.tripId === fastest.tripId
-              ? `${comfortable.routeNumber}이 빠르고 앉아서 갈 가능성도 높아요.`
-              : `${comfortable.routeNumber}은 ${comfortDelay}분 늦지만`}
+              ? `${comfortable.routeNumber}번이 빠르고 앉아서 갈 가능성도 높아요.`
+              : `${comfortable.routeNumber}번은 ${comfortDelay}분 늦지만`}
           </strong>
           {comfortable.tripId !== fastest.tripId && <span>앉기 편한 시간이 약 {extraSeatFriendlyMinutes}분 더 길어요.</span>}
           <span>여유 예상 구간을 더한 값이며, 좌석을 보장하지 않아요.</span>
@@ -428,16 +542,16 @@ function CompareScreen({ destinationStop, onBack, onRoute }) {
   );
 }
 
-function DetailScreen({ destinationStop, route, onBack }) {
+function DetailScreen({ destinationStop, route, onBack, onHome }) {
   const predictionAvailable = Boolean(destinationStop.hasPrediction && route.segments?.length);
   const bannerTone = predictionAvailable ? route.tone : "fast";
   const total = getTotalMinutes(route);
 
   return (
     <main className="screen" aria-labelledby="detail-title">
-      <BackHeader title={getStopDisplayName(destinationStop)} onBack={onBack} />
+      <BackHeader title={getStopDisplayName(destinationStop)} onBack={onBack} onHome={onHome} />
       <section className="route-title">
-        <h1 id="detail-title">{route.routeNumber}</h1>
+        <h1 id="detail-title">{route.routeNumber}번</h1>
         <p>{route.direction} · {route.vehicleType}</p>
       </section>
 
@@ -499,6 +613,7 @@ export default function App() {
   const [screen, setScreen] = useState("loading");
   const [currentStop, setCurrentStop] = useState(null);
   const [destinationStops, setDestinationStops] = useState([]);
+  const [hasRecentDestinations, setHasRecentDestinations] = useState(false);
   const [destinationStop, setDestinationStop] = useState(null);
   const [selectedTripId, setSelectedTripId] = useState(null);
 
@@ -514,7 +629,9 @@ export default function App() {
         const bootstrap = await busApi.getBootstrap(requestedStopId);
         if (!active) return;
         setCurrentStop(bootstrap.currentStop);
-        setDestinationStops(bootstrap.destinationStops);
+        const recentDestinations = readRecentDestinations(bootstrap.currentStop.stopId);
+        setDestinationStops(recentDestinations.length ? recentDestinations : bootstrap.destinationStops);
+        setHasRecentDestinations(recentDestinations.length > 0);
 
         if (!["confirm", "compare", "limited", "detail"].includes(requestedScreen)) {
           setScreen("destination");
@@ -562,6 +679,14 @@ export default function App() {
 
   const openStopConfirmation = (nextDestinationStop) => {
     analysisRequestRef.current += 1;
+    const storedDestinations = readRecentDestinations(currentStop.stopId);
+    const recentDestinations = [
+      nextDestinationStop,
+      ...storedDestinations.filter((stop) => stop.stopId !== nextDestinationStop.stopId),
+    ].slice(0, MAX_RECENT_DESTINATIONS);
+    setDestinationStops(recentDestinations);
+    setHasRecentDestinations(true);
+    saveRecentDestinations(currentStop.stopId, recentDestinations);
     setDestinationStop(nextDestinationStop);
     setSelectedTripId(null);
     setScreen("confirm");
@@ -587,14 +712,22 @@ export default function App() {
       setDestinationStop(destinationWithPrediction);
       setSelectedTripId(destinationWithPrediction.routes[0]?.tripId ?? null);
       setScreen("compare");
-    } catch {
-      if (analysisRequestRef.current === requestId) setScreen("error");
+    } catch (error) {
+      if (analysisRequestRef.current !== requestId) return;
+      setScreen(error.code === "NO_DIRECT_ROUTE" ? "no-direct-route" : "error");
     }
   };
 
   const cancelAnalysis = () => {
     analysisRequestRef.current += 1;
     setScreen("confirm");
+  };
+
+  const returnToDestinationSearch = () => {
+    analysisRequestRef.current += 1;
+    setDestinationStop(null);
+    setSelectedTripId(null);
+    setScreen("destination");
   };
 
   if (screen === "loading" || screen === "error") {
@@ -612,6 +745,7 @@ export default function App() {
           <DestinationScreen
             currentStop={currentStop}
             destinationStops={destinationStops}
+            hasRecentDestinations={hasRecentDestinations}
             onSelectDestinationStop={openStopConfirmation}
           />
         )}
@@ -630,10 +764,17 @@ export default function App() {
             onBack={cancelAnalysis}
           />
         )}
+        {screen === "no-direct-route" && destinationStop && (
+          <NoDirectRouteScreen
+            destinationStop={destinationStop}
+            onBack={() => setScreen("destination")}
+          />
+        )}
         {screen === "compare" && destinationStop && (
           <CompareScreen
             destinationStop={destinationStop}
             onBack={() => setScreen("confirm")}
+            onHome={returnToDestinationSearch}
             onRoute={(tripId) => {
               setSelectedTripId(tripId);
               setScreen("detail");
@@ -645,6 +786,7 @@ export default function App() {
             destinationStop={destinationStop}
             route={selectedRoute}
             onBack={() => setScreen("compare")}
+            onHome={returnToDestinationSearch}
           />
         )}
       </div>
