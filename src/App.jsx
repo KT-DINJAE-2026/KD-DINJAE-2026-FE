@@ -323,21 +323,27 @@ function DestinationScreen({
           {query ? "검색 결과" : hasRecentDestinations ? "최근 도착 정류장" : "추천 도착 정류장"}
         </h2>
         <div className="place-list">
-          {matches.map((destinationStop) => (
-            <button
-              className="place-row"
-              type="button"
-              key={destinationStop.stopId}
-              onClick={() => onSelectDestinationStop(destinationStop)}
-            >
-              <span className="place-row__icon"><MapPin aria-hidden="true" /></span>
-              <span className="place-row__copy">
-                <strong>{getStopDisplayName(destinationStop)}</strong>
-                <small>정류장 {destinationStop.arsId} · {destinationStop.directionDescription}</small>
-              </span>
-              <ChevronRight aria-hidden="true" />
-            </button>
-          ))}
+          {matches.map((destinationStop) => {
+            const directRouteCount = destinationStop.servedRoutes?.length ?? 0;
+            return (
+              <button
+                className="place-row"
+                type="button"
+                key={destinationStop.stopId}
+                onClick={() => onSelectDestinationStop(destinationStop)}
+              >
+                <span className="place-row__icon"><MapPin aria-hidden="true" /></span>
+                <span className="place-row__copy">
+                  <strong>{getStopDisplayName(destinationStop)}</strong>
+                  <small>정류장 {destinationStop.arsId} · {destinationStop.directionDescription}</small>
+                  {directRouteCount === 0 && (
+                    <small className="place-row__route-status">직통 노선 없음</small>
+                  )}
+                </span>
+                <ChevronRight aria-hidden="true" />
+              </button>
+            );
+          })}
           {isSearching && <div className="empty-result">정류장을 검색하고 있어요.</div>}
           {!isSearching && !matches.length && <div className="empty-result">일치하는 정류장이 없어요.</div>}
         </div>
@@ -392,8 +398,15 @@ function StopConfirmationScreen({
         </dl>
       </section>
 
-      <InfoBand icon={BusFront}>
-        <strong>{currentStopDisplayName}에서 바로 가는 버스 {directRouteCount}개</strong>
+      <InfoBand icon={BusFront} tone={directRouteCount === 0 ? "warning" : "info"}>
+        {directRouteCount > 0 ? (
+          <strong>{currentStopDisplayName}에서 바로 가는 버스 {directRouteCount}개</strong>
+        ) : (
+          <>
+            <strong>이 정류장까지 직통 노선이 없어요</strong>
+            <span>정류장 검색은 정상이며, 환승 경로는 현재 제공하지 않아요.</span>
+          </>
+        )}
       </InfoBand>
 
       <div className="screen-bottom confirm-bottom">
@@ -754,7 +767,13 @@ export default function App() {
             currentStop={currentStop}
             destinationStop={destinationStop}
             onBack={() => setScreen("destination")}
-            onConfirm={() => analyzeJourney(destinationStop)}
+            onConfirm={() => {
+              if ((destinationStop.servedRoutes?.length ?? 0) === 0) {
+                setScreen("no-direct-route");
+                return;
+              }
+              analyzeJourney(destinationStop);
+            }}
           />
         )}
         {screen === "analyzing" && currentStop && destinationStop && (

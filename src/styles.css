@@ -306,6 +306,11 @@ input:focus-visible {
   line-height: 1.4;
 }
 
+.place-row__copy .place-row__route-status {
+  color: #9d5f00;
+  font-weight: 800;
+}
+
 .place-row > svg {
   width: 21px;
   flex: 0 0 21px;

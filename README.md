@@ -5,6 +5,8 @@
 한 시점의 차량 혼잡도만 보여주는 대신 출발 정류장부터 도착 정류장까지의 구간을 나눠 예측합니다. 과거 데이터가 충분하지 않을 때는 혼잡도를 임의로 채우지 않고 확인 가능한 도착 정보만 보여줍니다.
 
 - 배포: https://kd-dinjae-2026-fe.vercel.app
+- 백엔드: https://backend-827716553089.asia-northeast3.run.app
+- Swagger: https://backend-827716553089.asia-northeast3.run.app/swagger-ui.html
 - API 협의 문서: [`docs/API_CONTRACT_DRAFT.md`](docs/API_CONTRACT_DRAFT.md)
 - Figma 화면 자료: [`design/figma-import`](design/figma-import)
 
@@ -101,10 +103,11 @@ React 화면
       └─ server 모드 → Spring API
 ```
 
-현재 사용하는 함수는 두 개입니다.
+현재 사용하는 함수는 세 개입니다.
 
 ```js
 busApi.getBootstrap(stopId)
+busApi.searchDestinationStops({ originStopId, query })
 busApi.getJourneyPrediction({ originStopId, destinationStopId })
 ```
 
@@ -114,7 +117,7 @@ busApi.getJourneyPrediction({ originStopId, destinationStopId })
 | `src/mocks/predictions/bomun.json` | `POST /api/v1/journeys/predictions` | 혼잡도 예측 성공 응답 |
 | `src/mocks/predictions/sinseoldong.json` | `POST /api/v1/journeys/predictions` | 과거 데이터 부족 응답 |
 
-도착 정류장 검색은 지금은 `bootstrap.json`의 작은 목록을 브라우저에서 필터링합니다. Spring 연동 때는 `GET /api/v1/stops/search`로 교체할 예정입니다.
+Mock 모드에서는 `bootstrap.json`을 브라우저에서 필터링하고, 현재 Vercel의 server 모드에서는 `GET /api/v1/stops/search`를 호출합니다. 검색 결과의 `servedRoutes: []`는 검색 실패가 아니라 해당 출발지에서 직통 노선이 없다는 뜻이며, 화면에 `직통 노선 없음`으로 표시합니다.
 
 ### 데모 정류장
 
@@ -143,16 +146,18 @@ busApi.getJourneyPrediction({ originStopId, destinationStopId })
 
 `앉기 편한 시간`은 여유로 예측된 구간을 더한 값입니다. 빈 좌석이나 실제 착석을 보장한다는 뜻은 아닙니다. 모든 구간의 `durationMinutes` 합은 반드시 `travelMinutes`와 같아야 합니다.
 
-## Spring API로 전환
+## 배포된 Spring API 연결
 
-백엔드가 준비되면 환경변수만 바꿉니다.
+Vercel은 아래 환경변수로 GCP Cloud Run의 Spring API와 연결되어 있습니다.
 
 ```env
 VITE_API_MODE=server
-VITE_API_BASE_URL=http://localhost:8080
+VITE_API_BASE_URL=https://backend-827716553089.asia-northeast3.run.app
 ```
 
-Mock과 Spring 응답은 같은 필드 구조를 사용합니다. 프론트가 서버 응답을 별도 화면 형식으로 다시 만드는 대신 Mock JSON을 API 예시 응답으로 유지하는 방식입니다.
+로컬 Spring 서버를 사용할 때만 `VITE_API_BASE_URL=http://localhost:8080`으로 바꿉니다. Cloud Run과 로컬 서버 모두 `http://localhost:5173` 및 운영 Vercel Origin을 허용합니다.
+
+Mock과 Spring 응답은 같은 필드 구조를 사용합니다. 현재 서버 응답은 실제 AI 예측 연동 전의 계약 검증용 데모 데이터이며 응답 스키마는 그대로 유지됩니다.
 
 우선 맞춰야 할 요청은 다음 세 가지입니다.
 
@@ -163,6 +168,8 @@ Mock과 Spring 응답은 같은 필드 구조를 사용합니다. 프론트가 �
 | 정류장 확인 후 분석 | `POST /api/v1/journeys/predictions` |
 
 혼잡도 표본이 부족한 경우는 HTTP 오류가 아니라 `200 OK`의 `INSUFFICIENT_DATA`로 구분합니다. 반대로 잘못된 정류장, 직통 버스 없음, 서버 장애는 오류 코드로 구분해 화면 상태를 결정합니다. 자세한 필드와 검증 규칙은 [`docs/API_CONTRACT_DRAFT.md`](docs/API_CONTRACT_DRAFT.md)에 있습니다.
+
+Cloud Run이 유휴 상태라면 첫 요청에 10초 이상 걸릴 수 있습니다. API 오류에는 `traceId`가 포함되므로 문제 응답을 전달할 때 함께 공유하면 서버 로그를 추적할 수 있습니다.
 
 ## 주요 ID
 
