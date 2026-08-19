@@ -481,10 +481,13 @@ function CompareScreen({ destinationStop, onBack, onHome, onRoute }) {
     () => sortRoutes(destinationStop.routes, destinationStop.hasPrediction),
     [destinationStop],
   );
+  const noRealtimeArrivals = routes.length === 0;
   const comfortable = destinationStop.hasPrediction ? routes[0] : null;
-  const fastest = [...destinationStop.routes].sort(
-    (a, b) => getTotalMinutes(a) - getTotalMinutes(b) || a.arrivalMinutes - b.arrivalMinutes,
-  )[0];
+  const fastest = noRealtimeArrivals
+    ? null
+    : [...destinationStop.routes].sort(
+        (a, b) => getTotalMinutes(a) - getTotalMinutes(b) || a.arrivalMinutes - b.arrivalMinutes,
+      )[0];
   const comfortDelay = comfortable ? getTotalMinutes(comfortable) - getTotalMinutes(fastest) : 0;
   const extraSeatFriendlyMinutes = comfortable
     ? comfortable.seatFriendlyMinutes - fastest.seatFriendlyMinutes
@@ -495,10 +498,19 @@ function CompareScreen({ destinationStop, onBack, onHome, onRoute }) {
       <BackHeader title={getStopDisplayName(destinationStop)} onBack={onBack} onHome={onHome} />
       <section className="screen-heading screen-heading--compare">
         <h1 id="compare-title">어떤 버스가<br />더 나을까요?</h1>
-        <p>도착 예정 버스 {routes.length}대를 비교했어요.</p>
+        <p>
+          {noRealtimeArrivals
+            ? "지금 도착 예정인 버스 정보가 없어요."
+            : `도착 예정 버스 ${routes.length}대를 비교했어요.`}
+        </p>
       </section>
 
-      {destinationStop.hasPrediction ? (
+      {noRealtimeArrivals ? (
+        <InfoBand tone="info" icon={Clock3}>
+          <strong>실시간 도착 정보가 없어요</strong>
+          <span>심야 시간대이거나 운행이 종료됐을 수 있어요.</span>
+        </InfoBand>
+      ) : destinationStop.hasPrediction ? (
         <InfoBand>
           <strong>
             {comfortable.tripId === fastest.tripId
@@ -516,25 +528,35 @@ function CompareScreen({ destinationStop, onBack, onHome, onRoute }) {
         </InfoBand>
       )}
 
-      <section className="bus-list" aria-label="버스 비교 결과">
-        {routes.map((route) => (
-          <BusOption
-            key={route.tripId}
-            route={route}
-            isComfortBest={comfortable?.tripId === route.tripId}
-            isFastest={fastest.tripId === route.tripId}
-            predictionAvailable={destinationStop.hasPrediction}
-            onClick={() => onRoute(route.tripId)}
-          />
-        ))}
-      </section>
+      {!noRealtimeArrivals && (
+        <section className="bus-list" aria-label="버스 비교 결과">
+          {routes.map((route) => (
+            <BusOption
+              key={route.tripId}
+              route={route}
+              isComfortBest={comfortable?.tripId === route.tripId}
+              isFastest={fastest.tripId === route.tripId}
+              predictionAvailable={destinationStop.hasPrediction}
+              onClick={() => onRoute(route.tripId)}
+            />
+          ))}
+        </section>
+      )}
 
       <div className="compare-note">
-        {destinationStop.hasPrediction ? <Clock3 aria-hidden="true" /> : <RefreshCw aria-hidden="true" />}
+        {noRealtimeArrivals ? (
+          <RefreshCw aria-hidden="true" />
+        ) : destinationStop.hasPrediction ? (
+          <Clock3 aria-hidden="true" />
+        ) : (
+          <RefreshCw aria-hidden="true" />
+        )}
         <span>
-          {destinationStop.hasPrediction
-            ? `예측 기준 · ${destinationStop.predictionBasis.description}`
-            : "혼잡도 데이터가 생기면 자동으로 갱신해요."}
+          {noRealtimeArrivals
+            ? "운행 시간대에 다시 확인해 주세요."
+            : destinationStop.hasPrediction
+              ? `예측 기준 · ${destinationStop.predictionBasis.description}`
+              : "혼잡도 데이터가 생기면 자동으로 갱신해요."}
         </span>
       </div>
       <p className="fine-print compare-footnote">도착 및 혼잡 예측은 실제 운행 상황에 따라 달라질 수 있어요.</p>
