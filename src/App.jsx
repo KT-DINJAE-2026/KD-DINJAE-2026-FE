@@ -323,21 +323,27 @@ function DestinationScreen({
           {query ? "검색 결과" : hasRecentDestinations ? "최근 도착 정류장" : "추천 도착 정류장"}
         </h2>
         <div className="place-list">
-          {matches.map((destinationStop) => (
-            <button
-              className="place-row"
-              type="button"
-              key={destinationStop.stopId}
-              onClick={() => onSelectDestinationStop(destinationStop)}
-            >
-              <span className="place-row__icon"><MapPin aria-hidden="true" /></span>
-              <span className="place-row__copy">
-                <strong>{getStopDisplayName(destinationStop)}</strong>
-                <small>정류장 {destinationStop.arsId} · {destinationStop.directionDescription}</small>
-              </span>
-              <ChevronRight aria-hidden="true" />
-            </button>
-          ))}
+          {matches.map((destinationStop) => {
+            const hasDirectRoute = (destinationStop.servedRoutes?.length ?? 0) > 0;
+            return (
+              <button
+                className="place-row"
+                type="button"
+                key={destinationStop.stopId}
+                onClick={() => onSelectDestinationStop(destinationStop)}
+              >
+                <span className="place-row__icon"><MapPin aria-hidden="true" /></span>
+                <span className="place-row__copy">
+                  <strong>{getStopDisplayName(destinationStop)}</strong>
+                  <small>정류장 {destinationStop.arsId} · {destinationStop.directionDescription}</small>
+                  {!hasDirectRoute && (
+                    <small className="place-row__route-status">직통 노선 없음</small>
+                  )}
+                </span>
+                <ChevronRight aria-hidden="true" />
+              </button>
+            );
+          })}
           {isSearching && <div className="empty-result">정류장을 검색하고 있어요.</div>}
           {!isSearching && !matches.length && <div className="empty-result">일치하는 정류장이 없어요.</div>}
         </div>
